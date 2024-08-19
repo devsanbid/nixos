@@ -1,0 +1,30 @@
+[pyprland]
+plugins = [
+    "scratchpads",
+    "lost_windows",
+    "monitors",
+    "toggle_dpms",
+    "magnify",
+    "expose",
+    "shift_monitors",
+    "workspaces_follow_focus",
+]
+
+
+[scratchpads.term]
+animation = "fromBottom"
+command = "alacritty --class kitty-dropterm -e nvim ~/Desktop/fixanswer.txt"
+class = "kitty-dropterm"
+size = "23% 15%"
+max_size = "1920px 100%"
+margin = 0
+
+
+[scratchpads.ai]
+animation = "fromBottom"
+command = "brave-browser-nightly --profile-directory=Default --app=http://localhost:3210/chat"
+class = "Brave-browser-nightly"
+size = "55% 35%"
+max_size = "1920px 100%"
+process_tracking = false
+
