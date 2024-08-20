@@ -3,10 +3,38 @@
 {
   home.username = "sanbid";
   home.homeDirectory = "/home/sanbid";
-  home.stateVersion = "24.05"; 
+  home.stateVersion = "24.05";
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    # x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 16;
+  };
+
+
+  gtk = {
+    enable = true;
+
+    theme = {
+      package = pkgs.flat-remix-gtk;
+      name = "Flat-Remix-GTK-Grey-Darkest";
+    };
+
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+
+    font = {
+      name = "Sans";
+      size = 11;
+    };
+  };
 
   home.packages = with pkgs; [
-	hello
+    hello
   ];
 
   home.file.".config/hypr".source = ./config/hypr;
@@ -26,11 +54,10 @@
   };
 
   programs.git = {
-  	enable = true;
-	userName = "sandesh shahi";
-	userEmail = "devsanbid@gmail.com";
-	aliases = {
-	};
+    enable = true;
+    userName = "devsanbid";
+    userEmail = "devsanbid@gmail.com";
+    aliases = { };
   };
 
   programs.home-manager.enable = true;

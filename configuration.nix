@@ -1,25 +1,25 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
+    };
+    grub = {
+      efiSupport = true;
+      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
+      device = "nodev";
+    };
+  };
   system.autoUpgrade.enable = true;
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "nixos";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -54,136 +54,146 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
     ];
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+  programs = {
+    firefox.enable = true;
+    fish.enable = true;
+    dconf.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+    };
+    xwayland.enable = true;
+  };
+
+  #default shell
+  users.defaultUserShell = pkgs.fish;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  programs.hyprland.enable = true;
 
-environment.systemPackages = with pkgs; [
-vim
-neovim
-htop
-brave
-kitty
-git
-dunst
-alacritty
-gtk4
-tmux
-vivid
-waybar
-wpaperd
-starship
-rustup
-ripgrep
-fd
-dua
-stow
-ansible
-wofi
-brightnessctl
-bat
-bc
-dolphin
-kdePackages.dolphin-plugins
-dog
-fastfetch
-fzf
-gvfs
-gzip
-unzip
-jq
-lua
-luarocks
-mpv
-nodejs_22
-podman
-docker
-polkit
-telegram-desktop
-tesseract
-sqlitebrowser
-xfce.thunar
-xfce.thunar-volman
-vlc
-acpi
-wpsoffice
-zoxide
-pamixer
-wlsunset
-fuzzel
-progress
-swappy
-atac
-tokei
-grim
-slurp
-python3
-libgcc
-gcc
-eza
-libreoffice
-ydotool
-libnotify
-pyprland
-libinput-gestures
-blueman
-swaybg
-hypridle
-wl-clipboard
-tealdeer
-ollama
-gnome3.gnome-tweaks
-home-manager
+  environment.systemPackages = with pkgs; [
+    vim
+    neovim
+    htop
+    brave
+    kitty
+    git
+    dunst
+    alacritty
+    gtk4
+    tmux
+    python312Packages.pip
+    vivid
+    waybar
+    wpaperd
+    starship
+    rustup
+    ripgrep
+    fd
+    dua
+    stow
+    ansible
+    wofi
+    brightnessctl
+    bat
+    bc
+    dolphin
+    kdePackages.dolphin-plugins
+    dog
+    fastfetch
+    fzf
+    gvfs
+    gzip
+    unzip
+    jq
+    lua
+    luarocks
+    mpv
+    nodejs_22
+    podman
+    docker
+    polkit
+    telegram-desktop
+    tesseract
+    sqlitebrowser
+    xfce.thunar
+    xfce.thunar-volman
+    vlc
+    acpi
+    wpsoffice
+    zoxide
+    pamixer
+    wlsunset
+    fuzzel
+    progress
+    swappy
+    atac
+    tokei
+    grim
+    slurp
+    python3Full
+    libgcc
+    gcc
+    eza
+    libreoffice
+    ydotool
+    libnotify
+    pyprland
+    libinput-gestures
+    blueman
+    swaybg
+    hypridle
+    wl-clipboard
+    tealdeer
+    ollama
+    gnome-tweaks
+    home-manager
+    gparted
+    kdePackages.partitionmanager
+    polkit_gnome
+    python312Packages.pillow
+    python312Packages.tkinter
+    tk
   ];
-nix.settings.experimental-features = [ "nix-command" "flakes" ];
- fonts.fontDir.enable = true;
- fonts.packages = with pkgs; [
-  (
-  nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" ]; 
-  })
- ];
-  virtualisation.docker.enable = true;
-  virtualisation.podman.enable = true;
-  virtualisation.docker.rootless.enable = true;
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.ollama.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  security = {
+    polkit = {
+      enable = true;
+    };
+  };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  fonts = {
+    fontDir.enable = true;
+    packages = with pkgs; [
+      (
+        nerdfonts.override {
+          fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" ];
+        })
+    ];
+  };
+  virtualisation = {
+    docker.enable = true;
+    podman.enable = true;
+    docker.rootless.enable = true;
+  };
+
+  services = {
+    openssh.enable = true;
+    ollama.enable = true;
+  };
+
   system.stateVersion = "24.05"; # Did you read the comment?
 
 }
