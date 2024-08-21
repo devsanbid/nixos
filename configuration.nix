@@ -14,6 +14,8 @@
     };
     grub = {
       efiSupport = true;
+      useOSProber = true;
+
       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
     };
@@ -48,7 +50,10 @@
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+  };
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -165,6 +170,7 @@
     python312Packages.pillow
     python312Packages.tkinter
     tk
+    eog
   ];
 
   security = {

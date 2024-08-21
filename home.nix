@@ -33,8 +33,14 @@
     };
   };
 
+  nixpkgs.config.allowUnfree = true;
+
+
   home.packages = with pkgs; [
     hello
+    whatsapp-for-linux
+    discord
+
   ];
 
   home.file.".config/hypr".source = ./config/hypr;
@@ -59,6 +65,8 @@
     userEmail = "devsanbid@gmail.com";
     aliases = { };
   };
+
+  programs.zathura.enable = true;
 
   programs.home-manager.enable = true;
 }
