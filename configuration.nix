@@ -73,6 +73,7 @@
   programs = {
     firefox.enable = true;
     fish.enable = true;
+    appimage.enable = true;
     dconf.enable = true;
     hyprland = {
       enable = true;
@@ -171,6 +172,7 @@
     python312Packages.tkinter
     tk
     eog
+    ollama-rocm
   ];
 
   security = {
