@@ -35,7 +35,6 @@
 
   nixpkgs.config.allowUnfree = true;
 
-
   home.packages = with pkgs; [
     hello
     whatsapp-for-linux

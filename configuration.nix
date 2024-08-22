@@ -64,7 +64,7 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "libvirtd" "docker" ];
     packages = with pkgs; [
     ];
   };
@@ -72,6 +72,7 @@
   # Install firefox.
   programs = {
     firefox.enable = true;
+    virt-manager.enable = true;
     fish.enable = true;
     appimage.enable = true;
     dconf.enable = true;
@@ -192,6 +193,7 @@
     ];
   };
   virtualisation = {
+    libvirtd.enable = true;
     docker.enable = true;
     podman.enable = true;
     docker.rootless.enable = true;
@@ -199,6 +201,8 @@
 
   services = {
     openssh.enable = true;
+    qemuGuest.enable = true;
+    spice-vdagentd.enable = true;
     ollama.enable = true;
   };
 
