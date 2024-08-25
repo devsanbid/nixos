@@ -51,7 +51,9 @@
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security = {
+    sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
     rtkit.enable = true;
+    polkit.enable = true;
   };
 
   services.pipewire = {
@@ -64,15 +66,20 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = [ "networkmanager" "libvirtd" "docker" ];
+    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" ];
     packages = with pkgs; [
     ];
+  };
+
+  ## Enviroment varibale
+  environment.sessionVariables = {
+    FLAKE = "/home/sanbid/.dotfiles";
+    GTK_THEME = "Tokyonight-Dark-B";
   };
 
   # Install firefox.
   programs = {
     firefox.enable = true;
-    virt-manager.enable = true;
     fish.enable = true;
     appimage.enable = true;
     dconf.enable = true;
@@ -130,7 +137,6 @@
     nodejs_22
     podman
     docker
-    polkit
     telegram-desktop
     tesseract
     sqlitebrowser
@@ -168,17 +174,27 @@
     home-manager
     gparted
     kdePackages.partitionmanager
-    polkit_gnome
     python312Packages.pillow
     python312Packages.tkinter
     tk
     eog
     ollama-rocm
+    nh
+    gnomeExtensions.nordvpn-quick-toggle
+    figlet
+    lolcat
+    entr
+    diff-so-fancy
+    libsForQt5.qtstyleplugin-kvantum
+    libsForQt5.qt5ct
   ];
 
-  security = {
-    polkit = {
-      enable = true;
+  nixpkgs.config.qt5 = {
+    enable = true;
+    platformTheme = "qt5ct";
+    style = {
+      package = pkgs.utterly-nord-plasma;
+      name = "Utterly Nord Plasma";
     };
   };
 
@@ -192,8 +208,13 @@
         })
     ];
   };
+
+  users.extraGroups.vboxusers.members = [ "sanbid" ];
   virtualisation = {
-    libvirtd.enable = true;
+    virtualbox.host.enable = true;
+    virtualbox.host.enableExtensionPack = true;
+    virtualbox.guest.enable = true;
+    virtualbox.guest.draganddrop = true;
     docker.enable = true;
     podman.enable = true;
     docker.rootless.enable = true;
