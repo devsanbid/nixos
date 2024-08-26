@@ -24,7 +24,10 @@
   networking.hostName = "nixos";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Kathmandu";
@@ -74,7 +77,6 @@
   ## Enviroment varibale
   environment.sessionVariables = {
     FLAKE = "/home/sanbid/.dotfiles";
-    GTK_THEME = "Tokyonight-Dark-B";
   };
 
   # Install firefox.
@@ -187,14 +189,24 @@
     diff-so-fancy
     libsForQt5.qtstyleplugin-kvantum
     libsForQt5.qt5ct
+    dig
   ];
 
-  nixpkgs.config.qt5 = {
+  stylix = {
     enable = true;
-    platformTheme = "qt5ct";
-    style = {
-      package = pkgs.utterly-nord-plasma;
-      name = "Utterly Nord Plasma";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+    opacity = {
+      applications = 0.85;
+      desktop = 0.85;
+      popups = 1.0;
+    };
+    polarity = "dark";
+    targets = {
+      chromium.enable = true;
+      fish.enable = true;
+      gnome.enable = true;
+      grub.enable = true;
+      gtk.enable = true;
     };
   };
 
@@ -214,7 +226,6 @@
     virtualbox.host.enable = true;
     virtualbox.host.enableExtensionPack = true;
     virtualbox.guest.enable = true;
-    virtualbox.guest.draganddrop = true;
     docker.enable = true;
     podman.enable = true;
     docker.rootless.enable = true;
