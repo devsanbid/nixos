@@ -12,39 +12,11 @@
   #   size = 16;
   # };
 
-
-  # gtk = {
-  #   enable = true;
-  #
-  #   theme = {
-  #     package = pkgs.flat-remix-gtk;
-  #     name = "Flat-Remix-GTK-Grey-Darkest";
-  #   };
-  #
-  #   cursorTheme = {
-  #     package = pkgs.bibata-cursors;
-  #     name = "Bibata-Modern-Classic";
-  #     size = 16;
-  #   };
-  #
-  #   iconTheme = {
-  #     package = pkgs.adwaita-icon-theme;
-  #     name = "Adwaita";
-  #   };
-  #
-  #   font = {
-  #     name = "Sauce Code Pro";
-  #     size = 12;
-  #   };
-  # };
-  #
   nixpkgs.config.allowUnfree = true;
 
   home.packages = with pkgs; [
-    hello
     whatsapp-for-linux
     discord
-
   ];
 
   home.file.".config/hypr".source = ./config/hypr;

@@ -25,8 +25,13 @@
 
   # Enable networking
   networking = {
-    networkmanager.enable = true;
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+    networkmanager = {
+      enable = true;
+    };
+  };
+
+  environment.etc = {
+    "resolv.conf".text = "nameserver 1.1.1.1\n";
   };
 
   # Set your time zone.
@@ -102,6 +107,13 @@
     vim
     neovim
     htop
+    webkitgtk_6_0
+    webkitgtk_4_1
+    moreutils
+    obs-studio
+    obs-cli
+    obsidian
+    kotatogram-desktop
     brave
     kitty
     git
@@ -180,7 +192,6 @@
     python312Packages.tkinter
     tk
     eog
-    ollama-rocm
     nh
     gnomeExtensions.nordvpn-quick-toggle
     figlet
@@ -190,11 +201,40 @@
     libsForQt5.qtstyleplugin-kvantum
     libsForQt5.qt5ct
     dig
+    chromium
   ];
 
   stylix = {
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+    cursor = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 21;
+    };
+    fonts = {
+      serif = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Serif";
+      };
+
+      sansSerif = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Sans";
+      };
+
+      monospace = {
+        package = pkgs.ubuntu-sans-mono;
+        name = "ubuntu mono";
+      };
+
+      emoji = {
+        package = pkgs.noto-fonts-emoji;
+        name = "Noto Color Emoji";
+      };
+    };
+
+
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
     opacity = {
       applications = 0.85;
       desktop = 0.85;
