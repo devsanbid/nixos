@@ -1,7 +1,6 @@
 
 local hi =  vim.api.nvim_set_hl
 
-
 hi(0, "StatusLine", { bg = "none" })
 hi(0, "TelescopeBorder", { bg = "none" })
 hi(0, "FloatBorder", { bg = "none" })

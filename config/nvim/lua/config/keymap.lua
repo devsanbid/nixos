@@ -1,6 +1,8 @@
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+
+-- keybinding
 keymap("v", "<S-j>", "<Nop>")
 keymap("n", "<S-j>", "<Nop>")
 keymap("n", "U", "g+")

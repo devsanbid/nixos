@@ -6,20 +6,8 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
-  boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
-    };
-    grub = {
-      efiSupport = true;
-      useOSProber = true;
-
-      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
-      device = "nodev";
-    };
-  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
   system.autoUpgrade.enable = true;
   networking.hostName = "nixos";
 
@@ -29,6 +17,8 @@
       enable = true;
     };
   };
+  # xdg.portal = { enable = true; extraPortals = [ pkgs.xdg-desktop-portal-hyprland ]; };
+
 
   environment.etc = {
     "resolv.conf".text = "nameserver 1.1.1.1\n";
@@ -40,10 +30,8 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable the GNOME Desktop Environment.
+  services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
@@ -82,6 +70,8 @@
   ## Enviroment varibale
   environment.sessionVariables = {
     FLAKE = "/home/sanbid/.dotfiles";
+    OPENSSL_DIR = pkgs.openssl.dev;
+    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
   };
 
   # Install firefox.
@@ -90,12 +80,11 @@
     fish.enable = true;
     appimage.enable = true;
     dconf.enable = true;
-    hyprland = {
-      enable = true;
-      xwayland.enable = true;
-    };
-    xwayland.enable = true;
+    # hyprland = {
+    #   enable = true;
+    # };
   };
+  xdg.portal.enable = true;
 
   #default shell
   users.defaultUserShell = pkgs.fish;
@@ -112,6 +101,8 @@
     moreutils
     obs-studio
     obs-cli
+    openssl.dev
+    pkg-config
     obsidian
     kotatogram-desktop
     brave
@@ -128,6 +119,7 @@
     starship
     rustup
     ripgrep
+    python312Packages.huggingface-hub
     fd
     dua
     stow
@@ -213,18 +205,18 @@
     };
     fonts = {
       serif = {
-        package = pkgs.dejavu_fonts;
-        name = "DejaVu Serif";
+        package = pkgs.roboto-serif;
+        name = "Roboto Serif";
       };
 
       sansSerif = {
-        package = pkgs.dejavu_fonts;
-        name = "DejaVu Sans";
+        package = pkgs.roboto;
+        name = "Roboto Serif";
       };
 
       monospace = {
-        package = pkgs.ubuntu-sans-mono;
-        name = "ubuntu mono";
+        package = pkgs.roboto-mono;
+        name = "roboto mono";
       };
 
       emoji = {
