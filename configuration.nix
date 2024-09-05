@@ -80,9 +80,9 @@
     fish.enable = true;
     appimage.enable = true;
     dconf.enable = true;
-    # hyprland = {
-    #   enable = true;
-    # };
+    hyprland = {
+      enable = true;
+    };
   };
   xdg.portal.enable = true;
 
