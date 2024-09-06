@@ -8,7 +8,7 @@ let
 in
 {
 
-  stylix.autoEnable = false;
+  stylix.autoEnable = true;
   stylix.enable = true;
   stylix.polarity = themePolarity;
   stylix.image = pkgs.fetchurl {
@@ -18,7 +18,6 @@ in
   stylix.base16Scheme = ./. + themePath;
 
   stylix.targets.console.enable = true;
-  stylix.targets.kde.enable = true;
   stylix.targets.gnome.enable = true;
   stylix.targets.grub.enable = true;
   stylix.targets.grub.useImage = true;
