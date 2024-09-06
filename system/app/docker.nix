@@ -1,20 +1,9 @@
-{ pkgs, lib, storageDriver ? null, ... }:
-
-assert lib.asserts.assertOneOf "storageDriver" storageDriver [
-  null
-  "aufs"
-  "btrfs"
-  "devicemapper"
-  "overlay"
-  "overlay2"
-  "zfs"
-];
+{ pkgs, lib, ... }:
 
 {
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
-    storageDriver = storageDriver;
     autoPrune.enable = true;
   };
   users.users."sanbid".extraGroups = [ "docker" ];
