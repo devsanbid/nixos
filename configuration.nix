@@ -4,13 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./system/app
-      ./system/dm
-      ./system/enviroment
-      ./system/package
-      ./system/security
-      ./system/style
-      ./system/wm
+      ./system
     ];
   boot.loader = {
     efi = {
