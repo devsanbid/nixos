@@ -1,8 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+let
+  themePath = "../../../themes/io/io.yaml";
+  themePolarity = lib.removeSuffix "\n" (builtins.readFile (./. + "../../../themes/io/polarity.txt"));
+  backgroundUrl = builtins.readFile (./. + "../../../themes/io/backgroundurl.txt");
+  backgroundSha256 = builtins.readFile (./. + "../../../themes/io/backgroundsha256.txt");
+in
+
 {
-  imports = [
-    ./fish.nix
-  ];
   home.username = "sanbid";
   home.homeDirectory = "/home/sanbid";
   home.stateVersion = "24.05";
@@ -23,11 +27,23 @@
     zafiro-icons
   ];
 
-
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk2";
+  stylix.autoEnable = false;
+  stylix.enable = true;
+  stylix.polarity = themePolarity;
+  stylix.image = pkgs.fetchurl {
+    url = backgroundUrl;
+    sha256 = backgroundSha256;
   };
+  stylix.base16Scheme = ./. + themePath;
+
+  stylix.targets.console.enable = true;
+  stylix.targets.kde.enable = true;
+  stylix.targets.gnome.enable = true;
+  stylix.targets.grub.enable = true;
+  stylix.targets.grub.useImage = true;
+  stylix.targets.gtk.enable = true;
+  stylix.targets.kmscon.enable = true;
+
 
   fonts.fontconfig.enable = true;
 
@@ -45,6 +61,7 @@
   home.file.".config/nvim".source = ./config/nvim;
   home.file.".config/alacritty".source = ./config/alacritty;
   home.file.".config/kitty".source = ./config/kitty;
+  home.file.".config/fish".source = ./config/fish;
   home.file.".config/dunst".source = ./config/dunst;
   home.file.".config/tmux".source = ./config/tmux;
   home.file.".config/vivid".source = ./config/vivid;

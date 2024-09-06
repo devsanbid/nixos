@@ -21,7 +21,7 @@
 
   services.xserver.excludePackages = [ pkgs.xterm ];
 
-  services.xserver = {
+  services = {
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;

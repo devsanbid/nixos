@@ -37,7 +37,7 @@
       homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = { inherit nix-colors; inherit inputs; };
-        modules = [ ./home.nix ];
+        modules = [ stylix.homeManagerModules.stylix ./home.nix ];
       };
     };
 }
