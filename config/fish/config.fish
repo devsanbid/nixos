@@ -4,13 +4,10 @@ end
 
 set TERM "xterm-kitty"
 set fish_greeting
-set MANPAGER "sh -c 'col -b | bat -l man -p'"
 set _JAVA_AWT_WM_NONREPARENTING 1
 
 set BROWSER "brave"
 set EDITOR "nvim"
-set PANGOCAIRO_BACKEND "fc"
-set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -x SHELL /usr/bin/fish
 set -x LIBVIRT_DEFAULT_URL 'qemu:///system'
 set -x FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'

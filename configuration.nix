@@ -1,13 +1,22 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nix-colors, ... }:
 
 {
   imports =
     [
       ./hardware-configuration.nix
     ];
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
+    };
+    grub = {
+      efiSupport = true;
+      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
+      device = "nodev";
+    };
+  };
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
   system.autoUpgrade.enable = true;
   networking.hostName = "nixos";
 
@@ -17,7 +26,9 @@
       enable = true;
     };
   };
-  # xdg.portal = { enable = true; extraPortals = [ pkgs.xdg-desktop-portal-hyprland ]; };
+
+  services.xserver.enable = true;
+  services.xserver.desktopManager.budgie.enable = true;
 
 
   environment.etc = {
@@ -29,11 +40,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -70,8 +76,48 @@
   ## Enviroment varibale
   environment.sessionVariables = {
     FLAKE = "/home/sanbid/.dotfiles";
-    OPENSSL_DIR = pkgs.openssl.dev;
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+    GTK_THEME = "Tokyonight-Dark-B";
+  };
+
+  #Stylix
+  stylix = {
+    enable = true;
+    polarity = "dark";
+    base16Scheme = nix-colors.colorSchemes.oxocarbon-dark;
+    fonts = rec {
+      monospace = {
+        package = pkgs.fantasque-sans-mono;
+        name = "Fantasque Sans Mono";
+      };
+      emoji = {
+        package = pkgs.noto-fonts-emoji;
+        name = "Noto Color Emoji";
+      };
+      sizes = {
+        applications = 14;
+        desktop = 14;
+        popups = 14;
+        terminal = 16;
+      };
+    };
+    opacity = {
+      terminal = 0.90;
+      popups = 0.90;
+      desktop = 0.90;
+    };
+    cursor = {
+      package = pkgs.phinger-cursors;
+      name = "phinger-cursors-light";
+      size = 32;
+    };
+  };
+  fonts = {
+    fontconfig.defaultFonts = rec {
+      sansSerif = [ "Kollektif" "Mamelon" ];
+      serif = sansSerif;
+      emoji = [ "Noto Color Emoji" ];
+    };
   };
 
   # Install firefox.
@@ -82,28 +128,21 @@
     dconf.enable = true;
     hyprland = {
       enable = true;
+      xwayland.enable = true;
     };
   };
-  xdg.portal.enable = true;
 
   #default shell
   users.defaultUserShell = pkgs.fish;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     vim
     neovim
     htop
-    webkitgtk_6_0
-    webkitgtk_4_1
     moreutils
     obs-studio
     obs-cli
-    openssl.dev
+    openssl
     pkg-config
-    obsidian
     kotatogram-desktop
     brave
     kitty
@@ -117,7 +156,8 @@
     waybar
     wpaperd
     starship
-    rustup
+    cargo
+    rustc
     ripgrep
     python312Packages.huggingface-hub
     fd
@@ -150,7 +190,6 @@
     xfce.thunar-volman
     vlc
     acpi
-    wpsoffice
     zoxide
     pamixer
     wlsunset
@@ -192,72 +231,28 @@
     diff-so-fancy
     libsForQt5.qtstyleplugin-kvantum
     libsForQt5.qt5ct
+    wayland-scanner.dev
     dig
     chromium
+    glib
+
   ];
 
-  stylix = {
-    enable = true;
-    cursor = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 21;
-    };
-    fonts = {
-      serif = {
-        package = pkgs.roboto-serif;
-        name = "Roboto Serif";
-      };
-
-      sansSerif = {
-        package = pkgs.roboto;
-        name = "Roboto Serif";
-      };
-
-      monospace = {
-        package = pkgs.roboto-mono;
-        name = "roboto mono";
-      };
-
-      emoji = {
-        package = pkgs.noto-fonts-emoji;
-        name = "Noto Color Emoji";
-      };
-    };
-
-
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
-    opacity = {
-      applications = 0.85;
-      desktop = 0.85;
-      popups = 1.0;
-    };
-    polarity = "dark";
-    targets = {
-      chromium.enable = true;
-      fish.enable = true;
-      gnome.enable = true;
-      grub.enable = true;
-      gtk.enable = true;
-    };
-  };
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
       (
         nerdfonts.override {
-          fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" ];
+          fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly" ];
         })
     ];
   };
 
   users.extraGroups.vboxusers.members = [ "sanbid" ];
   virtualisation = {
-    virtualbox.host.enable = true;
-    virtualbox.host.enableExtensionPack = true;
-    virtualbox.guest.enable = true;
+    # virtualbox.host.enable = true;
+    # virtualbox.host.enableExtensionPack = true;
+    # virtualbox.guest.enable = true;
     docker.enable = true;
     podman.enable = true;
     docker.rootless.enable = true;
@@ -265,10 +260,20 @@
 
   services = {
     openssh.enable = true;
+    displayManager = {
+      sddm = {
+        wayland.enable = true;
+        enable = true;
+      };
+
+    };
     qemuGuest.enable = true;
     spice-vdagentd.enable = true;
     ollama.enable = true;
   };
+
+  # Allow unfree packages
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
 
