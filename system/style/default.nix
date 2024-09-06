@@ -17,7 +17,6 @@ in
   };
   stylix.base16Scheme = ./. + themePath;
 
-  stylix.targets.sddm.enable = true;
   stylix.targets.console.enable = true;
 
   environment.sessionVariables = {
