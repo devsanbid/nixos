@@ -4,6 +4,13 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./app
+      ./dm
+      ./enviroment
+      ./package
+      ./security
+      ./style
+      ./wm
     ];
   boot.loader = {
     efi = {
@@ -27,13 +34,6 @@
     };
   };
 
-  services.xserver.enable = true;
-  services.xserver.desktopManager.budgie.enable = true;
-
-
-  environment.etc = {
-    "resolv.conf".text = "nameserver 1.1.1.1\n";
-  };
 
   # Set your time zone.
   time.timeZone = "Asia/Kathmandu";
@@ -58,12 +58,6 @@
     polkit.enable = true;
   };
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   users.users.sanbid = {
     isNormalUser = true;
@@ -73,63 +67,12 @@
     ];
   };
 
-  ## Enviroment varibale
-  environment.sessionVariables = {
-    FLAKE = "/home/sanbid/.dotfiles";
-    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-    GTK_THEME = "Tokyonight-Dark-B";
-  };
-
-  #Stylix
-  stylix = {
-    enable = true;
-    polarity = "dark";
-    base16Scheme = nix-colors.colorSchemes.oxocarbon-dark;
-    fonts = rec {
-      monospace = {
-        package = pkgs.fantasque-sans-mono;
-        name = "Fantasque Sans Mono";
-      };
-      emoji = {
-        package = pkgs.noto-fonts-emoji;
-        name = "Noto Color Emoji";
-      };
-      sizes = {
-        applications = 14;
-        desktop = 14;
-        popups = 14;
-        terminal = 16;
-      };
-    };
-    opacity = {
-      terminal = 0.90;
-      popups = 0.90;
-      desktop = 0.90;
-    };
-    cursor = {
-      package = pkgs.phinger-cursors;
-      name = "phinger-cursors-light";
-      size = 32;
-    };
-  };
-  fonts = {
-    fontconfig.defaultFonts = rec {
-      sansSerif = [ "Kollektif" "Mamelon" ];
-      serif = sansSerif;
-      emoji = [ "Noto Color Emoji" ];
-    };
-  };
 
   # Install firefox.
   programs = {
     firefox.enable = true;
     fish.enable = true;
     appimage.enable = true;
-    dconf.enable = true;
-    hyprland = {
-      enable = true;
-      xwayland.enable = true;
-    };
   };
 
   #default shell
@@ -249,26 +192,8 @@
   };
 
   users.extraGroups.vboxusers.members = [ "sanbid" ];
-  virtualisation = {
-    # virtualbox.host.enable = true;
-    # virtualbox.host.enableExtensionPack = true;
-    # virtualbox.guest.enable = true;
-    docker.enable = true;
-    podman.enable = true;
-    docker.rootless.enable = true;
-  };
 
   services = {
-    openssh.enable = true;
-    displayManager = {
-      sddm = {
-        wayland.enable = true;
-        enable = true;
-      };
-
-    };
-    qemuGuest.enable = true;
-    spice-vdagentd.enable = true;
     ollama.enable = true;
   };
 
