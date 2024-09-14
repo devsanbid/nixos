@@ -22,6 +22,7 @@
       };
       pkgs = import nixpkgs {
         inherit system;
+        config.allowUnfree = true;
         overlays = [ xdphOverlay ];
       };
     in

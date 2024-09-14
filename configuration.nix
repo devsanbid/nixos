@@ -1,4 +1,4 @@
-{ config, pkgs, nix-colors, ... }:
+{ config, lib, pkgs, nix-colors, ... }:
 
 {
   imports =
@@ -61,6 +61,16 @@
     ];
   };
 
+  nix.gc = {
+    automatic = true;
+    persistent = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+
+  #Java
+  nixpkgs.config.allowUnfree = true;
+  programs.java = { enable = true; };
 
   # Install firefox.
   programs = {
@@ -69,12 +79,17 @@
     appimage.enable = true;
   };
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "google-chrome"
+  ];
+
   #default shell
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
     vim
     neovim
     htop
+    jdk
     moreutils
     obs-studio
     obs-cli
@@ -86,7 +101,9 @@
     git
     dunst
     alacritty
+    mysql-workbench
     gtk4
+    bun
     tmux
     python312Packages.pip
     vivid
@@ -119,6 +136,7 @@
     mpv
     nodejs_22
     podman
+    obsidian
     docker
     telegram-desktop
     tesseract
@@ -185,6 +203,10 @@
     ];
   };
 
+  services.mysql = {
+    enable = true;
+    package = pkgs.mysql;
+  };
   users.extraGroups.vboxusers.members = [ "sanbid" ];
 
   services = {

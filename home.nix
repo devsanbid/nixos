@@ -24,6 +24,7 @@ in
     libsForQt5.qt5ct
     papirus-folders
     zafiro-icons
+    webkitgtk
   ];
 
   stylix.autoEnable = true;
