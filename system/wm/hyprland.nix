@@ -8,9 +8,8 @@
   programs = {
     hyprland = {
       enable = true;
-      xwayland = {
-        enable = true;
-      };
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     };
   };
 
@@ -19,13 +18,13 @@
     plasma6.excludePackages = [ pkgs.kdePackages.systemsettings ];
   };
 
-  services.xserver.excludePackages = [ pkgs.xterm ];
-
   services = {
-    displayManager.sddm = {
+    xserver = {
       enable = true;
-      wayland.enable = true;
-      package = pkgs.sddm;
+      displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
     };
 
   };

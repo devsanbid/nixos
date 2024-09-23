@@ -8,6 +8,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     stylix.url = "github:danth/stylix";
     nix-colors.url = "github:misterio77/nix-colors";
   };
@@ -30,9 +31,12 @@
       nixosConfigurations = {
         nixos = lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs pkgs; inherit nix-colors; };
+          specialArgs = { inherit pkgs; inherit nix-colors; inherit inputs; };
 
-          modules = [ stylix.nixosModules.stylix ./configuration.nix ];
+          modules = [
+            stylix.nixosModules.stylix
+            ./configuration.nix
+          ];
         };
       };
       homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {

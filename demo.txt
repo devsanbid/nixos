@@ -1,0 +1,14 @@
+● ydotoold.service - ydotoold - backend for ydotool
+     Loaded: loaded (/etc/systemd/system/ydotoold.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2024-09-21 07:16:00 +0545; 43min ago
+ Invocation: dabed24b3f32455c9640a819aafb0856
+   Main PID: 869 (ydotoold)
+         IP: 0B in, 0B out
+         IO: 36K read, 0B written
+      Tasks: 1 (limit: 16569)
+     Memory: 552K (peak: 2.3M)
+        CPU: 27ms
+     CGroup: /system.slice/ydotoold.service
+             └─869 /nix/store/33h8gh6x4yqqz53jzv580r50d1j71a7x-ydotool-1.0.4/bin/ydotoold --socket-path=/run/ydotoold/socket --socket-perm=0660
+
+Sep 21 07:16:00 nixos systemd[1]: Started ydotoold - backend for ydotool.

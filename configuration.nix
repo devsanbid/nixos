@@ -56,7 +56,7 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" ];
+    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" "ydotool" ];
     packages = with pkgs; [
     ];
   };
@@ -70,17 +70,20 @@
 
   #Java
   nixpkgs.config.allowUnfree = true;
-  programs.java = { enable = true; };
 
   # Install firefox.
   programs = {
     firefox.enable = true;
     fish.enable = true;
     appimage.enable = true;
+    java.enable = true;
+    ydotool = {
+      enable = true;
+    };
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "google-chrome"
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
   ];
 
   #default shell
@@ -89,7 +92,14 @@
     vim
     neovim
     htop
+    mycli
     jdk
+    python312Packages.python-dotenv
+    micromamba
+    grimblast
+    libinput-gestures
+    rust-analyzer
+    wmctrl
     moreutils
     obs-studio
     obs-cli
@@ -110,8 +120,7 @@
     waybar
     wpaperd
     starship
-    cargo
-    rustc
+    rustup
     ripgrep
     python312Packages.huggingface-hub
     fd
@@ -160,7 +169,6 @@
     gcc
     eza
     libreoffice
-    ydotool
     libnotify
     pyprland
     libinput-gestures

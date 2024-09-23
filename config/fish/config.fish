@@ -98,7 +98,7 @@ alias cl 'clear'
 
 
 # Replace some more things with better alternatives
-alias cat 'bat --style header --style snip --style changes --style header'
+alias cat 'bat -pp'
 
 # Starship prompt
  if status --is-interactive
