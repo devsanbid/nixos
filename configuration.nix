@@ -99,6 +99,7 @@
     grimblast
     libinput-gestures
     rust-analyzer
+        wgnord
     wmctrl
     moreutils
     obs-studio
