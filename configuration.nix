@@ -6,7 +6,9 @@
       ./hardware-configuration.nix
       ./system
     ];
-  boot.loader = {
+
+
+     boot.loader = {
     efi = {
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
@@ -17,8 +19,14 @@
       device = "nodev";
     };
   };
-
-  system.autoUpgrade.enable = true;
+    system.autoUpgrade = {
+    enable = true;
+    operation = "switch"; # If you don't want to apply updates immediately, only after rebooting, use `boot` option in this case
+    flake = "/home/sanbid/.dotfiles";
+    flags = [ "--update-input" "nixpkgs" "--update-input" "rust-overlay" "--commit-lock-file" ];
+    dates = "weekly";
+  };
+  
   networking.hostName = "nixos";
 
   # Enable networking
@@ -61,12 +69,20 @@
     ];
   };
 
+    nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
+
   nix.gc = {
     automatic = true;
     persistent = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
+      # Enable Gnome
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   #Java
   nixpkgs.config.allowUnfree = true;
@@ -86,11 +102,105 @@
   programs.nix-ld.libraries = with pkgs; [
   ];
 
+    services.dbus = {
+    enable = true;
+    implementation = "broker";
+    packages = with pkgs; [
+      xfce.xfconf
+      gnome2.GConf
+    ];
+    };
+
+
+      services.gvfs.enable = true;
+  environment.variables.GTK_THEME = "catppuccin-macchiato-teal-standard";
+  environment.variables.XCURSOR_THEME = "Catppuccin-Macchiato-Teal";
+  environment.variables.HYPRCURSOR_THEME = "Catppuccin-Macchiato-Teal";
+  environment.variables.HYPRCURSOR_SIZE = "24";
+  qt.enable = true;
+  qt.platformTheme = "gtk2";
+  qt.style = "gtk2";
+  console = {
+    earlySetup = true;
+    colors = [
+      "24273a"
+      "ed8796"
+      "a6da95"
+      "eed49f"
+      "8aadf4"
+      "f5bde6"
+      "8bd5ca"
+      "cad3f5"
+      "5b6078"
+      "ed8796"
+      "a6da95"
+      "eed49f"
+      "8aadf4"
+      "f5bde6"
+      "8bd5ca"
+      "a5adcb"
+    ];
+  };
+
+  # Override packages
+  nixpkgs.config.packageOverrides = pkgs: {
+    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = ["teal"]; };
+    catppuccin-gtk = pkgs.catppuccin-gtk.override {
+      accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes 
+      size = "standard";
+      variant = "macchiato";
+    };
+    discord = pkgs.discord.override {
+      withOpenASAR = true;
+      withTTS = true;
+    };
+  };
+
+
+
+
   #default shell
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
+    wget
+    isoimagewriter
+    python312Packages.pynvim
     vim
+        wlogout
+            wlrctl
+        wtype
+        xdg-utils
+
+        wl-clip-persist
+    cliphist
+        wl-screenrec
+        imagemagick
+    swappy
+    ffmpeg_6-full
+          at-spi2-atk
+    qt6.qtwayland
+    psi-notify
+    poweralertd
+    playerctl
+    psmisc
+        numix-icon-theme-circle
+    colloid-icon-theme
+    catppuccin-gtk
+    catppuccin-kvantum
+    catppuccin-cursors.macchiatoTeal
     neovim
+      hyprpicker
+    hyprcursor
+    hyprlock
+    hypridle
+        cool-retro-term
+    imv
+    onefetch
+     sumneko-lua-language-server
+     hyprls
+    emmet-language-server
+    nil
+    hyprpaper
     htop
     mycli
     jdk
@@ -99,7 +209,9 @@
     grimblast
     libinput-gestures
     rust-analyzer
-        wgnord
+    python312Packages.pyautogui
+    wgnord
+    comic-mono
     wmctrl
     moreutils
     obs-studio
@@ -205,6 +317,8 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
+jetbrains-mono
+    nerd-font-patcher
       (
         nerdfonts.override {
           fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly" ];
@@ -226,5 +340,4 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }

@@ -5,27 +5,24 @@
     ./wayland.nix
   ];
 
-  programs = {
-    hyprland = {
-      enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-    };
-  };
+  # Enable Hyprland
+  programs.hyprland.enable = true;
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";# Enable Display Manager
 
-  environment = {
-    plasma5.excludePackages = [ pkgs.kdePackages.systemsettings ];
-    plasma6.excludePackages = [ pkgs.kdePackages.systemsettings ];
-  };
 
-  services = {
-    xserver = {
-      enable = true;
-      displayManager.sddm = {
-        enable = true;
-        wayland.enable = true;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd Hyprland";
+        user = "greeter";
       };
     };
-
   };
+
+     environment.systemPackages = with pkgs; [
+    greetd.tuigreet
+  ];
+
 }
