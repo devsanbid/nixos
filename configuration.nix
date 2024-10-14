@@ -8,7 +8,7 @@
     ];
 
 
-     boot.loader = {
+  boot.loader = {
     efi = {
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
@@ -19,14 +19,31 @@
       device = "nodev";
     };
   };
-    system.autoUpgrade = {
+
+  systemd = {
+    user.services.polkit-gnome-authentication-agent-1 = {
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+    };
+  };
+
+  system.autoUpgrade = {
     enable = true;
     operation = "switch"; # If you don't want to apply updates immediately, only after rebooting, use `boot` option in this case
     flake = "/home/sanbid/.dotfiles";
     flags = [ "--update-input" "nixpkgs" "--update-input" "rust-overlay" "--commit-lock-file" ];
     dates = "weekly";
   };
-  
+
   networking.hostName = "nixos";
 
   # Enable networking
@@ -69,7 +86,7 @@
     ];
   };
 
-    nix.settings.auto-optimise-store = true;
+  nix.settings.auto-optimise-store = true;
   nix.optimise.automatic = true;
 
   nix.gc = {
@@ -79,7 +96,7 @@
     options = "--delete-older-than 7d";
   };
 
-      # Enable Gnome
+  # Enable Gnome
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
@@ -102,17 +119,17 @@
   programs.nix-ld.libraries = with pkgs; [
   ];
 
-    services.dbus = {
+  services.dbus = {
     enable = true;
     implementation = "broker";
     packages = with pkgs; [
       xfce.xfconf
       gnome2.GConf
     ];
-    };
+  };
 
 
-      services.gvfs.enable = true;
+  services.gvfs.enable = true;
   environment.variables.GTK_THEME = "catppuccin-macchiato-teal-standard";
   environment.variables.XCURSOR_THEME = "Catppuccin-Macchiato-Teal";
   environment.variables.HYPRCURSOR_THEME = "Catppuccin-Macchiato-Teal";
@@ -144,7 +161,7 @@
 
   # Override packages
   nixpkgs.config.packageOverrides = pkgs: {
-    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = ["teal"]; };
+    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = [ "teal" ]; };
     catppuccin-gtk = pkgs.catppuccin-gtk.override {
       accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes 
       size = "standard";
@@ -166,38 +183,40 @@
     isoimagewriter
     python312Packages.pynvim
     vim
-        wlogout
-            wlrctl
-        wtype
-        xdg-utils
+    wlogout
+    wlrctl
+    wtype
+    xdg-utils
 
-        wl-clip-persist
+    wl-clip-persist
     cliphist
-        wl-screenrec
-        imagemagick
+    wl-screenrec
+    imagemagick
     swappy
     ffmpeg_6-full
-          at-spi2-atk
+    at-spi2-atk
     qt6.qtwayland
+    sway
+
     psi-notify
     poweralertd
     playerctl
     psmisc
-        numix-icon-theme-circle
+    numix-icon-theme-circle
     colloid-icon-theme
     catppuccin-gtk
     catppuccin-kvantum
     catppuccin-cursors.macchiatoTeal
     neovim
-      hyprpicker
+    hyprpicker
     hyprcursor
     hyprlock
     hypridle
-        cool-retro-term
+    cool-retro-term
     imv
     onefetch
-     sumneko-lua-language-server
-     hyprls
+    sumneko-lua-language-server
+    hyprls
     emmet-language-server
     nil
     hyprpaper
@@ -317,8 +336,8 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-jetbrains-mono
-    nerd-font-patcher
+      jetbrains-mono
+      nerd-font-patcher
       (
         nerdfonts.override {
           fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly" ];
