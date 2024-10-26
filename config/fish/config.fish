@@ -10,7 +10,7 @@ set BROWSER "brave"
 set EDITOR "nvim"
 set -x SHELL /usr/bin/fish
 set -x LIBVIRT_DEFAULT_URL 'qemu:///system'
-set -x FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+# set -x FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 set -x FZF_CTRL_T_OPTS "
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'
@@ -115,7 +115,7 @@ set --export PATH $BUN_INSTALL/bin $PATH
 set --export ATAC_MAIN_DIR $HOME/.config/atac
 set --export ATAC_KEY_BINDINGS $HOME/.config/atac/key_bindings_templates/vim_key_bindings.toml
 
-set --export JDK_JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+#set --export JDK_JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 set --export KITTY_ENABLE_WAYLAND 1
 
 

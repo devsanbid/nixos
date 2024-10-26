@@ -1,12 +1,12 @@
-{ config, lib, pkgs, nix-colors, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./system
-    ];
-
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+    ./system
+  ];
 
   boot.loader = {
     efi = {
@@ -15,7 +15,6 @@
     };
     grub = {
       efiSupport = true;
-      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
     };
   };
@@ -23,9 +22,9 @@
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      wants = ["graphical-session.target"];
+      after = ["graphical-session.target"];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
@@ -40,7 +39,7 @@
     enable = true;
     operation = "switch"; # If you don't want to apply updates immediately, only after rebooting, use `boot` option in this case
     flake = "/home/sanbid/.dotfiles";
-    flags = [ "--update-input" "nixpkgs" "--update-input" "rust-overlay" "--commit-lock-file" ];
+    flags = ["--update-input" "nixpkgs" "--update-input" "rust-overlay" "--commit-lock-file"];
     dates = "weekly";
   };
 
@@ -52,7 +51,6 @@
       enable = true;
     };
   };
-
 
   # Set your time zone.
   time.timeZone = "Asia/Kathmandu";
@@ -77,11 +75,10 @@
     polkit.enable = true;
   };
 
-
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" "ydotool" ];
+    extraGroups = ["networkmanager" "libvirtd" "docker" "wheel" "ydotool"];
     packages = with pkgs; [
     ];
   };
@@ -128,42 +125,13 @@
     ];
   };
 
-
   services.gvfs.enable = true;
-  environment.variables.GTK_THEME = "catppuccin-macchiato-teal-standard";
-  environment.variables.XCURSOR_THEME = "Catppuccin-Macchiato-Teal";
-  environment.variables.HYPRCURSOR_THEME = "Catppuccin-Macchiato-Teal";
-  environment.variables.HYPRCURSOR_SIZE = "24";
-  qt.enable = true;
-  qt.platformTheme = "gtk2";
-  qt.style = "gtk2";
-  console = {
-    earlySetup = true;
-    colors = [
-      "24273a"
-      "ed8796"
-      "a6da95"
-      "eed49f"
-      "8aadf4"
-      "f5bde6"
-      "8bd5ca"
-      "cad3f5"
-      "5b6078"
-      "ed8796"
-      "a6da95"
-      "eed49f"
-      "8aadf4"
-      "f5bde6"
-      "8bd5ca"
-      "a5adcb"
-    ];
-  };
 
   # Override packages
   nixpkgs.config.packageOverrides = pkgs: {
-    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = [ "teal" ]; };
+    colloid-icon-theme = pkgs.colloid-icon-theme.override {colorVariants = ["teal"];};
     catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes 
+      accents = ["teal"]; # You can specify multiple accents here to output multiple themes
       size = "standard";
       variant = "macchiato";
     };
@@ -172,9 +140,6 @@
       withTTS = true;
     };
   };
-
-
-
 
   #default shell
   users.defaultUserShell = pkgs.fish;
@@ -187,17 +152,18 @@
     wlrctl
     wtype
     xdg-utils
+    qbittorrent
 
     wl-clip-persist
-    cliphist
     wl-screenrec
-    imagemagick
     swappy
+    lua5_1
+    imagemagick
     ffmpeg_6-full
+        deadnix
     at-spi2-atk
     qt6.qtwayland
     sway
-
     psi-notify
     poweralertd
     playerctl
@@ -211,17 +177,17 @@
     hyprpicker
     hyprcursor
     hyprlock
-    hypridle
     cool-retro-term
     imv
     onefetch
     sumneko-lua-language-server
     hyprls
     emmet-language-server
+         tree
+
     nil
     hyprpaper
     htop
-    mycli
     jdk
     python312Packages.python-dotenv
     micromamba
@@ -237,8 +203,8 @@
     obs-cli
     openssl
     pkg-config
-    kotatogram-desktop
     brave
+    greetd.gtkgreet
     kitty
     git
     dunst
@@ -306,7 +272,6 @@
     libinput-gestures
     blueman
     swaybg
-    hypridle
     wl-clipboard
     tealdeer
     ollama
@@ -330,8 +295,11 @@
     dig
     chromium
     glib
-
+    alejandra
+    nixd
   ];
+
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   fonts = {
     fontDir.enable = true;
@@ -340,23 +308,25 @@
       nerd-font-patcher
       (
         nerdfonts.override {
-          fonts = [ "FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly" ];
-        })
+          fonts = ["FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly"];
+        }
+      )
     ];
   };
 
   services.mysql = {
     enable = true;
-    package = pkgs.mysql;
+    package = pkgs.mariadb;
   };
-  users.extraGroups.vboxusers.members = [ "sanbid" ];
+  users.extraGroups.vboxusers.members = ["sanbid"];
 
   services = {
     ollama.enable = true;
+    hypridle.enable = true;
   };
 
   # Allow unfree packages
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }

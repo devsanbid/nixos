@@ -17,6 +17,13 @@ in
   };
   stylix.base16Scheme = ./. + themePath;
 
+  stylix.cursor = {
+    package = pkgs.rose-pine-cursor;
+    name = "BreezeX-RoséPine";
+    size = 21;
+  };
+
+
   stylix.targets.console.enable = true;
   stylix.targets.gnome.enable = true;
   stylix.targets.grub.enable = true;

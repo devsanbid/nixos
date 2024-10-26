@@ -1,31 +1,30 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   themePolarity = lib.removeSuffix "\n" (builtins.readFile (./. + "/themes/io/polarity.txt"));
   backgroundUrl = builtins.readFile (./. + "/themes/io/backgroundurl.txt");
   backgroundSha256 = builtins.readFile (./. + "/themes/io/backgroundsha256.txt");
-in
-
-{
+in {
   home.username = "sanbid";
   home.homeDirectory = "/home/sanbid";
   home.stateVersion = "24.05";
 
-  home.sessionPath = [ "$HOME/.cargo/bin" ];
+  home.sessionPath = ["$HOME/.cargo/bin"];
   nixpkgs.config.allowUnfree = true;
 
   home.packages = with pkgs; [
     whatsapp-for-linux
     discord
-    (catppuccin-kvantum.override {
-      accent = "Blue";
-      variant = "Macchiato";
-    })
     libsForQt5.qtstyleplugin-kvantum
     libsForQt5.qt5ct
     papirus-folders
     zafiro-icons
     webkitgtk
   ];
+
 
   stylix.autoEnable = true;
   stylix.enable = true;
@@ -36,16 +35,18 @@ in
   };
   stylix.base16Scheme = ./. + "/themes/io/io.yaml";
 
+  ## cursor
+  stylix.cursor = {
+    package = pkgs.rose-pine-cursor;
+    name = "BreezeX-RoséPine";
+    size = 21;
+  };
+
   stylix.targets.kde.enable = true;
   stylix.targets.gnome.enable = true;
   stylix.targets.gtk.enable = true;
 
-
   fonts.fontconfig.enable = true;
-
-  xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
-    General.theme = "Catppuccin-Macchiato-Blue";
-  };
 
   services.wlsunset = {
     enable = true;
@@ -82,7 +83,7 @@ in
     enable = true;
     userName = "devsanbid";
     userEmail = "devsanbid@gmail.com";
-    aliases = { };
+    aliases = {};
   };
 
   programs.zathura.enable = true;
