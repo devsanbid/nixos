@@ -148,6 +148,7 @@
     isoimagewriter
     python312Packages.pynvim
     vim
+    rust-analyzer
     wlogout
     wlrctl
     wtype
@@ -155,12 +156,11 @@
     qbittorrent
 
     wl-clip-persist
-    wl-screenrec
     swappy
     lua5_1
     imagemagick
     ffmpeg_6-full
-        deadnix
+    deadnix
     at-spi2-atk
     qt6.qtwayland
     sway
@@ -183,7 +183,7 @@
     sumneko-lua-language-server
     hyprls
     emmet-language-server
-         tree
+    tree
 
     nil
     hyprpaper
@@ -268,7 +268,6 @@
     eza
     libreoffice
     libnotify
-    pyprland
     libinput-gestures
     blueman
     swaybg
