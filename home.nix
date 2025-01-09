@@ -25,7 +25,6 @@ in {
     webkitgtk
   ];
 
-
   stylix.autoEnable = true;
   stylix.enable = true;
   stylix.polarity = themePolarity;
@@ -35,12 +34,13 @@ in {
   };
   stylix.base16Scheme = ./. + "/themes/io/io.yaml";
 
-  ## cursor
+  # cursor
   stylix.cursor = {
     package = pkgs.rose-pine-cursor;
     name = "BreezeX-RoséPine";
-    size = 21;
+    size = 28;
   };
+
 
   stylix.targets.kde.enable = true;
   stylix.targets.gnome.enable = true;

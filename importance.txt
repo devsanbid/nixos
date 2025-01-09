@@ -1,0 +1,34 @@
+
+mcq
+cpu each part role (ALU,CLU,memory)
+memeory herihercy 
+firmware,ROM
+character represent ASCII
+numberice represent byte 
+pipeline (phase)
+ieee 754 floating point
+
+
+system bus
+cache memory 
+
+
+long question
+computer architecure ko difference
+sign magnitude 1's compli and 2's compli
+k-map 4 variables
+type of resgiter and register of assembly lanagugue
+type of operating system and function
+IO controller (importance *)
+pipelining 
+RISC and CISC
+flynn calassification
+cache replacemenent policy (importance *)
+OSI model and networking
+well-known, dynamic
+4 bit multipler and full adder
+8085 defination 
+how 32 bit sign integer reprenstated in hex decimal notation (* importance)
+
+
+

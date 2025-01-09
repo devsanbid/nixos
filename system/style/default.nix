@@ -20,7 +20,7 @@ in
   stylix.cursor = {
     package = pkgs.rose-pine-cursor;
     name = "BreezeX-RoséPine";
-    size = 21;
+    size = 28;
   };
 
 

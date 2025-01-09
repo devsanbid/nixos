@@ -118,6 +118,13 @@ set --export ATAC_KEY_BINDINGS $HOME/.config/atac/key_bindings_templates/vim_key
 #set --export JDK_JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 set --export KITTY_ENABLE_WAYLAND 1
 
+# >>> mamba initialize >>>
+set -gx MAMBA_EXE "/nix/store/l2125zbsxc6xsj5rihsc780bqbfyfz96-micromamba-1.5.8/bin/micromamba"
+set -gx MAMBA_ROOT_PREFIX "/home/sanbid/micromamba"
+# <<< mamba initialize <<<
+
+set fish_path "/run/current-system/sw/bin/fish"
+
 
 
 # >>> conda initialize >>>

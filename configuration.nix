@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -6,6 +8,7 @@
   imports = [
     ./hardware-configuration.nix
     ./system
+    # ./patchpoetry.nix
   ];
 
   boot.loader = {
@@ -15,32 +18,10 @@
     };
     grub = {
       efiSupport = true;
+      useOSProber = true;
+      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
     };
-  };
-
-  systemd = {
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = ["graphical-session.target"];
-      wants = ["graphical-session.target"];
-      after = ["graphical-session.target"];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
-  };
-
-  system.autoUpgrade = {
-    enable = true;
-    operation = "switch"; # If you don't want to apply updates immediately, only after rebooting, use `boot` option in this case
-    flake = "/home/sanbid/.dotfiles";
-    flags = ["--update-input" "nixpkgs" "--update-input" "rust-overlay" "--commit-lock-file"];
-    dates = "weekly";
   };
 
   networking.hostName = "nixos";
@@ -50,6 +31,22 @@
     networkmanager = {
       enable = true;
     };
+  };
+
+  environment.sessionVariables = rec {
+    XDG_CACHE_HOME = "$HOME/.cache";
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+    CUDA_PATH = "${pkgs.cudatoolkit}";
+    EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+    EXTRA_CCFLAGS = "-I/usr/include";
+    GDK_SCALE = "2.5";
+
+    XDG_BIN_HOME = "$HOME/.local/bin";
+    PATH = [
+      "${XDG_BIN_HOME}"
+    ];
   };
 
   # Set your time zone.
@@ -99,21 +96,6 @@
   nix.settings.auto-optimise-store = true;
   nix.optimise.automatic = true;
 
-  nix.gc = {
-    automatic = true;
-    persistent = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
-
-  # Enable Gnome
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  #Java
-  nixpkgs.config.allowUnfree = true;
-
   # Install firefox.
   programs = {
     firefox.enable = true;
@@ -134,7 +116,6 @@
     implementation = "broker";
     packages = with pkgs; [
       xfce.xfconf
-      gnome2.GConf
     ];
   };
 
@@ -153,26 +134,62 @@
       withTTS = true;
     };
   };
+  hardware.nvidia-container-toolkit.enable = true;
+  nix.settings.trusted-users = ["root" "sanbid"];
+
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+  };
+
+  systemd.services.ollama.serviceConfig = {
+    DeviceAllow = lib.mkForce [
+      "char-nvidia"
+      "char-nvidia-modeset"
+      "char-nvidiactl"
+      "char-nvidia-nvswitch"
+      "char-nvidia-nvlink"
+      "char-nvidia-caps"
+      "char-nvidia-caps-imex-channels"
+      "char-nvidia-uvm"
+      "char-nvidia-frontend"
+    ];
+    DevicePolicy = lib.mkForce "auto";
+  };
 
   #default shell
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
     wget
     isoimagewriter
-    python312Packages.pynvim
+    cudatoolkit
+    nvtopPackages.nvidia
+    # cudaPackages.cudatoolkit
+    # cudatoolkit
+    pipx
+    conda
     vim
     rust-analyzer
+        swww
+    ghostty
+    onnxruntime
+    lmstudio
+    cudaPackages.libcublas
     wlogout
     pulseaudio
     virt-manager
+
+    devbox
+    mysql_jdbc
     virt-viewer
     spice
     spice-gtk
     spice-protocol
     win-virtio
     win-spice
-    gnome.adwaita-icon-theme
     wlrctl
+    nvitop
+
     wtype
     xdg-utils
     qbittorrent
@@ -211,18 +228,25 @@
     hyprpaper
     htop
     jdk
-    python312Packages.python-dotenv
+    heroic
+    lutris
+    poetry
+    python3
     micromamba
+    netbeans
+    python312Packages.pandas
+    python312Packages.seaborn
+    python312Packages.matplotlib
+    python312Packages.numpy
+    vscode
+    luajitPackages.lua-lsp
     grimblast
     libinput-gestures
     rust-analyzer
-    python312Packages.pyautogui
     wgnord
     comic-mono
     wmctrl
     moreutils
-    obs-studio
-    obs-cli
     openssl
     pkg-config
     brave
@@ -231,18 +255,17 @@
     git
     dunst
     alacritty
-    mysql-workbench
     gtk4
     bun
     tmux
-    python312Packages.pip
     vivid
     waybar
     wpaperd
     starship
+    inxi
+
     rustup
     ripgrep
-    python312Packages.huggingface-hub
     fd
     dua
     stow
@@ -253,7 +276,6 @@
     bc
     dolphin
     kdePackages.dolphin-plugins
-    dog
     fastfetch
     fzf
     gvfs
@@ -265,7 +287,6 @@
     mpv
     nodejs_22
     podman
-    obsidian
     docker
     telegram-desktop
     tesseract
@@ -284,10 +305,12 @@
     tokei
     grim
     slurp
-    python3Full
+    python3
     libgcc
     gcc
     eza
+    uv
+    micromamba
     libreoffice
     libnotify
     libinput-gestures
@@ -295,13 +318,11 @@
     swaybg
     wl-clipboard
     tealdeer
-    ollama
     gnome-tweaks
     home-manager
     gparted
     kdePackages.partitionmanager
-    python312Packages.pillow
-    python312Packages.tkinter
+    eww
     tk
     eog
     nh
@@ -311,29 +332,66 @@
     entr
     diff-so-fancy
     libsForQt5.qtstyleplugin-kvantum
+    ollama-cuda
+    nwg-look
     libsForQt5.qt5ct
     wayland-scanner.dev
     dig
     chromium
+    lenovo-legion
     glib
+    mycli
     alejandra
     nixd
   ];
+
+  services.xserver.videoDrivers = ["nvidia"];
+  services.desktopManager.plasma6.enable = true;
+
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPackages = with pkgs; [
+        vpl-gpu-rt # for newer GPUs on NixOS >24.05 or unstable
+      ];
+    };
+  };
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = true;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    prime = {
+      sync.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+  };
 
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-      jetbrains-mono
-      nerd-font-patcher
-      (
-        nerdfonts.override {
-          fonts = ["FiraCode" "DroidSansMono" "Hack" "UbuntuMono" "NerdFontsSymbolsOnly"];
-        }
-      )
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.fira-code
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.hack
+      nerd-fonts.noto
+      nerd-fonts.comic-shanns-mono
+      nerd-fonts.monofur
+      nerd-fonts.mononoki
+      nerd-fonts.iosevka
+      nerd-fonts.symbols-only
+      nerd-fonts.ubuntu-mono
+      nerd-fonts.sauce-code-pro
+      gyre-fonts
     ];
   };
+
+  nixpkgs.config.cudaSupport = true;
 
   services.mysql = {
     enable = true;
@@ -342,11 +400,9 @@
   users.extraGroups.vboxusers.members = ["sanbid"];
 
   services = {
-    ollama.enable = true;
     hypridle.enable = true;
   };
 
-  # Allow unfree packages
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   system.stateVersion = "24.05"; # Did you read the comment?

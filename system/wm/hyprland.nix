@@ -1,5 +1,9 @@
-{ inputs, pkgs, lib, ... }:
 {
+  inputs,
+  pkgs,
+  lib,
+  ...
+}: {
   # Import wayland config
   imports = [
     ./wayland.nix
@@ -10,18 +14,18 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1"; # Enable Display Manager
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
-        user = "sanbid";
-      };
-    };
-  };
+  # services.greetd = {
+  #     enable = true;
+  #     settings = {
+  #         default_session = {
+  #             command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+  #             user = "sanbid";
+  #         };
+  #     };
+  # };
 
+  programs.regreet.enable = true;
   environment.systemPackages = with pkgs; [
-    greetd.tuigreet
+    # greetd.tuigreet
   ];
-
 }

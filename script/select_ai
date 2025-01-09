@@ -1,0 +1,24 @@
+#!/run/current-system/sw/bin/bash
+
+
+get_ai_response() {
+    clipboard_content=$(wl-paste)
+    temp_response=$(mktemp)
+    clipboard_content+="\nFrom the following options, choose the single most correct answer. Do not provide any explanation or justification just show answer no other things"
+    echo "$clipboard_content" | ollama run llama3.1:8b-instruct-q8_0  2> /dev/null > "$temp_response"
+
+    if [ -s "$temp_response" ]; then  
+        ai_response=$(cat "$temp_response")
+        notify-send -h string:bgcolor:#FFFFFF  -h string:fgcolor:#ADACAD "." "'$ai_response'" -t 1500
+    else
+        echo "No response received from the AI." >&2
+    fi
+    rm "$temp_response"
+}
+
+trap 'echo "Exiting..." >&2; exit 1' INT
+
+get_ai_response &  
+
+
+

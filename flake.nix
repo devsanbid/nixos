@@ -8,42 +8,48 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     stylix.url = "github:danth/stylix";
     nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, nixos-unstable-small, nix-colors, ... }@inputs:
-    let
-      lib = nixpkgs.lib;
-      system = "x86_64-linux";
-      unstable-small-pkgs = import nixos-unstable-small { inherit system; };
-      xdphOverlay = final: prev: {
-        inherit (unstable-small-pkgs) xdg-desktop-portal-hyprland;
-      };
-      pkgs = import nixpkgs {
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    stylix,
+    nixos-unstable-small,
+    nix-colors,
+    ...
+  } @ inputs: let
+    lib = nixpkgs.lib;
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+  in {
+    nixosConfigurations = {
+      nixos = lib.nixosSystem {
         inherit system;
-        config.allowUnfree = true;
-        overlays = [ xdphOverlay ];
-      };
-    in
-    {
-      nixosConfigurations = {
-        nixos = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit pkgs; inherit nix-colors; inherit inputs; };
-
-          modules = [
-            stylix.nixosModules.stylix
-            ./configuration.nix
-          ];
+        specialArgs = {
+          inherit pkgs;
+          inherit nix-colors;
+          inherit inputs;
         };
-      };
-      homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit nix-colors; inherit inputs; };
-        modules = [ stylix.homeManagerModules.stylix ./home.nix ];
+
+        modules = [
+          stylix.nixosModules.stylix
+          ./configuration.nix
+        ];
       };
     };
+    homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {
+        inherit nix-colors;
+        inherit inputs;
+      };
+      modules = [stylix.homeManagerModules.stylix ./home.nix];
+    };
+  };
 }
-
