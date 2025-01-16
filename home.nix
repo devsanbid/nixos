@@ -22,7 +22,6 @@ in {
     libsForQt5.qt5ct
     papirus-folders
     zafiro-icons
-    webkitgtk
   ];
 
   stylix.autoEnable = true;
@@ -40,7 +39,6 @@ in {
     name = "BreezeX-RoséPine";
     size = 28;
   };
-
 
   stylix.targets.kde.enable = true;
   stylix.targets.gnome.enable = true;

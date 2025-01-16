@@ -18,7 +18,7 @@
     };
     grub = {
       efiSupport = true;
-      useOSProber = true;
+      # useOSProber = true;
       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
     };
@@ -65,7 +65,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security = {
     sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
     rtkit.enable = true;
@@ -168,9 +168,12 @@
     # cudatoolkit
     pipx
     conda
+    webkitgtk
+
+    flatpak
     vim
     rust-analyzer
-        swww
+    swww
     ghostty
     onnxruntime
     lmstudio
@@ -209,6 +212,7 @@
     psmisc
     numix-icon-theme-circle
     colloid-icon-theme
+    ollama-cuda
     catppuccin-gtk
     catppuccin-kvantum
     catppuccin-cursors.macchiatoTeal
@@ -288,7 +292,6 @@
     nodejs_22
     podman
     docker
-    telegram-desktop
     tesseract
     sqlitebrowser
     xfce.thunar
@@ -332,7 +335,6 @@
     entr
     diff-so-fancy
     libsForQt5.qtstyleplugin-kvantum
-    ollama-cuda
     nwg-look
     libsForQt5.qt5ct
     wayland-scanner.dev
@@ -351,9 +353,9 @@
   hardware = {
     graphics = {
       enable = true;
-      enable32Bit = true;
       extraPackages = with pkgs; [
-        vpl-gpu-rt # for newer GPUs on NixOS >24.05 or unstable
+        intel-media-driver
+        intel-ocl
       ];
     };
   };
@@ -362,7 +364,7 @@
     modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
     prime = {
       sync.enable = true;
       intelBusId = "PCI:0:2:0";

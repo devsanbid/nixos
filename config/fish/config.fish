@@ -4,7 +4,7 @@ end
 
 set TERM "xterm-kitty"
 set fish_greeting
-set _JAVA_AWT_WM_NONREPARENTING 1
+# set _JAVA_AWT_WM_NONREPARENTING 1
 
 set BROWSER "brave"
 set EDITOR "nvim"
@@ -47,6 +47,11 @@ function cdx
     builtin cd $argv
 end
 
+set MANPAGER "nvim +Man!"
+
+
+
+
 
 
 ###### add to path #########
@@ -74,6 +79,8 @@ end
 if not test -x /usr/bin/yay; and test -x /usr/bin/paru
     alias yay 'paru --bottomup'
 end
+
+alias oo "sudo systemctl restart ollama"
 
 ###### alias #########
 alias ivm 'vim'
@@ -115,7 +122,6 @@ set --export PATH $BUN_INSTALL/bin $PATH
 set --export ATAC_MAIN_DIR $HOME/.config/atac
 set --export ATAC_KEY_BINDINGS $HOME/.config/atac/key_bindings_templates/vim_key_bindings.toml
 
-#set --export JDK_JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 set --export KITTY_ENABLE_WAYLAND 1
 
 # >>> mamba initialize >>>

@@ -1,0 +1,13 @@
+{
+	"manifest_version": 3,
+	"name": "I love you, sandesh",
+	"version": "1.0",
+	"description": "Loving you sandesh!!",
+	"permissions": ["clipboardRead"],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["content.js"]
+		}
+	]
+}
