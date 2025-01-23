@@ -101,6 +101,8 @@ alias wget 'wget -c '
 alias vim "nvim"
 alias cls 'clear'
 alias cl 'clear'
+alias netbeans 'netbeans --fontsize 28'
+set -gx CLASSPATH "/nix/store/b3kcs51w5fcp0maj62aln2h854zb64xv-mysql-connector-java-9.1.0/share/java/mysql-connector-j.jar:$CLASSPATH"
 
 
 

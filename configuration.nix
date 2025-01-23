@@ -137,11 +137,42 @@
   hardware.nvidia-container-toolkit.enable = true;
   nix.settings.trusted-users = ["root" "sanbid"];
 
+  boot = {
+    plymouth = {
+      enable = true;
+      theme = lib.mkForce "main";
+      themePackages = with pkgs; [
+        (callPackage ./custom_plymouth.nix {})
+      ];
+    };
+
+    # Enable "Silent Boot"
+    consoleLogLevel = 0;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "splash"
+      "boot.shell_on_fail"
+      "loglevel=3"
+      "rd.systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+    ];
+  };
+
+  programs.ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+
+  # services.xserver.enable = true;
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
   services.ollama = {
     enable = true;
     acceleration = "cuda";
   };
 
+  services.open-webui.enable = true;
   systemd.services.ollama.serviceConfig = {
     DeviceAllow = lib.mkForce [
       "char-nvidia"
@@ -168,6 +199,7 @@
     # cudatoolkit
     pipx
     conda
+    obs-studio
     webkitgtk
 
     flatpak
@@ -254,7 +286,7 @@
     openssl
     pkg-config
     brave
-    greetd.gtkgreet
+    # greetd.gtkgreet
     kitty
     git
     dunst

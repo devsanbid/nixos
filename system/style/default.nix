@@ -8,7 +8,7 @@ let
 in
 {
 
-  stylix.autoEnable = true;
+  stylix.autoEnable = false;
   stylix.enable = true;
   stylix.polarity = themePolarity;
   stylix.image = pkgs.fetchurl {

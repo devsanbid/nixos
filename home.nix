@@ -22,7 +22,21 @@ in {
     libsForQt5.qt5ct
     papirus-folders
     zafiro-icons
+    snapcraft
+    walker
+    rustc
+    kdePackages.alpaka
+    kolourpaint
   ];
+
+  qt = {
+    enable = true;
+    platformTheme.name = "qt5ct";
+    style = {
+      package = pkgs.utterly-nord-plasma;
+      name = "Utterly Nord Plasma";
+    };
+  };
 
   stylix.autoEnable = true;
   stylix.enable = true;
@@ -33,12 +47,42 @@ in {
   };
   stylix.base16Scheme = ./. + "/themes/io/io.yaml";
 
-  # cursor
-  stylix.cursor = {
-    package = pkgs.rose-pine-cursor;
-    name = "BreezeX-RoséPine";
-    size = 28;
+  home.pointerCursor = {
+    gtk.enable = true;
+    package = lib.mkForce pkgs.phinger-cursors;
+    name = lib.mkForce "phinger-cursors-light";
+    size = lib.mkForce 24;
   };
+
+  gtk = {
+    enable = true;
+    theme = {
+      package = lib.mkForce pkgs.flat-remix-gtk;
+      name = lib.mkForce "Flat-Remix-GTK-Blue-Darkest-Solid";
+    };
+
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Tela-dark";
+    };
+  };
+
+  xdg.desktopEntries = {
+    netbeans = {
+      name = "netbeans 2";
+      icon = "netbeans";
+      genericName = "Integrated Development Environment";
+      exec = "netbeans --fontsize 24";
+      categories = ["Development"];
+    };
+  };
+
+  # cursor
+  # stylix.cursor = {
+  #   package = pkgs.rose-pine-cursor;
+  #   name = "BreezeX-RoséPine";
+  #   size = 28;
+  # };
 
   stylix.targets.kde.enable = true;
   stylix.targets.gnome.enable = true;
