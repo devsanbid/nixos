@@ -5,5 +5,7 @@ Comment=made by Vivek Rajan
 ModuleName=script
 
 [script]
-ImageDir=/usr/share/plymouth/themes/Anonymous
-ScriptFile=/usr/share/plymouth/themes/Anonymous/Anonymous.script
+ImageDir=/nix/store/sz2qr43vgsvg1grfzy036ymimc8p27x3-plymouth-themes/share/plymouth/themes/Anonymous
+ScriptFile=/nix/store/sz2qr43vgsvg1grfzy036ymimc8p27x3-plymouth-themes/share/plymouth/themes/Anonymous/Anonymous.script
+
+

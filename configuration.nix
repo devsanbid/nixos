@@ -140,7 +140,7 @@
   boot = {
     plymouth = {
       enable = true;
-      theme = lib.mkForce "main";
+      theme = lib.mkForce "Anonymous";
       themePackages = with pkgs; [
         (callPackage ./custom_plymouth.nix {})
       ];
@@ -165,6 +165,7 @@
   # services.xserver.enable = true;
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.defaultSession = "hyprland";
   services.xserver.desktopManager.gnome.enable = true;
 
   services.ollama = {
@@ -188,6 +189,10 @@
     DevicePolicy = lib.mkForce "auto";
   };
 
+  virtualisation.podman = {
+    enable = true;
+  };
+
   #default shell
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
@@ -205,8 +210,10 @@
     flatpak
     vim
     rust-analyzer
+    jetbrains.idea-community-src
     swww
     ghostty
+    gnumake
     onnxruntime
     lmstudio
     cudaPackages.libcublas
@@ -214,14 +221,14 @@
     pulseaudio
     virt-manager
 
+    distrobox
+
     devbox
     mysql_jdbc
     virt-viewer
     spice
     spice-gtk
     spice-protocol
-    win-virtio
-    win-spice
     wlrctl
     nvitop
 
@@ -329,6 +336,8 @@
     xfce.thunar
     xfce.thunar-volman
     vlc
+
+    telegram-desktop
     acpi
     zoxide
     pamixer

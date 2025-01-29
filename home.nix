@@ -84,10 +84,6 @@ in {
   #   size = 28;
   # };
 
-  stylix.targets.kde.enable = true;
-  stylix.targets.gnome.enable = true;
-  stylix.targets.gtk.enable = true;
-
   fonts.fontconfig.enable = true;
 
   services.wlsunset = {
