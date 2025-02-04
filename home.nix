@@ -26,15 +26,16 @@ in {
     walker
     rustc
     kdePackages.alpaka
+    wf-recorder
     kolourpaint
   ];
 
   qt = {
     enable = true;
-    platformTheme.name = "qt5ct";
+    platformTheme.name = lib.mkForce "qt5ct";
     style = {
-      package = pkgs.utterly-nord-plasma;
-      name = "Utterly Nord Plasma";
+      package = lib.mkForce pkgs.utterly-nord-plasma;
+      name = lib.mkForce "Utterly Nord Plasma";
     };
   };
 

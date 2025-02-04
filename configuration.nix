@@ -63,9 +63,14 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+  };
 
   # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
   security = {
     sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
     rtkit.enable = true;
@@ -75,7 +80,7 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = ["networkmanager" "libvirtd" "docker" "wheel" "ydotool"];
+    extraGroups = ["networkmanager" "libvirtd" "docker" "wheel" "ydotool" "audio"];
     packages = with pkgs; [
     ];
   };
@@ -160,13 +165,15 @@
     ];
   };
 
+  services.xserver.desktopManager.deepin.enable = true;
+
   programs.ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
   # services.xserver.enable = true;
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.defaultSession = "hyprland";
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.displayManager.defaultSession = "hyprland";
+  # services.xserver.desktopManager.gnome.enable = true;
 
   services.ollama = {
     enable = true;
@@ -207,8 +214,12 @@
     obs-studio
     webkitgtk
 
+    cmake
+
     flatpak
     vim
+    sonusmix
+    zoom-us
     rust-analyzer
     jetbrains.idea-community-src
     swww
@@ -218,9 +229,7 @@
     lmstudio
     cudaPackages.libcublas
     wlogout
-    pulseaudio
     virt-manager
-
     distrobox
 
     devbox
@@ -244,11 +253,16 @@
     deadnix
     at-spi2-atk
     qt6.qtwayland
+    wireplumber
     sway
     psi-notify
     poweralertd
     playerctl
+    mysql-workbench
+
     psmisc
+    wf-recorder
+    gnome-boxes
     numix-icon-theme-circle
     colloid-icon-theme
     ollama-cuda

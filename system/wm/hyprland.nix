@@ -24,7 +24,7 @@
   #     };
   # };
 
-  # programs.regreet.enable = true;
+  programs.regreet.enable = true;
   environment.systemPackages = with pkgs; [
     # greetd.tuigreet
   ];
