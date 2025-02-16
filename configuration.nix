@@ -126,6 +126,10 @@
 
   services.gvfs.enable = true;
 
+  services.kasmweb.enable = false;
+
+  networking.firewall.allowedTCPPorts = [443];
+
   # Override packages
   nixpkgs.config.packageOverrides = pkgs: {
     colloid-icon-theme = pkgs.colloid-icon-theme.override {colorVariants = ["teal"];};
@@ -165,22 +169,19 @@
     ];
   };
 
-  services.xserver.desktopManager.deepin.enable = true;
+  # services.xserver.desktopManager.deepin.enable = true;
 
   programs.ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+  programs.hyprland.withUWSM = true;
 
-  # services.xserver.enable = true;
   services.xserver.enable = true;
   # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.displayManager.defaultSession = "hyprland";
-  # services.xserver.desktopManager.gnome.enable = true;
 
   services.ollama = {
     enable = true;
     acceleration = "cuda";
   };
 
-  services.open-webui.enable = true;
   systemd.services.ollama.serviceConfig = {
     DeviceAllow = lib.mkForce [
       "char-nvidia"
@@ -218,8 +219,13 @@
 
     flatpak
     vim
+    tunnelto
     sonusmix
     zoom-us
+    ncmpcpp
+    ags
+    cpufrequtils
+    gjs
     rust-analyzer
     jetbrains.idea-community-src
     swww
@@ -230,6 +236,7 @@
     cudaPackages.libcublas
     wlogout
     virt-manager
+    postman
     distrobox
 
     devbox
@@ -258,14 +265,13 @@
     psi-notify
     poweralertd
     playerctl
-    mysql-workbench
 
     psmisc
     wf-recorder
     gnome-boxes
     numix-icon-theme-circle
-    colloid-icon-theme
     ollama-cuda
+    go
     catppuccin-gtk
     catppuccin-kvantum
     catppuccin-cursors.macchiatoTeal
@@ -363,8 +369,8 @@
     tokei
     grim
     slurp
-    python3
     libgcc
+    devenv
     gcc
     eza
     uv

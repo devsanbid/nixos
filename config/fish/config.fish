@@ -106,6 +106,9 @@ alias avim 'NVIM_APPNAME=astro_nvim nvim'
 set -gx CLASSPATH "/nix/store/b3kcs51w5fcp0maj62aln2h854zb64xv-mysql-connector-java-9.1.0/share/java/mysql-connector-j.jar:$CLASSPATH"
 alias wf-recorder='wf-recorder --audio=alsa_input.pci-0000_00_1f.3.analog-stereo'
 
+alias lvim "NVIM_APPNAME=lazy_nvim nvim"
+
+
 
 
 # Replace some more things with better alternatives

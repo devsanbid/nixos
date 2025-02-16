@@ -25,6 +25,22 @@
   # };
 
   programs.regreet.enable = true;
+  programs.regreet.settings = {
+    background = {
+      path = ../../config/hypr/wallpapers/arch.png;
+      fit = "Fill";
+    };
+
+    GTK = {
+      application_prefer_dark_theme = true;
+      theme_name = lib.mkForce "aphelion";
+      font_name = lib.mkForce "monofur Nerd Font 20";
+    };
+    default_session = {
+      command = "${pkgs.hyprland}/bin/hyprland";
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     # greetd.tuigreet
   ];

@@ -16,29 +16,22 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   home.packages = with pkgs; [
-    whatsapp-for-linux
     discord
-    libsForQt5.qtstyleplugin-kvantum
-    libsForQt5.qt5ct
     papirus-folders
     zafiro-icons
-    snapcraft
-    walker
     rustc
-    kdePackages.alpaka
     wf-recorder
-    kolourpaint
   ];
 
-  qt = {
-    enable = true;
-    platformTheme.name = lib.mkForce "qt5ct";
-    style = {
-      package = lib.mkForce pkgs.utterly-nord-plasma;
-      name = lib.mkForce "Utterly Nord Plasma";
-    };
-  };
-
+  # qt = {
+  #   enable = true;
+  #   platformTheme.name = lib.mkForce "qt5ct";
+  #   style = {
+  #     package = lib.mkForce pkgs.utterly-nord-plasma;
+  #     name = lib.mkForce "Utterly Nord Plasma";
+  #   };
+  # };
+  #
   stylix.autoEnable = true;
   stylix.enable = true;
   stylix.polarity = themePolarity;
@@ -125,7 +118,7 @@ in {
     aliases = {};
   };
 
-  programs.zathura.enable = true;
+  # programs.zathura.enable = true;
 
   programs.home-manager.enable = true;
 }

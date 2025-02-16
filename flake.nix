@@ -33,6 +33,7 @@
         inherit system;
         specialArgs = {
           inherit pkgs;
+          inherit nixos-unstable-small;
           inherit nix-colors;
           inherit inputs;
         };

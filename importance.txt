@@ -1,4 +1,3 @@
-
 mcq
 cpu each part role (ALU,CLU,memory)
 memeory herihercy 
@@ -29,6 +28,3 @@ well-known, dynamic
 4 bit multipler and full adder
 8085 defination 
 how 32 bit sign integer reprenstated in hex decimal notation (* importance)
-
-
-

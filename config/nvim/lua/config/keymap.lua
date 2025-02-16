@@ -67,11 +67,4 @@ keymap("n", "<leader>lr", function()
 end, opts)
 
 keymap("n", "<leader>w", ":w<cr>")
-keymap("n", "<leader>e", function()
-	local oil = require("oil")
-	if vim.bo.filetype == "oil" then
-		oil.close()
-	else
-		oil.open()
-	end
-end)
+keymap("n", "<leader>e", ":Neotree toggle <cr>")
