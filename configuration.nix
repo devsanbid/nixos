@@ -74,7 +74,6 @@
   security = {
     sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
     rtkit.enable = true;
-    polkit.enable = true;
   };
 
   users.users.sanbid = {
@@ -174,8 +173,21 @@
   programs.ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
   programs.hyprland.withUWSM = true;
 
-  services.xserver.enable = true;
+  services.xserver = {
+    enable = true;
+    desktopManager = {
+      xfce.enable = true;
+      xterm.enable = true;
+    };
+    windowManager = {
+      bspwm.enable = true;
+    };
+  };
+
   # services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.sddm.enable = true;
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
 
   services.ollama = {
     enable = true;
@@ -221,6 +233,44 @@
     vim
     tunnelto
     sonusmix
+
+    ## hyprland plugins
+    hyprpolkitagent
+    hyprpaper
+    hyprpicker
+    hyprsunset
+    hyprsysteminfo
+    hyprcursor
+    hyprland-qt-support
+    hyprutils
+    hyprwayland-scanner
+    aquamarine
+    hyprgraphics
+    hyprland-qtutils
+    hyprls
+    #########
+
+    showtime
+    parabolic
+    gamemode
+    bubblewrap
+    bottles
+    protontricks
+    krita
+    pwvucontrol
+    anydesk
+    rustdesk
+    drawing
+    keypunch
+    lollypop
+    geany
+    iwgtk
+    blueberry
+    udiskie
+
+    ## discord alternative client
+    webcord
+
     zoom-us
     ncmpcpp
     ags
