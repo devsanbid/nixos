@@ -87,7 +87,7 @@ in {
   };
 
   home.file.".config/hypr".source = ./config/hypr;
-  home.file.".config/nvim".source = ./config/astro_nvim;
+  home.file.".config/nvim".source = ./config/astro;
   home.file.".config/alacritty".source = ./config/alacritty;
   home.file.".config/kitty".source = ./config/kitty;
   home.file.".config/fish".source = ./config/fish;
