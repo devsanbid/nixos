@@ -11,10 +11,10 @@ opt.spelllang = { -- Languages for spell checking
 
 opt.shell = "/run/current-system/sw/bin/fish"
 
-opt.tabstop = 4
+opt.tabstop = 2
 vim.cmd("set formatoptions-=cro")
-opt.softtabstop = 4
-opt.shiftwidth = 4
+opt.softtabstop = 2
+opt.shiftwidth = 2
 opt.expandtab = true
 opt.smartcase = true
 opt.ignorecase = true

@@ -8,7 +8,8 @@ return {
     },
     opts = {
         servers = {
-            lua_ls = {}
+            lua_ls = {},
+            ts_ls = {}
         },
         ---@type vim.diagnostic.Opts
         diagnostics = {
