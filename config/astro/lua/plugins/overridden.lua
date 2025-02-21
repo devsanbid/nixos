@@ -1,7 +1,10 @@
 return {
   {
     "folke/which-key.nvim",
-    enable = false,
+    enabled = false,
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    enabled = false,
   },
 }
-

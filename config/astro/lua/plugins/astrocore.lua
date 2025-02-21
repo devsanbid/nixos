@@ -42,7 +42,14 @@ return {
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
     mappings = {
       n = {
-        ["<Leader><Leader>"] = { ":Telescope find_files<cr>", desc = "open files" },
+        ["<Leader><Leader>"] = {
+          function()
+            require("snacks").picker.files {
+              hidden = vim.tbl_get((vim.uv or vim.loop).fs_stat ".git" or {}, "type") == "directory",
+            }
+          end,
+          desc = "open files",
+        },
       },
     },
   },
