@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
+{ config
+, lib
+, pkgs
+, inputs
+, ...
 }: {
   imports = [
     ./hardware-configuration.nix
@@ -79,10 +78,16 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = ["networkmanager" "libvirtd" "docker" "wheel" "ydotool" "audio"];
+    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" "ydotool" "audio" "kvm" ];
     packages = with pkgs; [
     ];
   };
+
+  programs.virt-manager.enable = true; 
+
+  users.groups.libvirtd.members = ["sanbid"];
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
 
   virtualisation = {
     libvirtd = {
@@ -90,12 +95,11 @@
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;
-        ovmf.packages = [pkgs.OVMFFull.fd];
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
       };
     };
     spiceUSBRedirection.enable = true;
   };
-  services.spice-vdagentd.enable = true;
 
   nix.settings.auto-optimise-store = true;
   nix.optimise.automatic = true;
@@ -127,13 +131,13 @@
 
   services.kasmweb.enable = false;
 
-  networking.firewall.allowedTCPPorts = [443];
+  networking.firewall.allowedTCPPorts = [ 443 ];
 
   # Override packages
   nixpkgs.config.packageOverrides = pkgs: {
-    colloid-icon-theme = pkgs.colloid-icon-theme.override {colorVariants = ["teal"];};
+    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = [ "teal" ]; };
     catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = ["teal"]; # You can specify multiple accents here to output multiple themes
+      accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes
       size = "standard";
       variant = "macchiato";
     };
@@ -143,14 +147,14 @@
     };
   };
   hardware.nvidia-container-toolkit.enable = true;
-  nix.settings.trusted-users = ["root" "sanbid"];
+  nix.settings.trusted-users = [ "root" "sanbid" ];
 
   boot = {
     plymouth = {
       enable = true;
       theme = lib.mkForce "Anonymous";
       themePackages = with pkgs; [
-        (callPackage ./custom_plymouth.nix {})
+        (callPackage ./custom_plymouth.nix { })
       ];
     };
 
@@ -187,7 +191,7 @@
   # services.xserver.displayManager.gdm.enable = true;
   services.displayManager.sddm.enable = true;
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   services.ollama = {
     enable = true;
@@ -225,9 +229,12 @@
     pipx
     conda
     obs-studio
+    statix
     webkitgtk
-
+    virt-manager
     cmake
+
+    ## virtualisation
 
     flatpak
     vim
@@ -458,7 +465,7 @@
     nixd
   ];
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   services.desktopManager.plasma6.enable = true;
 
   hardware = {
@@ -483,7 +490,7 @@
     };
   };
 
-  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
   fonts = {
     fontDir.enable = true;
@@ -510,13 +517,13 @@
     enable = true;
     package = pkgs.mariadb;
   };
-  users.extraGroups.vboxusers.members = ["sanbid"];
+  users.extraGroups.vboxusers.members = [ "sanbid" ];
 
   services = {
     hypridle.enable = true;
   };
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
