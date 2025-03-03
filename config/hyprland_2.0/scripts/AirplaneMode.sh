@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Airplane Mode. Turning on or off all wifi using rfkill. 
 

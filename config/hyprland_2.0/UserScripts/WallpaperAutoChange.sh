@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # source https://wiki.archlinux.org/title/Hyprland#Using_a_script_to_change_wallpaper_every_X_minutes
 

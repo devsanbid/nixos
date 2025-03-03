@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Wallust Colors for current wallpaper
 

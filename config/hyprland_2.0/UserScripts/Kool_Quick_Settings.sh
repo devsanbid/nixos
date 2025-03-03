@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Rofi menu for KooL Hyprland Quick Settings (SUPER SHIFT E)
 
@@ -7,13 +9,13 @@ edit=${EDITOR:-nano}
 tty=kitty
 
 # variables
-configs="$HOME/.config/hypr/configs"
-UserConfigs="$HOME/.config/hypr/UserConfigs"
-rofi_theme="$HOME/.config/rofi/config-edit.rasi"
+configs="$HOME/.dotfiles/config/hyprland_2.0/configs"
+UserConfigs="$HOME/.dotfiles/config/hyprland_2.0/UserConfigs"
+rofi_theme="$HOME/.dotfiles/config/rofi/config-edit.rasi"
 msg=' ⁉️ Choose what to do ⁉️'
-iDIR="$HOME/.config/swaync/images"
-scriptsDir="$HOME/.config/hypr/scripts"
-UserScripts="$HOME/.config/hypr/UserScripts"
+iDIR="$HOME/.dotfiles/config/swaync/images"
+scriptsDir="$HOME/.dotfiles/config/hyprland_2.0/scripts"
+UserScripts="$HOME/.dotfiles/config/hyprland_2.0/UserScripts"
 
 # Function to display the menu options without numbers
 menu() {

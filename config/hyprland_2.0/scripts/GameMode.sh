@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Game Mode. Turning off all animations
 
 notif="$HOME/.config/swaync/images/ja.png"
-SCRIPTSDIR="$HOME/.config/hypr/scripts"
+SCRIPTSDIR="$HOME/.dotfiles/config/hyprland_2.0/scripts"
 
 
 HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')

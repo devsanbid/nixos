@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Script for adding a selected theme to the Rofi config
 
