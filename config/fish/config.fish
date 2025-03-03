@@ -81,6 +81,7 @@ if not test -x /usr/bin/yay; and test -x /usr/bin/paru
 end
 
 alias oo "sudo systemctl restart ollama"
+alias fixit "pkill -f xwaylandvideobridge"
 
 ###### alias #########
 alias ivm 'vim'

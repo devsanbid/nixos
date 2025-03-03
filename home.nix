@@ -71,13 +71,6 @@ in {
     };
   };
 
-  # cursor
-  # stylix.cursor = {
-  #   package = pkgs.rose-pine-cursor;
-  #   name = "BreezeX-RoséPine";
-  #   size = 28;
-  # };
-
   fonts.fontconfig.enable = true;
 
   services.wlsunset = {

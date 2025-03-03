@@ -1,8 +1,9 @@
-{ config
-, lib
-, pkgs
-, inputs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
 }: {
   imports = [
     ./hardware-configuration.nix
@@ -17,9 +18,21 @@
     };
     grub = {
       efiSupport = true;
-      # useOSProber = true;
+      useOSProber = true;
+      fontSize = 32;
+      default = "saved";
       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
+      extraEntries = ''
+        menuentry "fedora test" {
+           savedefault
+            insmod part_gpt
+            insmod ext2
+            search --no-floppy --fs-uuid --set=root 18690bb7-87b3-4651-9dcd-5a1a90cbb228
+          linux /boot/vmlinuz-6.13.3-201.nobara.fc41.x86_64 root=/dev/nvme0n1p9
+          initrd /boot/initramfs-6.13.3-201.nobara.fc41.x86_64.img
+        }
+      '';
     };
   };
 
@@ -78,28 +91,16 @@
   users.users.sanbid = {
     isNormalUser = true;
     description = "sanbid";
-    extraGroups = [ "networkmanager" "libvirtd" "docker" "wheel" "ydotool" "audio" "kvm" ];
+    extraGroups = ["networkmanager" "libvirtd" "docker" "wheel" "ydotool" "audio" "kvm"];
     packages = with pkgs; [
     ];
   };
 
-  programs.virt-manager.enable = true; 
+  programs.virt-manager.enable = true;
 
   users.groups.libvirtd.members = ["sanbid"];
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
-
-  virtualisation = {
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-        ovmf.enable = true;
-        ovmf.packages = [ pkgs.OVMFFull.fd ];
-      };
-    };
-    spiceUSBRedirection.enable = true;
-  };
 
   nix.settings.auto-optimise-store = true;
   nix.optimise.automatic = true;
@@ -115,10 +116,6 @@
     };
   };
 
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-  ];
-
   services.dbus = {
     enable = true;
     implementation = "broker";
@@ -131,13 +128,13 @@
 
   services.kasmweb.enable = false;
 
-  networking.firewall.allowedTCPPorts = [ 443 ];
+  networking.firewall.allowedTCPPorts = [443];
 
   # Override packages
   nixpkgs.config.packageOverrides = pkgs: {
-    colloid-icon-theme = pkgs.colloid-icon-theme.override { colorVariants = [ "teal" ]; };
+    colloid-icon-theme = pkgs.colloid-icon-theme.override {colorVariants = ["teal"];};
     catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes
+      accents = ["teal"]; # You can specify multiple accents here to output multiple themes
       size = "standard";
       variant = "macchiato";
     };
@@ -147,41 +144,60 @@
     };
   };
   hardware.nvidia-container-toolkit.enable = true;
-  nix.settings.trusted-users = [ "root" "sanbid" ];
+  nix.settings.trusted-users = ["root" "sanbid"];
 
-  boot = {
-    plymouth = {
-      enable = true;
-      theme = lib.mkForce "Anonymous";
-      themePackages = with pkgs; [
-        (callPackage ./custom_plymouth.nix { })
-      ];
-    };
-
-    # Enable "Silent Boot"
-    consoleLogLevel = 0;
-    initrd.verbose = false;
-    kernelParams = [
-      "quiet"
-      "splash"
-      "boot.shell_on_fail"
-      "loglevel=3"
-      "rd.systemd.show_status=false"
-      "rd.udev.log_level=3"
-      "udev.log_priority=3"
-    ];
-  };
-
-  # services.xserver.desktopManager.deepin.enable = true;
+  # boot = {
+  #   plymouth = {
+  #     enable = true;
+  #     theme = lib.mkForce "Anonymous";
+  #     themePackages = with pkgs; [
+  #       (callPackage ./custom_plymouth.nix {})
+  #     ];
+  #   };
+  #
+  #   # Enable "Silent Boot"
+  #   consoleLogLevel = 1;
+  #   initrd.verbose = false;
+  #   kernelParams = [
+  #     "quiet"
+  #     "splash"
+  #     "boot.shell_on_fail"
+  #     "loglevel=3"
+  #     "rd.systemd.show_status=false"
+  #     "rd.udev.log_level=3"
+  #     "udev.log_priority=3"
+  #   ];
+  # };
 
   programs.ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
   programs.hyprland.withUWSM = true;
+
+  environment.gnome.excludePackages = with pkgs; [
+    atomix # puzzle game
+    cheese # webcam tool
+    epiphany # web browser
+    evince # document viewer
+    geary # email reader
+    gedit # text editor
+    gnome-characters
+    gnome-music
+    gnome-photos
+    gnome-terminal
+    gnome-tour
+    hitori # sudoku game
+    iagno # go game
+    tali # poker game
+    totem # video player
+  ];
 
   services.xserver = {
     enable = true;
     desktopManager = {
       xfce.enable = true;
-      xterm.enable = true;
+      gnome.enable = true;
+      xterm = {
+        enable = true;
+      };
     };
     windowManager = {
       bspwm.enable = true;
@@ -191,36 +207,61 @@
   # services.xserver.displayManager.gdm.enable = true;
   services.displayManager.sddm.enable = true;
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
 
   services.ollama = {
     enable = true;
     acceleration = "cuda";
   };
 
-  systemd.services.ollama.serviceConfig = {
-    DeviceAllow = lib.mkForce [
-      "char-nvidia"
-      "char-nvidia-modeset"
-      "char-nvidiactl"
-      "char-nvidia-nvswitch"
-      "char-nvidia-nvlink"
-      "char-nvidia-caps"
-      "char-nvidia-caps-imex-channels"
-      "char-nvidia-uvm"
-      "char-nvidia-frontend"
-    ];
-    DevicePolicy = lib.mkForce "auto";
-  };
+  # systemd.services.ollama.serviceConfig = {
+  #   DeviceAllow = lib.mkForce [
+  #     "char-nvidia"
+  #     "char-nvidia-modeset"
+  #     "char-nvidiactl"
+  #     "char-nvidia-nvswitch"
+  #     "char-nvidia-nvlink"
+  #     "char-nvidia-caps"
+  #     "char-nvidia-caps-imex-channels"
+  #     "char-nvidia-uvm"
+  #     "char-nvidia-frontend"
+  #   ];
+  #   DevicePolicy = lib.mkForce "auto";
+  # };
 
+  programs.dconf.enable = true;
+  services.sysprof.enable = true;
+
+  services.udev.packages = with pkgs; [gnome-settings-daemon];
   virtualisation.podman = {
     enable = true;
   };
+
+  boot.kernelParams = ["nvidia-drm.modeset=1"];
+  # systemd.services."s6-svscan".stopTimeout = "5s";
+  # environment.etc."sv".source = null;
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=7s
+  '';
+
+  # In your configuration.nix
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Common libraries that might be needed
+    stdenv.cc.cc.lib
+    zlib
+    glib
+    gtk3
+    libusb1
+    udev
+  ];
 
   #default shell
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
     wget
+    gnomeExtensions.appindicator
     isoimagewriter
     cudatoolkit
     nvtopPackages.nvidia
@@ -230,16 +271,25 @@
     conda
     obs-studio
     statix
+    nix-ld
+    nwg-displays
+
+    usbimager
     webkitgtk
-    virt-manager
+    sxhkd
+
     cmake
 
+    lsof
     ## virtualisation
 
     flatpak
     vim
     tunnelto
     sonusmix
+    aider-chat
+    pnpm
+    motrix
 
     ## hyprland plugins
     hyprpolkitagent
@@ -284,7 +334,6 @@
     cpufrequtils
     gjs
     rust-analyzer
-    jetbrains.idea-community-src
     swww
     ghostty
     gnumake
@@ -394,8 +443,6 @@
     brightnessctl
     bat
     bc
-    dolphin
-    kdePackages.dolphin-plugins
     fastfetch
     fzf
     gvfs
@@ -417,7 +464,7 @@
     telegram-desktop
     acpi
     zoxide
-    pamixer
+    # pamixer
     wlsunset
     fuzzel
     progress
@@ -465,7 +512,7 @@
     nixd
   ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
   services.desktopManager.plasma6.enable = true;
 
   hardware = {
@@ -490,7 +537,7 @@
     };
   };
 
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   fonts = {
     fontDir.enable = true;
@@ -517,13 +564,13 @@
     enable = true;
     package = pkgs.mariadb;
   };
-  users.extraGroups.vboxusers.members = [ "sanbid" ];
+  users.extraGroups.vboxusers.members = ["sanbid"];
 
   services = {
     hypridle.enable = true;
   };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
