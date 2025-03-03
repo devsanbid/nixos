@@ -23,16 +23,16 @@
       default = "saved";
       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       device = "nodev";
-      extraEntries = ''
-        menuentry "fedora test" {
-           savedefault
-            insmod part_gpt
-            insmod ext2
-            search --no-floppy --fs-uuid --set=root 18690bb7-87b3-4651-9dcd-5a1a90cbb228
-          linux /boot/vmlinuz-6.13.3-201.nobara.fc41.x86_64 root=/dev/nvme0n1p9
-          initrd /boot/initramfs-6.13.3-201.nobara.fc41.x86_64.img
-        }
-      '';
+      # extraEntries = ''
+      #   menuentry "fedora test" {
+      #      savedefault
+      #       insmod part_gpt
+      #       insmod ext2
+      #       search --no-floppy --fs-uuid --set=root 18690bb7-87b3-4651-9dcd-5a1a90cbb228
+      #     linux /boot/vmlinuz-6.13.3-201.nobara.fc41.x86_64 root=/dev/nvme0n1p9
+      #     initrd /boot/initramfs-6.13.3-201.nobara.fc41.x86_64.img
+      #   }
+      # '';
     };
   };
 
@@ -277,6 +277,18 @@
     usbimager
     webkitgtk
     sxhkd
+
+    pciutils
+    swaynotificationcenter
+    wallust
+    cava
+    swappy
+    pamixer
+    cliphist
+
+    wlprop
+    swww
+    rofi-wayland
 
     cmake
 

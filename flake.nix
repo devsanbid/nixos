@@ -8,7 +8,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
     nix-colors.url = "github:misterio77/nix-colors";
   };
 
@@ -16,7 +15,6 @@
     self,
     nixpkgs,
     home-manager,
-    stylix,
     nixos-unstable-small,
     nix-colors,
     ...
@@ -39,7 +37,6 @@
         };
 
         modules = [
-          stylix.nixosModules.stylix
           ./configuration.nix
         ];
       };
@@ -50,7 +47,7 @@
         inherit nix-colors;
         inherit inputs;
       };
-      modules = [stylix.homeManagerModules.stylix ./home.nix];
+      modules = [./home.nix];
     };
   };
 }

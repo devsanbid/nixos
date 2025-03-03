@@ -8,7 +8,6 @@
     ./enviroment
     ./package
     ./security
-    ./style
     ./wm
   ];
 }

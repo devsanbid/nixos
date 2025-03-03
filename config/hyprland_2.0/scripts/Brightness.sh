@@ -8,7 +8,7 @@ step=10  # INCREASE/DECREASE BY THIS VALUE
 
 # Get brightness
 get_backlight() {
-	brightnessctl -m | cut -d, -f4 | sed 's/%//'
+	brightnessctl -m -d intel_backlight | cut -d, -f4 | sed 's/%//'
 }
 
 # Get icons
@@ -51,7 +51,7 @@ change_backlight() {
 		new_brightness=100
 	fi
 
-	brightnessctl set "${new_brightness}%"
+	brightnessctl set "${new_brightness}%" -d intel_backlight
 	get_icon
 	current=$new_brightness
 	notify_user

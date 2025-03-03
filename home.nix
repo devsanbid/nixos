@@ -1,19 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
-  themePolarity = lib.removeSuffix "\n" (builtins.readFile (./. + "/themes/io/polarity.txt"));
-  backgroundUrl = builtins.readFile (./. + "/themes/io/backgroundurl.txt");
-  backgroundSha256 = builtins.readFile (./. + "/themes/io/backgroundsha256.txt");
-in {
+{pkgs, ...}: {
   home.username = "sanbid";
   home.homeDirectory = "/home/sanbid";
   home.stateVersion = "24.05";
 
   home.sessionPath = ["$HOME/.cargo/bin"];
-  nixpkgs.config.allowUnfree = true;
 
   home.packages = with pkgs; [
     discord
@@ -22,44 +12,6 @@ in {
     rustc
     wf-recorder
   ];
-
-  # qt = {
-  #   enable = true;
-  #   platformTheme.name = lib.mkForce "qt5ct";
-  #   style = {
-  #     package = lib.mkForce pkgs.utterly-nord-plasma;
-  #     name = lib.mkForce "Utterly Nord Plasma";
-  #   };
-  # };
-  #
-  stylix.autoEnable = true;
-  stylix.enable = true;
-  stylix.polarity = themePolarity;
-  stylix.image = pkgs.fetchurl {
-    url = backgroundUrl;
-    sha256 = backgroundSha256;
-  };
-  stylix.base16Scheme = ./. + "/themes/io/io.yaml";
-
-  home.pointerCursor = {
-    gtk.enable = true;
-    package = lib.mkForce pkgs.phinger-cursors;
-    name = lib.mkForce "phinger-cursors-light";
-    size = lib.mkForce 24;
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      package = lib.mkForce pkgs.flat-remix-gtk;
-      name = lib.mkForce "Flat-Remix-GTK-Blue-Darkest-Solid";
-    };
-
-    iconTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Tela-dark";
-    };
-  };
 
   xdg.desktopEntries = {
     netbeans = {
@@ -71,15 +23,21 @@ in {
     };
   };
 
-  fonts.fontconfig.enable = true;
 
-  services.wlsunset = {
-    enable = true;
-    latitude = "-22";
-    longitude = "-43";
-  };
-
-  home.file.".config/hypr".source = ./config/hypr;
+  home.file.".config/hypr".source = ./config/hyprland_2.0;
+  home.file.".config/rofi".source = ./config/rofi;
+  home.file.".config/ags".source = ./config/ags;
+  home.file.".config/btop".source = ./config/btop;
+  home.file.".config/cava".source = ./config/cava;
+  home.file.".config/fastfetch".source = ./config/fastfetch;
+  home.file.".config/Kvantum".source = ./config/Kvantum;
+  home.file.".config/qt5ct".source = ./config/qt5ct;
+  home.file.".config/qt6ct".source = ./config/qt6ct;
+  home.file.".config/swappy".source = ./config/swappy;
+  home.file.".config/swaync".source = ./config/swaync;
+  home.file.".config/wlogout".source = ./config/wlogout;
+  home.file.".config/wallust".source = ./config/wallust;
+  home.file."Pictures/wallpapers".source = ./config/wallpapers;
   home.file.".config/nvim".source = ./config/nvim;
   home.file.".config/alacritty".source = ./config/alacritty;
   home.file.".config/kitty".source = ./config/kitty;
@@ -90,17 +48,6 @@ in {
   home.file.".config/waybar".source = ./config/waybar;
   home.file.".config/pip".source = ./config/pip;
   home.file.".config/fuzzel".source = ./config/fuzzel;
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    NIXOS_OZONE_WL = 1;
-    MOZ_ENABLE_WAYLAND = 1;
-    GDK_BACKEND = "wayland,x11";
-    QT_QPA_PLATFORM = "wayland-egl";
-    SDL_VIDEODRIVER = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    XDG_SESSION_TYPE = "wayland";
-  };
 
   services.gnome-keyring.enable = true;
 
