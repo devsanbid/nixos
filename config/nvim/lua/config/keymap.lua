@@ -1,7 +1,6 @@
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
-
 -- keybinding
 keymap("v", "<S-j>", "<Nop>")
 keymap("n", "<S-j>", "<Nop>")
@@ -30,14 +29,17 @@ keymap("n", "<M-S-k>", "8kzz")
 -- center while searching
 keymap("n", "n", "nzzzv")
 keymap("n", "N", "Nzzzv")
-keymap('n', '<leader>x','gg_dG')
+keymap("n", "<leader>x", "gg_dG")
 
 --telescope
 keymap("n", "<leader>ff", function()
-	require("telescope.builtin").find_files({ hidden = false })
+	require("snacks").picker.files()
 end, opts)
-keymap("n", "<leader><leader>", ":Telescope find_files<cr>", opts)
-keymap("n", "<leader>fw", ":Telescope live_grep<cr>", opts)
+
+keymap("n", "<leader><leader>", function()
+    require("snacks").picker.files()
+end, opts)
+
 keymap("n", "<leader>fH", ":Telescope help_tags<cr>", opts)
 keymap("n", "<leader>fr", ":Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>fh", ":Telescope highlights<cr>", opts)
