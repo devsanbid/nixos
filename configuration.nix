@@ -130,19 +130,6 @@
 
   networking.firewall.allowedTCPPorts = [443];
 
-  # Override packages
-  nixpkgs.config.packageOverrides = pkgs: {
-    colloid-icon-theme = pkgs.colloid-icon-theme.override {colorVariants = ["teal"];};
-    catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = ["teal"]; # You can specify multiple accents here to output multiple themes
-      size = "standard";
-      variant = "macchiato";
-    };
-    discord = pkgs.discord.override {
-      withOpenASAR = true;
-      withTTS = true;
-    };
-  };
   hardware.nvidia-container-toolkit.enable = true;
   nix.settings.trusted-users = ["root" "sanbid"];
 
@@ -285,6 +272,11 @@
     swappy
     pamixer
     cliphist
+    yad
+    efibootmgr
+
+    themechanger
+    pyprland
 
     wlprop
     swww

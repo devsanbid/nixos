@@ -30,7 +30,6 @@
   home.file.".config/btop".source = ./config/btop;
   home.file.".config/cava".source = ./config/cava;
   home.file.".config/fastfetch".source = ./config/fastfetch;
-  home.file.".config/Kvantum".source = ./config/Kvantum;
   home.file.".config/qt5ct".source = ./config/qt5ct;
   home.file.".config/qt6ct".source = ./config/qt6ct;
   home.file.".config/swappy".source = ./config/swappy;

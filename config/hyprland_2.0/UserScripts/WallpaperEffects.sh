@@ -120,11 +120,6 @@ if [[ -n "$choice" ]]; then
     notify-send -i "$iDIR/ja.png" "Missing $terminal" "Install $terminal to enable setting of wallpaper background"
     exit 1
     fi
-
-      # Open terminal and set the wallpaper
-    $terminal -e bash -c "echo 'Enter your password to set wallpaper as SDDM Background'; \
-    sudo cp -r $wallpaper_output '$sddm_sequoia/backgrounds/default' && \
-    notify-send -i '$iDIR/ja.png' 'SDDM' 'Background SET'"
     fi
   fi
 fi
