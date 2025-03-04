@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  #
 # A bash script designed to run only once dotfiles installed
 
@@ -8,14 +9,14 @@
 # However, I do highly suggest not to touch it since again, as long as the marker exist, script wont run
 
 # Variables
-scriptsDir=$HOME/.config/hypr/scripts
-wallpaper=$HOME/.config/hypr/wallpaper_effects/.wallpaper_current
-waybar_style="$HOME/.config/waybar/style/[Extra] Modern-Combined - Transparent.css"
+scriptsDir=$HOME/.dotfiles/config/hypr/scripts
+wallpaper=$HOME/.dotfiles/config/hypr/wallpaper_effects/.wallpaper_current
+waybar_style="$HOME/.dotfiles/config/waybar/style/[Extra] Modern-Combined - Transparent.css"
 kvantum_theme="catppuccin-mocha-blue"
 color_scheme="prefer-dark"
-gtk_theme="Flat-Remix-GTK-Blue-Dark"
-icon_theme="Flat-Remix-Blue-Dark"
-cursor_theme="Bibata-Modern-Ice"
+gtk_theme="aphelion'"
+icon_theme="Tela-dark"
+cursor_theme="breeze_cursors'"
 
 swww="swww img"
 effect="--transition-bezier .43,1.19,1,.4 --transition-fps 30 --transition-type grow --transition-pos 0.925,0.977 --transition-duration 2"
@@ -43,11 +44,11 @@ if [ ! -f "$HOME/.config/hypr/.initial_startup_done" ]; then
       dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk_theme'" > /dev/null 2>&1 &
       dconf write /org/gnome/desktop/interface/icon-theme "'$icon_theme'" > /dev/null 2>&1 &
       dconf write /org/gnome/desktop/interface/cursor-theme "'$cursor_theme'" > /dev/null 2>&1 &
-      dconf write /org/gnome/desktop/interface/cursor-size "24" > /dev/null 2>&1 &
+      dconf write /org/gnome/desktop/interface/cursor-size "28" > /dev/null 2>&1 &
 	fi
        
     # initiate kvantum theme
-    kvantummanager --set "$kvantum_theme" > /dev/null 2>&1 &
+    kvantummanager --set "$kvantum_theme" > /dev/null 4>&1 &
 
     # initiate the kb_layout (for some reason) waybar cant launch it
     "$scriptsDir/SwitchKeyboardLayout.sh" > /dev/null 2>&1 &
@@ -60,7 +61,7 @@ if [ ! -f "$HOME/.config/hypr/.initial_startup_done" ]; then
 
 
     # Create a marker file to indicate that the script has been executed.
-    touch "$HOME/.config/hypr/.initial_startup_done"
+    touch "$HOME/.dotfiles/config/hyprland_2.0/.initial_startup_done"
 
     exit
 fi
