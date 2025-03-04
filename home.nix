@@ -11,6 +11,7 @@
     zafiro-icons
     rustc
     wf-recorder
+    kdePackages.qtstyleplugin-kvantum
   ];
 
   xdg.desktopEntries = {
@@ -22,7 +23,6 @@
       categories = ["Development"];
     };
   };
-
 
   home.file.".config/hypr".source = ./config/hyprland_2.0;
   home.file.".config/rofi".source = ./config/rofi;

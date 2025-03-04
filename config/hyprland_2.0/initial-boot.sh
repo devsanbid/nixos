@@ -14,12 +14,15 @@ wallpaper=$HOME/.dotfiles/config/hypr/wallpaper_effects/.wallpaper_current
 waybar_style="$HOME/.dotfiles/config/waybar/style/[Extra] Modern-Combined - Transparent.css"
 kvantum_theme="catppuccin-mocha-blue"
 color_scheme="prefer-dark"
-gtk_theme="aphelion'"
+gtk_theme="aphelion"
 icon_theme="Tela-dark"
-cursor_theme="breeze_cursors'"
+cursor_theme="Breeze_Light"
 
 swww="swww img"
 effect="--transition-bezier .43,1.19,1,.4 --transition-fps 30 --transition-type grow --transition-pos 0.925,0.977 --transition-duration 2"
+
+pkill -f xwaylandvideobridge
+
 
 # Check if a marker file exists.
 if [ ! -f "$HOME/.config/hypr/.initial_startup_done" ]; then
@@ -36,16 +39,16 @@ if [ ! -f "$HOME/.config/hypr/.initial_startup_done" ]; then
     gsettings set org.gnome.desktop.interface gtk-theme $gtk_theme > /dev/null 2>&1 &
     gsettings set org.gnome.desktop.interface icon-theme $icon_theme > /dev/null 2>&1 &
     gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme > /dev/null 2>&1 &
-    gsettings set org.gnome.desktop.interface cursor-size 24 > /dev/null 2>&1 &
+    gsettings set org.gnome.desktop.interface cursor-size 28 > /dev/null 2>&1 &
 
      # NIXOS initiate GTK dark mode and apply icon and cursor theme
-	if [ -n "$(grep -i nixos < /etc/os-release)" ]; then
-      gsettings set org.gnome.desktop.interface color-scheme "'$color_scheme'" > /dev/null 2>&1 &
-      dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk_theme'" > /dev/null 2>&1 &
-      dconf write /org/gnome/desktop/interface/icon-theme "'$icon_theme'" > /dev/null 2>&1 &
-      dconf write /org/gnome/desktop/interface/cursor-theme "'$cursor_theme'" > /dev/null 2>&1 &
-      dconf write /org/gnome/desktop/interface/cursor-size "28" > /dev/null 2>&1 &
-	fi
+	# if [ -n "$(grep -i nixos < /etc/os-release)" ]; then
+	#      gsettings set org.gnome.desktop.interface color-scheme "'$color_scheme'" > /dev/null 2>&1 &
+	#      dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk_theme'" > /dev/null 2>&1 &
+	#      dconf write /org/gnome/desktop/interface/icon-theme "'$icon_theme'" > /dev/null 2>&1 &
+	#      dconf write /org/gnome/desktop/interface/cursor-theme "'$cursor_theme'" > /dev/null 2>&1 &
+	#      dconf write /org/gnome/desktop/interface/cursor-size "28" > /dev/null 2>&1 &
+	# fi
        
     # initiate kvantum theme
     kvantummanager --set "$kvantum_theme" > /dev/null 4>&1 &
