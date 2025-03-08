@@ -11,8 +11,20 @@
     zafiro-icons
     rustc
     wf-recorder
-    kdePackages.qtstyleplugin-kvantum
   ];
+
+  ## style theme ###
+  # stylix = {
+  #   enable = true;
+  #
+  #   ## theme ##
+  #   base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+  #
+  #   ## perfer color mode ##
+  #   polarity = "dark";
+  # };
+  #
+  home.sessionVariables = {};
 
   xdg.desktopEntries = {
     netbeans = {
@@ -24,7 +36,7 @@
     };
   };
 
-  home.file.".config/hypr".source = ./config/hyprland_2.0;
+  home.file.".config/hypr".source = ./config/hypr;
   home.file.".config/rofi".source = ./config/rofi;
   home.file.".config/ags".source = ./config/ags;
   home.file.".config/btop".source = ./config/btop;
@@ -41,6 +53,7 @@
   home.file.".config/alacritty".source = ./config/alacritty;
   home.file.".config/kitty".source = ./config/kitty;
   home.file.".config/fish".source = ./config/fish;
+  home.file.".config/fish/fish_variables".source = ./config/fish/fish_variables;
   home.file.".config/dunst".source = ./config/dunst;
   home.file.".config/tmux".source = ./config/tmux;
   home.file.".config/vivid".source = ./config/vivid;

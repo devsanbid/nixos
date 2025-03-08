@@ -15,6 +15,11 @@ keymap({ "n", "x" }, "k", "gk", opts)
 vim.keymap.set("n", "<C-n>", ":keepjumps normal! mi*`i<CR>") -- " Use * to add w/out jumping
 vim.keymap.set("n", "gx", ":silent! execute '!open ' . shellescape(expand('<cfile>'), 1)<CR>")
 
+vim.keymap.set("n", "c", '"_c', { noremap = true })
+vim.keymap.set("n", "C", '"_C', { noremap = true })
+vim.keymap.set("n", "cc", '"_cc', { noremap = true })
+vim.keymap.set("v", "c", '"_c', { noremap = true })
+
 -- buffer
 keymap("n", "<leader>c", ":bdelete<cr>", opts)
 
@@ -37,7 +42,7 @@ keymap("n", "<leader>ff", function()
 end, opts)
 
 keymap("n", "<leader><leader>", function()
-    require("snacks").picker.files()
+	require("snacks").picker.files()
 end, opts)
 
 keymap("n", "<leader>fH", ":Telescope help_tags<cr>", opts)

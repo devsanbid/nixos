@@ -33,7 +33,6 @@
 	],
     
 "modules-right": [
-	"hyprland/window",  
 	"battery",
  	"group/audio", 
 	"custom/power",

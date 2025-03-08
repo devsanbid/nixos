@@ -2,15 +2,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-set TERM "xterm-kitty"
 set fish_greeting
 # set _JAVA_AWT_WM_NONREPARENTING 1
 
-set BROWSER "brave"
-set EDITOR "nvim"
-set -x SHELL /usr/bin/fish
-set -x LIBVIRT_DEFAULT_URL 'qemu:///system'
-# set -x FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 set -x FZF_CTRL_T_OPTS "
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'
