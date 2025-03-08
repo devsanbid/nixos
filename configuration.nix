@@ -556,23 +556,37 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs;
-    with nerd-fonts; [
-      jetbrains-mono
-      daddy-time-mono
-      fira-code
-      droid-sans-mono
-      hack
-      noto
-      comic-shanns-mono
-      monofur
-      cascadia-code
-      mononoki
-      iosevka
-      symbols-only
-      ubuntu-mono
-      sauce-code-pro
-      gyre-fonts
-    ];
+      [
+        nerd-fonts.jetbrains-mono
+        nerd-fonts.daddy-time-mono
+        nerd-fonts.droid-sans-mono
+        nerd-fonts.hack
+        nerd-fonts.noto
+        nerd-fonts.comic-shanns-mono
+        nerd-fonts.monofur
+        nerd-fonts.mononoki
+        nerd-fonts.iosevka
+        nerd-fonts.symbols-only
+        nerd-fonts.ubuntu-mono
+        nerd-fonts.sauce-code-pro
+      ]
+      ++ [
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-emoji
+        liberation_ttf
+        fira-code
+        fira-code-symbols
+        mplus-outline-fonts.githubRelease
+        dina-font
+        proggyfonts
+      ];
+
+    defaultFonts = {
+      serif = ["Ubuntu" "Liberation Serif" "Vazirmatn"];
+      sansSerif = ["Ubuntu" "Vazirmatn"];
+      monospace = ["Ubuntu Mono"];
+    };
   };
 
   #############################################################################
