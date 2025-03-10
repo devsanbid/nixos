@@ -18,11 +18,11 @@
 
     # See https://tinted-theming.github.io/tinted-gallery/ for more schemes
     base16Scheme = {
-      base00 = "0c0e0f"; # Default Background
-      base01 = "101314"; # Lighter Background (Used for status bars, line number and folding marks)
-      base02 = "313244"; # Selection Background
-      base03 = "45475a"; # Comments, Invisibles, Line Highlighting
-      base04 = "585b70"; # Dark Foreground (Used for status bars)
+      base00 = "010616"; # Default Background
+      base01 = "092135"; # Lighter Background (Used for status bars, line number and folding marks)
+      base02 = "1d3b53"; # Selection Background
+      base03 = "092135"; # Comments, Invisibles, Line Highlighting
+      base04 = "1d3b53"; # Dark Foreground (Used for status bars)
       base05 = "cdd6f4"; # Default Foreground, Caret, Delimiters, Operators
       base06 = "f5e0dc"; # Light Foreground (Not often used)
       base07 = "b4befe"; # Light Background (Not often used)
@@ -60,10 +60,10 @@
         name = "Noto Color Emoji";
       };
       sizes = {
-        applications = 13;
-        desktop = 13;
-        popups = 13;
-        terminal = 13;
+        applications = 18;
+        desktop = 18;
+        popups = 18;
+        terminal = 18;
       };
     };
 
@@ -107,6 +107,7 @@
   home.file.".config/cava".source = ./config/cava;
   home.file.".config/fastfetch".source = ./config/fastfetch;
   home.file.".config/qt5ct".source = ./config/qt5ct;
+  home.file.".config/waybar".source = ./config/waybar;
   home.file.".config/qt6ct".source = ./config/qt6ct;
   home.file.".config/swappy".source = ./config/swappy;
   home.file.".config/swaync".source = ./config/swaync;
@@ -122,7 +123,7 @@
   home.file.".config/tmux".source = ./config/tmux;
   home.file.".config/vivid".source = ./config/vivid;
   home.file.".zshrc".source = ./config/.zshrc;
-  home.file.".oh-my-zsh".source = ./config/.oh-my-zsh;
+  # home.file.".oh-my-zsh".source = ./config/.oh-my-zsh;
   home.file.".config/pip".source = ./config/pip;
   home.file.".config/fuzzel".source = ./config/fuzzel;
 
