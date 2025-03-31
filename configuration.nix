@@ -20,7 +20,6 @@
       };
       grub = {
         efiSupport = true;
-        useOSProber = true; # Auto-detect other operating systems
         fontSize = 32;
         default = "saved";
         device = "nodev"; # Install GRUB to the EFI directory, not to a device
@@ -46,6 +45,9 @@
   #############################################################################
   # Set up global environment variables
   environment.sessionVariables = rec {
+    # JAVA ISSUES FIX or garbled and fonts
+    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=1.25 -Dsun.java2d.dpiaware=true -Dawt.toolkit.name=WLToolkit";
+
     # XDG base directories
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
@@ -67,6 +69,10 @@
 
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
+    # kotlin
+    kotlin
+    gradle
+
     # Base utilities
     git
     wget
@@ -134,7 +140,7 @@
     vscode
 
     ##zen
-    zen-browser.packages."${system}".default
+     zen-browser.packages."${system}".twilight-official
 
     # Languages and runtimes
     lua
@@ -173,6 +179,7 @@
     grim
     hyprcursor
     hyprland-qt-support
+    hyprland-protocols
     hyprland-qtutils
     hyprlock
     hyprls
@@ -212,7 +219,6 @@
     obs-studio
     pamixer
     playerctl
-    pwvucontrol
     sonusmix
     vlc
     wf-recorder
@@ -232,7 +238,6 @@
 
     # Communication
     anydesk
-    rustdesk
     telegram-desktop
     tunnelto
     webcord
@@ -292,7 +297,6 @@
     cudaPackages.libcublas
     cudatoolkit
     lmstudio
-    nvitop
     nvtopPackages.nvidia
     ollama-cuda
     onnxruntime
@@ -315,7 +319,6 @@
     libinput
     libinput-gestures
     libnotify
-    zed-editor
     lollypop
     netbeans
     poweralertd
@@ -324,6 +327,20 @@
     webkitgtk
     wmctrl
     wine64
+
+    ## editor
+    code-cursor
+    windsurf
+
+    ## java
+    jdk17
+
+    ## android studio
+    android-studio
+
+    ## language server ###
+    typescript-language-server
+    lua-language-server
 
     # Other tools
     glib
@@ -464,11 +481,14 @@
   # Desktop utilities
   programs.firefox.enable = true;
   programs.appimage.enable = true;
-  programs.java.enable = true;
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk17;
+  };
   programs.ydotool.enable = true;
   programs.virt-manager.enable = true;
   programs.dconf.enable = true;
-  programs.hyprland.withUWSM = true;
+  # programs.hyprland.withUWSM = true;
 
   # XDG Portal for desktop integration
   xdg.portal.enable = true;
@@ -600,7 +620,7 @@
         name = "JetBrains Mono Nerd Font";
       };
       serif = {
-        package =  pkgs.nerd-fonts.jetbrains-mono;
+        package = pkgs.nerd-fonts.jetbrains-mono;
         name = "JetBrains Mono Nerd Font";
       };
       emoji = {

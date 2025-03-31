@@ -15,6 +15,10 @@ plugins=(
   docker-compose
   sudo
   jsontools
+
+  ## completion
+  ollama
+  zsh-completions
   
   ## without this i can't live ##
   tmux
@@ -65,3 +69,4 @@ alias wf-recorder="wf-recorder --audio=alsa_input.pci-0000_00_1f.3.analog-stereo
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+

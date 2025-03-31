@@ -25,7 +25,6 @@ keymap("n", "<leader>c", ":bdelete<cr>", opts)
 
 -- file action
 keymap("n", "<leader>w", ":w<cr>", opts)
-keymap("n", "<leader>q", ":q!<cr>", opts)
 
 -- up and down
 keymap("n", "<M-S-j>", "8jzz")

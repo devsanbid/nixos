@@ -22,7 +22,7 @@
 "modules-left": [	
 	"idle_inhibitor", 
 	"group/mobo_drawer",
-	"hyprland/workspaces#rw",
+  "hyprland/workspaces#pacman",
 	"tray",
 	"mpris", 
 	],
@@ -33,6 +33,7 @@
 	],
     
 "modules-right": [
+"network",
 	"battery",
  	"group/audio", 
 	"custom/power",

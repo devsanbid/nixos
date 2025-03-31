@@ -185,6 +185,8 @@
 		"title<.*youtube.*>": " ",
 		"title<.*amazon.*>": " ",
 		"title<.*reddit.*>": " ",
+    "title<.*zen.*>": " ",
+    "title<.*Zen.*>": " ",
 		"title<.*Picture-in-Picture.*>": " ",
 		"class<zed|firefox|org.mozilla.firefox|librewolf|floorp|mercury-browser|[Cc]achy-browser>": " ",
 		"class<kitty|konsole>": " ",
