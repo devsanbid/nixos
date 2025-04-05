@@ -36,6 +36,18 @@ opt.hlsearch = false
 opt.incsearch = true
 opt.termguicolors = true
 vim.opt.clipboard:append("unnamedplus") -- use system clipboard
+vim.g.clipboard = {
+  name = 'kitty',
+  copy = {
+    ['+'] = {'kitty', '+kitten', 'clipboard'},
+    ['*'] = {'kitty', '+kitten', 'clipboard'},
+  },
+  paste = {
+    ['+'] = {'kitty', '+kitten', 'clipboard', '--get-clipboard'},
+    ['*'] = {'kitty', '+kitten', 'clipboard', '--get-clipboard'},
+  },
+  cache_enabled = 0,
+}
 opt.scrolloff = 16
 opt.signcolumn = "no"
 opt.isfname:append("@-@")

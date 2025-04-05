@@ -13,7 +13,6 @@ plugins=(
   z
   docker
   docker-compose
-  sudo
   jsontools
 
   ## completion
