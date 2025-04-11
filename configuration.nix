@@ -64,7 +64,8 @@
     GDK_SCALE = "1";
 
     # Add local bin to PATH
-    PATH = ["${XDG_BIN_HOME}"];
+    PATH = ["${XDG_BIN_HOME}" "$HOME/.cargo/bin"];
+
   };
 
   # System packages (alphabetically organized in categories)
@@ -140,7 +141,8 @@
     vscode
 
     ##zen
-     zen-browser.packages."${system}".twilight-official
+    zen-browser.packages."${system}".default
+    flutterPackages-source.beta
 
     # Languages and runtimes
     lua

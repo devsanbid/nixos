@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixvim = {
+     url = "github:nix-community/nixvim";
+     inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +27,7 @@
     home-manager,
     nixos-unstable-small,
     nix-colors,
+    nixvim,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
@@ -58,6 +63,7 @@
       modules = [
         stylix.homeManagerModules.stylix
         ./home.nix
+      nixvim.homeManagerModules.nixvim
       ];
     };
   };

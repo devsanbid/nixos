@@ -1,4 +1,7 @@
 {pkgs, ...}: {
+imports = [
+   # ./config/nixvim/init.nix
+];
   home.username = "sanbid";
   home.homeDirectory = "/home/sanbid";
   home.stateVersion = "24.05";
@@ -12,6 +15,7 @@
     rustc
     wf-recorder
   ];
+
 
   stylix = {
     enable = true;
@@ -114,7 +118,7 @@
   home.file.".config/wlogout".source = ./config/wlogout;
   home.file.".config/wallust".source = ./config/wallust;
   home.file."Pictures/wallpapers".source = ./config/wallpapers;
-  home.file.".config/nvim".source = ./config/nvim;
+  # home.file.".config/nvim".source = ./config/lazyvim;
   home.file.".config/alacritty".source = ./config/alacritty;
   home.file.".config/kitty".source = ./config/kitty;
   home.file.".config/fish".source = ./config/fish;
