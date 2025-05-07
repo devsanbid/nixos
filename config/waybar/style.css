@@ -4,8 +4,8 @@
 @define-color critical #ff0000; /* critical color */
 @define-color warning #f3f809;  /* warning color */
 @define-color fgcolor #ffffff;  /* foreground color */
-@define-color bgcolor #303030;  /* background color */
-@define-color bgcolor #222436;  /* background color */
+@define-color bgcolor #000;  /* background color */
+@define-color bgcolor #000;  /* background color */
 @define-color alert   #df3320;
 
 @define-color accent1 #ff7a93;
