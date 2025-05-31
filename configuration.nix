@@ -1,22 +1,32 @@
 { config, lib, pkgs, inputs, zen-browser, ... }: {
-  imports = [ ./hardware-configuration.nix ./system ];
+  imports = [
+    ./hardware-configuration.nix 
+    ./system 
+    ./lanzaboote.nix
+  ];
 
   #############################################################################
   #                              BOOT CONFIGURATION                           #
   #############################################################################
+
   boot = {
+
     # EFI and GRUB bootloader configuration
     loader = {
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      grub = {
-        efiSupport = true;
-        fontSize = 32;
-        default = "saved";
-        device = "nodev"; # Install GRUB to the EFI directory, not to a device
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 4;  
       };
+      # grub = {
+      #   efiSupport = true;
+      #   fontSize = 32;
+      #   default = "saved";
+      #   device = "nodev"; # Install GRUB to the EFI directory, not to a device
+      # };
     };
 
     # Kernel parameters for NVIDIA
@@ -31,6 +41,8 @@
     hostName = "nixos";
     networkmanager.enable = true;
     firewall.allowedTCPPorts = [ 443 ]; # Allow HTTPS traffic
+    nameservers = [ "1.1.1.1" "9.9.9.9" ];
+    
   };
 
   #############################################################################
@@ -62,11 +74,20 @@
 
   };
 
+  services.mongodb.enable = true;
+
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
     # kotlin
     kotlin
     gradle
+
+    mongosh
+    nodemon
+
+    ## tools for secure boot
+    sbctl niv
+
 
     # Base utilities
     git
@@ -261,6 +282,8 @@
     # Office and productivity
     libreoffice
     showtime
+    onlyoffice-desktopeditors
+    mongodb
 
     # Appearance and customization
     aquamarine
@@ -358,7 +381,6 @@
   #                            USER CONFIGURATION                             #
   #############################################################################
   # Default shell for all users
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   # Main user account configuration
   users.users = {
