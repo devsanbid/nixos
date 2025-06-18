@@ -1,37 +1,30 @@
 { config, lib, pkgs, inputs, zen-browser, ... }: {
-  imports = [
-    ./hardware-configuration.nix 
-    ./system 
-    ./lanzaboote.nix
-  ];
+  imports = [ ./hardware-configuration.nix ./system ];
 
   #############################################################################
   #                              BOOT CONFIGURATION                           #
   #############################################################################
 
-  boot = {
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+  };
+  boot.loader.systemd-boot.enable = lib.mkForce false;
 
+  boot = {
     # EFI and GRUB bootloader configuration
     loader = {
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 4;  
-      };
-      # grub = {
-      #   efiSupport = true;
-      #   fontSize = 32;
-      #   default = "saved";
-      #   device = "nodev"; # Install GRUB to the EFI directory, not to a device
-      # };
     };
 
     # Kernel parameters for NVIDIA
     kernelParams = [ "nvidia-drm.modeset=1" ];
   };
+
+  # boot.blacklistedKernelModules = [ "kvm_intel" "kvm" ];
 
   #############################################################################
   #                           NETWORKING CONFIGURATION                        #
@@ -39,10 +32,29 @@
 
   networking = {
     hostName = "nixos";
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      dns = "none";
+    };
     firewall.allowedTCPPorts = [ 443 ]; # Allow HTTPS traffic
     nameservers = [ "1.1.1.1" "9.9.9.9" ];
-    
+
+  };
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "sanbid" ];
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.guest.enable = true;
+  virtualisation.virtualbox.guest.dragAndDrop = true;
+
+  #############################################################################
+  #                            NH NIXOS                                       #
+  #############################################################################
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+    flake = "$HOME/.dotfiles";
   };
 
   #############################################################################
@@ -74,6 +86,26 @@
 
   };
 
+  # services.postgresql = {
+  #   enable = true;
+  #   ensureDatabases = [ "mydatabase" ];
+  #   enableTCPIP = true;
+  #   authentication = pkgs.lib.mkOverride 10 ''
+  #     #...
+  #     #type database DBuser origin-address auth-method
+  #     local all       all     trust
+  #     # ipv4
+  #     host  all      all     127.0.0.1/32   trust
+  #     # ipv6
+  #     host all       all     ::1/128        trust
+  #   '';
+  #   initialScript = pkgs.writeText "backend-initScript" ''
+  #     CREATE ROLE users WITH LOGIN PASSWORD '33533' CREATEDB;
+  #     CREATE DATABASE nixdb;
+  #     GRANT ALL PRIVILEGES ON DATABASE nixdb TO users;
+  #   '';
+  # };
+
   services.mongodb.enable = true;
 
   # System packages (alphabetically organized in categories)
@@ -86,8 +118,10 @@
     nodemon
 
     ## tools for secure boot
-    sbctl niv
+    sbctl
+    niv
 
+    wineWowPackages.waylandFull
 
     # Base utilities
     git
@@ -106,6 +140,7 @@
     stow
     tmux
     unzip
+    pgcli
     zoxide
     tealdeer
     progress
@@ -123,6 +158,7 @@
     conda
     deadnix # Find dead Nix code
     devbox
+    efibootmgr
     devenv
     diff-so-fancy
     entr
@@ -134,8 +170,8 @@
     micromamba
     mysql_jdbc
     neovim
-    nh
     nil # Nix language server
+    nh
     nixd
     nodejs_22
     pipx
@@ -169,7 +205,6 @@
     acpi
     brightnessctl
     dig
-    efibootmgr
     gparted
     gnome-tweaks
     kdePackages.partitionmanager
@@ -186,7 +221,6 @@
     spice
     spice-gtk
     spice-protocol
-    virt-manager
     virt-viewer
 
     # Wayland tools
@@ -342,7 +376,6 @@
     poweralertd
     psi-notify
     sxhkd
-    webkitgtk
     wmctrl
     wine64
 
@@ -395,7 +428,6 @@
         "wheel" # sudo access
         "ydotool"
         "audio"
-        "kvm"
       ];
     };
 
@@ -409,7 +441,6 @@
   };
 
   # Additional group memberships
-  users.extraGroups.vboxusers.members = [ "sanbid" ];
   users.groups.libvirtd.members = [ "sanbid" ];
 
   #############################################################################
@@ -516,7 +547,6 @@
     package = pkgs.jdk17;
   };
   programs.ydotool.enable = true;
-  programs.virt-manager.enable = true;
   programs.dconf.enable = true;
   # programs.hyprland.withUWSM = true;
 
@@ -579,33 +609,35 @@
 
   fonts = {
     fontDir.enable = true;
-    packages = with pkgs;
-      [
-        nerd-fonts.jetbrains-mono
-        nerd-fonts.daddy-time-mono
-        nerd-fonts.droid-sans-mono
-        nerd-fonts.hack
-        nerd-fonts.noto
-        nerd-fonts.comic-shanns-mono
-        nerd-fonts.monofur
-        nerd-fonts.mononoki
-        nerd-fonts.iosevka
-        nerd-fonts.symbols-only
-        nerd-fonts.ubuntu-mono
-        nerd-fonts.sauce-code-pro
-      ] ++ [
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-emoji
-        liberation_ttf
-        fira-code
-        fira-code-symbols
-        mplus-outline-fonts.githubRelease
-        dina-font
-        proggyfonts
-      ];
+    packages = with pkgs; [
+      # Use the old nerdfonts override syntax for compatibility
+      (nerdfonts.override {
+        fonts = [
+          "JetBrainsMono"
+          "DaddyTimeMono"
+          "DroidSansMono"
+          "Hack"
+          "Noto"
+          "ComicShannsMono"
+          "Monofur"
+          "Mononoki"
+          "Iosevka"
+          "NerdFontsSymbolsOnly"
+          "UbuntuMono"
+          "SourceCodePro"
+        ];
+      })
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      liberation_ttf
+      fira-code
+      fira-code-symbols
+      mplus-outline-fonts.githubRelease
+      dina-font
+      proggyfonts
+    ];
   };
-
   #############################################################################
   #                               Stylix SETTINGS                             #
   #############################################################################
