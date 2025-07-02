@@ -107,15 +107,18 @@
   # };
 
   services.mongodb.enable = true;
-
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
     # kotlin
     kotlin
     gradle
 
+    postgresql
+
     mongosh
     nodemon
+
+    pgadmin
 
     ## tools for secure boot
     sbctl
@@ -159,7 +162,6 @@
     deadnix # Find dead Nix code
     devbox
     efibootmgr
-    devenv
     diff-so-fancy
     entr
     gcc
@@ -192,7 +194,7 @@
 
     ##zen
     zen-browser.packages."${system}".default
-    flutterPackages-source.beta
+    # flutterPackages-source.beta
 
     # Languages and runtimes
     lua
@@ -384,7 +386,7 @@
     windsurf
 
     ## java
-    jdk17
+    jdk24
 
     ## android studio
     android-studio
@@ -544,7 +546,7 @@
   programs.appimage.enable = true;
   programs.java = {
     enable = true;
-    package = pkgs.jdk17;
+    package = pkgs.jdk24;
   };
   programs.ydotool.enable = true;
   programs.dconf.enable = true;
@@ -610,23 +612,14 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.hack
+      nerd-fonts.noto
+      nerd-fonts.monofur
+      nerd-fonts.mononoki
+      nerd-fonts.iosevka
+      nerd-fonts.sauce-code-pro
       # Use the old nerdfonts override syntax for compatibility
-      (nerdfonts.override {
-        fonts = [
-          "JetBrainsMono"
-          "DaddyTimeMono"
-          "DroidSansMono"
-          "Hack"
-          "Noto"
-          "ComicShannsMono"
-          "Monofur"
-          "Mononoki"
-          "Iosevka"
-          "NerdFontsSymbolsOnly"
-          "UbuntuMono"
-          "SourceCodePro"
-        ];
-      })
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji

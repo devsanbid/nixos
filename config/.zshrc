@@ -66,6 +66,8 @@ alias cl="clear"
 alias netbeans="netbeans --fontsize 28"
 alias CLASSPATH="/nix/store/b3kcs51w5fcp0maj62aln2h854zb64xv-mysql-connector-java-9.1.0/share/java/mysql-connector-j.jar:$CLASSPATH"
 alias wf-recorder="wf-recorder --audio=alsa_input.pci-0000_00_1f.3.analog-stereo"
+alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
+
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
