@@ -85,7 +85,6 @@
     PATH = [ "${XDG_BIN_HOME}" "$HOME/.cargo/bin" ];
 
   };
-
   # services.postgresql = {
   #   enable = true;
   #   ensureDatabases = [ "mydatabase" ];
@@ -106,12 +105,15 @@
   #   '';
   # };
 
+  services.preload.enable = true;
   services.mongodb.enable = true;
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
     # kotlin
     kotlin
     gradle
+
+    preload
 
     postgresql
 
@@ -388,6 +390,8 @@
     ## java
     jdk24
 
+    notepadqq
+
     ## android studio
     android-studio
 
@@ -488,6 +492,7 @@
     desktopManager = {
       xfce.enable = true;
       gnome.enable = true;
+      plasma6.enable = true;
       xterm.enable = true;
     };
 

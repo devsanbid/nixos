@@ -15,7 +15,7 @@ get_ai_response() {
     clipboard_content=$(wl-paste)
     temp_response=$(mktemp)
     clipboard_content+="\nFrom the following options, choose the single most correct answer. Do not provide any explanation or justification just show answer no other things"
-    echo "$clipboard_content" | ollama run llama3.1:8b 2> /dev/null > "$temp_response"
+    echo "$clipboard_content" | ollama run gemma3n:latest  2> /dev/null > "$temp_response"
 
     if [ -s "$temp_response" ]; then  
         ai_response=$(cat "$temp_response")
