@@ -1,8 +1,8 @@
 [global]
     monitor = 0
     follow = none
-    height = (0, 300)    # Dynamic height up to 300px
-    height = (300, 300)  # Fixed 300px height
+    height = (100, 100)  # Fixed 300px height
+    weight = (100, 100)  # Fixed 300px height
     origin = bottom-center 
     offset = (20, 20)
     indicate_hidden = yes
