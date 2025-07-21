@@ -41,12 +41,20 @@
 
   };
 
+  virtualisation.libvirtd.enable = true;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "sanbid" ];
   virtualisation.virtualbox.host.enableExtensionPack = true;
   virtualisation.virtualbox.guest.enable = true;
   virtualisation.virtualbox.guest.dragAndDrop = true;
+  virtualisation.virtualbox.host = {
+    enableKvm = false; # This is key!
+  };
+  virtualisation.virtualbox.host = { addNetworkInterface = true; };
+  # Add your user to necessary groups
 
+  # Android development
+  programs.adb.enable = true;
   #############################################################################
   #                            NH NIXOS                                       #
   #############################################################################
@@ -107,11 +115,19 @@
 
   services.preload.enable = true;
   services.mongodb.enable = true;
+
+  services.fstrim.enable = true;
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 1;
+    "vm.vfs_cache_pressure" = 50;
+  };
+
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
     # kotlin
     kotlin
     gradle
+    scrcpy
 
     preload
 
@@ -252,7 +268,6 @@
     slurp
     sway
     swaybg
-    swaynotificationcenter
     swappy
     swww
     waybar
@@ -344,7 +359,6 @@
     onefetch
     parabolic
     qt6.qtwayland
-    themechanger
     tk
     wallust
     yad
@@ -364,7 +378,6 @@
     alacritty
     dbus
     eog
-    flatpak
     geany
     gnomeExtensions.appindicator
     gnomeExtensions.nordvpn-quick-toggle
@@ -385,8 +398,6 @@
 
     ## editor
     code-cursor
-    windsurf
-
     ## java
     jdk24
 
@@ -429,6 +440,9 @@
       description = "sanbid";
       extraGroups = [
         "networkmanager"
+        "kvm"
+        "vboxusers"
+        "adbusers"
         "libvirtd"
         "docker"
         "wheel" # sudo access
