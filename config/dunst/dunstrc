@@ -7,6 +7,7 @@
     offset = (20, 20)
     indicate_hidden = yes
     transparency = 100
+    frame_color = "#FFFFFF"
     background = "#FFFFFF"
     foreground = "#D3D3D3"
 
