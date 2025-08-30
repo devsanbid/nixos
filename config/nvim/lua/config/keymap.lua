@@ -73,7 +73,7 @@ keymap("n", "<leader>lr", function()
 end, opts)
 
 keymap("n", "<leader>w", ":w<cr>")
-keymap("n", "<leader>e", function()
+keymap("n", "<leader>E", function()
 	local oil = require("oil")
 	if vim.bo.filetype == "oil" then
 		oil.close()

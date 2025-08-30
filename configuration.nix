@@ -144,6 +144,9 @@
 
     wineWowPackages.waylandFull
 
+    ## window bootable
+    woeusb-ng
+
     # Base utilities
     git
     wget
@@ -205,6 +208,7 @@
     python312Packages.numpy
     rust-analyzer
     rustup
+    cargo
     statix # Lints and suggestions for Nix code
     sumneko-lua-language-server
     uv # Python package installer/resolver
@@ -239,6 +243,7 @@
     gnome-boxes
     podman
     spice
+    wl-clipboard
     spice-gtk
     spice-protocol
     virt-viewer
@@ -250,7 +255,7 @@
     hyprcursor
     hyprland-qt-support
     hyprland-protocols
-    hyprland-qtutils
+    # hyprland-qtutils
     hyprlock
     hyprls
     hyprpaper
@@ -261,12 +266,15 @@
     hyprutils
     hyprwayland-scanner
     imv
-    nwg-displays
     nwg-look
+    testdisk-qt
+    testdisk
     pyprland
     rofi-wayland
     slurp
     sway
+    lazygit
+    yarn
     swaybg
     swappy
     swww
@@ -367,12 +375,16 @@
     cudaPackages.libcublas
     cudatoolkit
     lmstudio
-    nvtopPackages.nvidia
     ollama-cuda
     onnxruntime
 
     # Specific hardware support
     lenovo-legion
+
+    # markdown
+    glow
+
+    llama-cpp
 
     # Desktop environment components
     alacritty
@@ -395,13 +407,11 @@
     sxhkd
     wmctrl
     wine64
-
+    #
     ## editor
     code-cursor
     ## java
     jdk24
-
-    notepadqq
 
     ## android studio
     android-studio
@@ -547,10 +557,7 @@
   };
 
   # Systemd configurations
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=6s
-  '';
-
+  systemd.settings.Manager = { DefaultTimeoutStopSec = "6s"; };
   #############################################################################
   #                           PROGRAMS AND FEATURES                           #
   #############################################################################
@@ -558,7 +565,7 @@
   programs.zsh = { enable = true; };
   programs.fish.enable = true;
 
-  # kasmweb 
+  # kasmweb
 
   # Desktop utilities
   programs.firefox.enable = true;
@@ -638,6 +645,10 @@
       nerd-fonts.mononoki
       nerd-fonts.iosevka
       nerd-fonts.sauce-code-pro
+      nerd-fonts.victor-mono
+      nerd-fonts.zed-mono
+      nerd-fonts.go-mono
+      nerd-fonts.commit-mono
       # Use the old nerdfonts override syntax for compatibility
       noto-fonts
       noto-fonts-cjk-sans
