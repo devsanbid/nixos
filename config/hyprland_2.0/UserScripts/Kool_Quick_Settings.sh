@@ -36,7 +36,9 @@ Choose Hyprland Animations
 Choose Monitor Profiles
 Choose Rofi Themes
 Search for Keybinds
-Bookmarks for browser
+view/edit Laptop Keybinds
+view/edit Bookmarks Work
+view/edit Bookmarks Personal
 EOF
 }
 
@@ -53,8 +55,8 @@ main() {
         "view/edit Startup Apps") file="$UserConfigs/Startup_Apps.conf" ;;
         "view/edit Decorations") file="$UserConfigs/UserDecorations.conf" ;;
         "view/edit Animations") file="$UserConfigs/UserAnimations.conf" ;;
-        "view/edit Bookmarks Personal") file="$bookmarks/personal.conf" ;;
-        "view/edit Bookmarks Work") file="$bookmarks/work.conf" ;;
+        "view/edit Bookmarks Personal") file="$bookmarks/personal.txt" ;;
+        "view/edit Bookmarks Work") file="$bookmarks/work.txt" ;;
         "view/edit Laptop Keybinds") file="$UserConfigs/Laptops.conf" ;;
         "view/edit Default Keybinds") file="$configs/Keybinds.conf" ;;
         "Configure Monitors (nwg-displays)")
