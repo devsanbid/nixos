@@ -37,9 +37,13 @@
       dns = "none";
     };
     firewall.allowedTCPPorts = [ 443 ]; # Allow HTTPS traffic
-    nameservers = [ "1.1.1.1" "9.9.9.9" ];
+    nameservers = [ "8.8.8.8" "1.1.1.1" ];
 
   };
+
+  networking.interfaces.wlan0.mtu = 1400;
+
+  hardware.enableRedistributableFirmware = true;
 
   virtualisation.libvirtd.enable = true;
   virtualisation.virtualbox.host.enable = true;
@@ -72,7 +76,7 @@
   environment.sessionVariables = rec {
     # JAVA ISSUES FIX or garbled and fonts
     _JAVA_OPTIONS =
-      "-Dsun.java2d.uiScale=1.25 -Dsun.java2d.dpiaware=true -Dawt.toolkit.name=WLToolkit";
+      "-Dawt.toolkit.name=WLToolkit";
 
     # XDG base directories
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -80,6 +84,7 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_BIN_HOME = "$HOME/.local/bin";
+    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.webkitgtk_4_1.dev}/lib/pkgconfig:${pkgs.libsoup_3.dev}/lib/pkgconfig:${pkgs.gtk4.dev}/lib/pkgconfig:${pkgs.gtk3.dev}/lib/pkgconfig:${pkgs.pango.dev}/lib/pkgconfig:${pkgs.cairo.dev}/lib/pkgconfig:${pkgs.gdk-pixbuf.dev}/lib/pkgconfig:${pkgs.glib.dev}/lib/pkgconfig:${pkgs.atk.dev}/lib/pkgconfig:${pkgs.gobject-introspection.dev}/lib/pkgconfig";
 
     # NVIDIA/CUDA configuration
     CUDA_PATH = "${pkgs.cudatoolkit}";
@@ -89,10 +94,15 @@
     # Display scaling
     GDK_SCALE = "1";
 
+    # rust
+   RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+
     # Add local bin to PATH
     PATH = [ "${XDG_BIN_HOME}" "$HOME/.cargo/bin" ];
 
   };
+
+
   # services.postgresql = {
   #   enable = true;
   #   ensureDatabases = [ "mydatabase" ];
@@ -122,6 +132,7 @@
     "vm.vfs_cache_pressure" = 50;
   };
 
+
   # System packages (alphabetically organized in categories)
   environment.systemPackages = with pkgs; [
     # kotlin
@@ -136,6 +147,8 @@
     mongosh
     nodemon
 
+    jetbrains.idea-community-bin
+
     pgadmin
 
     ## tools for secure boot
@@ -143,6 +156,14 @@
     niv
 
     wineWowPackages.waylandFull
+
+    ## r language
+    R
+    rstudio
+
+
+steam
+
 
     ## window bootable
     woeusb-ng
@@ -172,6 +193,54 @@
     fastfetch
     gzip
 
+  ## rust
+
+  libsoup_3.dev
+webkitgtk_4_1.dev
+gtk4.dev
+gtk3.dev
+pango.dev
+cairo.dev
+gdk-pixbuf.dev
+glib.dev
+atk.dev
+gobject-introspection.dev
+librsvg.dev
+
+      gtk4
+      gtk3
+      glib
+      cairo
+      pango
+      gdk-pixbuf
+      atk
+      gobject-introspection
+      librsvg
+
+                    pkg-config
+          cmake
+          ninja
+          meson
+          glade
+          d-spy
+          gtk4.dev
+          gtk3.dev
+          glib.dev
+          cairo.dev
+          pango.dev
+          gdk-pixbuf.dev
+          atk.dev
+          gobject-introspection.dev
+          librsvg.dev
+          openssl
+          libsoup_3.dev
+          webkitgtk_4_1
+          libadwaita
+          libappindicator-gtk3
+          webkitgtk_4_1.dev
+
+
+
     # Development tools
     alejandra # Nix formatter
     ansible
@@ -198,7 +267,6 @@
     nixd
     nodejs_22
     pipx
-    pkg-config
     pnpm
     postman
     python3
@@ -270,7 +338,11 @@
     testdisk-qt
     testdisk
     pyprland
-    rofi-wayland
+    rofi
+    brave
+
+    freerdp
+
     slurp
     sway
     lazygit
@@ -296,7 +368,6 @@
     obs-studio
     pamixer
     playerctl
-    sonusmix
     vlc
     wf-recorder
 
@@ -330,9 +401,10 @@
     xfce.thunar-volman
 
     # Browsers
-    brave
     chromium
-
+    glib
+    gtk4
+    gobject-introspection
     # Network tools
     blueman
     iwgtk
@@ -394,7 +466,6 @@
     gnomeExtensions.appindicator
     gnomeExtensions.nordvpn-quick-toggle
     gvfs
-    gtk4
     keypunch
     libgcc
     libinput
@@ -415,6 +486,13 @@
 
     ## android studio
     android-studio
+
+    ocs-url
+
+    cheese
+
+    pastel ## color
+    pandoc # convert doc
 
     ## language server ###
     typescript-language-server
@@ -515,8 +593,9 @@
     # Desktop environments
     desktopManager = {
       xfce.enable = true;
-      gnome.enable = true;
-      plasma6.enable = true;
+      # gnome.enable = true;
+      # plasma6.enable = true;
+      cinnamon.enable = true;
       xterm.enable = true;
     };
 
@@ -629,7 +708,7 @@
   #############################################################################
   #                           VIRTUALIZATION                                  #
   #############################################################################
-  virtualisation.podman = { enable = true; };
+  virtualisation.docker = { enable = true; };
 
   #############################################################################
   #                                FONTS                                      #

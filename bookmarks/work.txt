@@ -1,0 +1,2 @@
+[docs] NixOS Search :: https://search.nixos.org/packages
+

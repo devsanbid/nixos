@@ -10,6 +10,7 @@ tty=kitty
 
 # variables
 configs="$HOME/.dotfiles/config/hyprland_2.0/configs"
+bookmarks="$HOME/.dotfiles/bookmarks"
 UserConfigs="$HOME/.dotfiles/config/hyprland_2.0/UserConfigs"
 rofi_theme="$HOME/.dotfiles/config/rofi/config-edit.rasi"
 msg=' ⁉️ Choose what to do ⁉️'
@@ -35,13 +36,14 @@ Choose Hyprland Animations
 Choose Monitor Profiles
 Choose Rofi Themes
 Search for Keybinds
+Bookmarks for browser
 EOF
 }
 
 # Main function to handle menu selection
 main() {
     choice=$(menu | rofi -i -dmenu -config $rofi_theme -mesg "$msg")
-    
+
     # Map choices to corresponding files
     case "$choice" in
         "view/edit ENV variables") file="$UserConfigs/ENVariables.conf" ;;
@@ -51,15 +53,17 @@ main() {
         "view/edit Startup Apps") file="$UserConfigs/Startup_Apps.conf" ;;
         "view/edit Decorations") file="$UserConfigs/UserDecorations.conf" ;;
         "view/edit Animations") file="$UserConfigs/UserAnimations.conf" ;;
+        "view/edit Bookmarks Personal") file="$bookmarks/personal.conf" ;;
+        "view/edit Bookmarks Work") file="$bookmarks/work.conf" ;;
         "view/edit Laptop Keybinds") file="$UserConfigs/Laptops.conf" ;;
         "view/edit Default Keybinds") file="$configs/Keybinds.conf" ;;
-        "Configure Monitors (nwg-displays)") 
+        "Configure Monitors (nwg-displays)")
             if ! command -v nwg-displays &>/dev/null; then
                 notify-send -i "$iDIR/ja.png" "E-R-R-O-R" "Install nwg-displays first"
                 exit 1
             fi
             nwg-displays ;;
-        "Configure Workspace Rules (nwg-displays)") 
+        "Configure Workspace Rules (nwg-displays)")
             if ! command -v nwg-displays &>/dev/null; then
                 notify-send -i "$iDIR/ja.png" "E-R-R-O-R" "Install nwg-displays first"
                 exit 1
