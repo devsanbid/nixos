@@ -1,2 +1,2 @@
-[docs] NixOS Search :: https://search.nixos.org/packages
+NixOS Search :: https://search.nixos.org/packages
 

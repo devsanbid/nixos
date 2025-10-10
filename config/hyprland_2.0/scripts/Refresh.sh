@@ -24,7 +24,7 @@ for _prs in "${_ps[@]}"; do
 done
 
 # added since wallust sometimes not applying
-killall -SIGUSR2 waybar 
+killall -SIGUSR2 waybar
 killall -SIGUSR2 swaync
 
 # quit ags & relaunch ags
@@ -42,6 +42,8 @@ waybar &
 # relaunch swaync
 sleep 0.5
 swaync > /dev/null 2>&1 &
+
+hyprctl reload
 
 # Relaunching rainbow borders if the script exists
 sleep 1

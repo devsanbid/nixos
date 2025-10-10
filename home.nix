@@ -49,24 +49,24 @@ imports = [
     fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
+        name = "Hack Nerd Font";
       };
       sansSerif = {
         package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
+        name = "Hack Nerd Font";
       };
       serif = {
         package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
+        name = "Hack Nerd Font";
       };
       emoji = {
         package = pkgs.noto-fonts-emoji;
         name = "Noto Color Emoji";
       };
       sizes = {
-        applications = 18;
-        desktop = 18;
-        popups = 18;
+        applications = 15;
+        desktop = 15;
+        popups = 15;
         terminal = 18;
       };
     };

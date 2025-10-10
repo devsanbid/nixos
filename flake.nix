@@ -17,10 +17,16 @@
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     stylix.url = "github:danth/stylix";
 
-    ## secure boot 
+    ## secure boot
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       # Optional but recommended to limit the size of your system closure.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

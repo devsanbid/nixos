@@ -80,7 +80,7 @@ open_with() {
 
 case "$tag" in
   personal) open_with "$FIREFOX" ;;
-  work)     open_with "$BRAVE" ;;
+  work)     open_with "$FIREFOX" ;;
 esac
 
 # Fallback if specific browser not found
