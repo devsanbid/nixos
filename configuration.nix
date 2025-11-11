@@ -1,9 +1,28 @@
 { config, lib, pkgs, inputs, zen-browser, ... }: {
-  imports = [ ./hardware-configuration.nix ./system ];
+  # Imports: Only essential local modules
+  imports = [
+    ./hardware-configuration.nix
+    ./system
+  ];
 
-#############################################################################
-#                              BOOT CONFIGURATION                           #
-#############################################################################
+  #############################################################################
+  #                          BOOT & NIX CONFIGURATION                         #
+  #############################################################################
+  nixpkgs.config = {
+    allowBroken = true;
+    allowUnfree = true;
+    cudaSupport = true;
+  };
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-36.9.5"
+  ];
+
+
+  boot.kernelModules = [ "acpi_ec" "wmi" "ec_sys" "thinkpad_acpi" ];
+  boot.extraModulePackages = with pkgs; [
+    linuxKernel.packages.linux_6_12.lenovo-legion-module
+  ];
 
   boot.lanzaboote = {
     enable = true;
@@ -11,584 +30,110 @@
   };
   boot.loader.systemd-boot.enable = lib.mkForce false;
 
-  boot = {
-# EFI and GRUB bootloader configuration
-    loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-    };
-
-# Kernel parameters for NVIDIA
-    kernelParams = [ "nvidia-drm.modeset=1" ];
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot";
   };
 
-# boot.blacklistedKernelModules = [ "kvm_intel" "kvm" ];
+  # Kernel parameters for NVIDIA
+  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
 
-#############################################################################
-#                           NETWORKING CONFIGURATION                        #
-#############################################################################
-
-  networking = {
-    hostName = "nixos";
-    networkmanager = {
-      enable = true;
-      dns = "none";
-    };
-    firewall.allowedTCPPorts = [ 443 ]; # Allow HTTPS traffic
-      nameservers = [ "8.8.8.8" "1.1.1.1" ];
-
-  };
-
-  networking.interfaces.wlan0.mtu = 1400;
-
-  hardware.enableRedistributableFirmware = true;
-
-  virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "sanbid" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  virtualisation.virtualbox.guest.enable = true;
-  virtualisation.virtualbox.guest.dragAndDrop = true;
-  virtualisation.virtualbox.host = {
-    enableKvm = false; # This is key!
-  };
-  virtualisation.virtualbox.host = { addNetworkInterface = true; };
-# Add your user to necessary groups
-
-# Android development
-  programs.adb.enable = true;
-#############################################################################
-#                            NH NIXOS                                       #
-#############################################################################
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
-    flake = "$HOME/.dotfiles";
-  };
-
-#############################################################################
-#                            SYSTEM ENVIRONMENT                             #
-#############################################################################
-# Set up global environment variables
-  environment.sessionVariables = rec {
-# JAVA ISSUES FIX or garbled and fonts
-    _JAVA_OPTIONS =
-      "-Dawt.toolkit.name=WLToolkit";
-
-# XDG base directories
-    XDG_CACHE_HOME = "$HOME/.cache";
-    XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_DATA_HOME = "$HOME/.local/share";
-    XDG_STATE_HOME = "$HOME/.local/state";
-    XDG_BIN_HOME = "$HOME/.local/bin";
-    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.webkitgtk_4_1.dev}/lib/pkgconfig:${pkgs.libsoup_3.dev}/lib/pkgconfig:${pkgs.gtk4.dev}/lib/pkgconfig:${pkgs.gtk3.dev}/lib/pkgconfig:${pkgs.pango.dev}/lib/pkgconfig:${pkgs.cairo.dev}/lib/pkgconfig:${pkgs.gdk-pixbuf.dev}/lib/pkgconfig:${pkgs.glib.dev}/lib/pkgconfig:${pkgs.atk.dev}/lib/pkgconfig:${pkgs.gobject-introspection.dev}/lib/pkgconfig";
-
-# NVIDIA/CUDA configuration
-    CUDA_PATH = "${pkgs.cudatoolkit}";
-    EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
-    EXTRA_CCFLAGS = "-I/usr/include";
-
-# Display scaling
-    GDK_SCALE = "1";
-
-# rust
-    RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-
-# Add local bin to PATH
-    PATH = [ "${XDG_BIN_HOME}" "$HOME/.cargo/bin" ];
-
-  };
-
-
-# services.postgresql = {
-#   enable = true;
-#   ensureDatabases = [ "mydatabase" ];
-#   enableTCPIP = true;
-#   authentication = pkgs.lib.mkOverride 10 ''
-#     #...
-#     #type database DBuser origin-address auth-method
-#     local all       all     trust
-#     # ipv4
-#     host  all      all     127.0.0.1/32   trust
-#     # ipv6
-#     host all       all     ::1/128        trust
-#   '';
-#   initialScript = pkgs.writeText "backend-initScript" ''
-#     CREATE ROLE users WITH LOGIN PASSWORD '33533' CREATEDB;
-#     CREATE DATABASE nixdb;
-#     GRANT ALL PRIVILEGES ON DATABASE nixdb TO users;
-#   '';
-# };
-
-  services.preload.enable = true;
-  services.mongodb.enable = true;
-
+  # System performance tweaks
   services.fstrim.enable = true;
+  services.preload.enable = true;
   boot.kernel.sysctl = {
     "vm.swappiness" = 1;
     "vm.vfs_cache_pressure" = 50;
   };
 
-
-# System packages (alphabetically organized in categories)
-  environment.systemPackages = with pkgs; [
-
-inputs.kwin-effects-forceblur.packages.${pkgs.system}.default # Wayland
-  ## app
-  picom
-  gromit-mpx
-  wayland
-
-  kdePackages.full
-  kdePackages.kbackup
-
-  wayland-utils
-  feh
-
-
-  ffmpeg.dev
-  clang
-
-  qt6.qtwayland
-
-  # kotlin
-    kotlin
-      gradle
-      scrcpy
-
-      preload
-
-      postgresql
-
-      mongosh
-      nodemon
-
-      jetbrains.idea-community-bin
-
-      pgadmin
-
-## tools for secure boot
-      sbctl
-      niv
-
-      wineWowPackages.waylandFull
-
-## r language
-      R
-      rstudio
-      libqalculate
-
-
-      steam
-
-
-## window bootable
-      woeusb-ng
-
-# Base utilities
-      git
-      wget
-      vim
-      lsof
-      htop
-      bat
-      bc
-      eza
-      fzf
-      jq
-      ripgrep
-      fd
-      starship
-      stow
-      tmux
-      unzip
-      pgcli
-      zoxide
-      tealdeer
-      progress
-      inxi
-      fastfetch
-      gzip
-
-## rust
-
-      libsoup_3.dev
-      webkitgtk_4_1.dev
-      gtk4.dev
-      gtk3.dev
-      pango.dev
-      cairo.dev
-      gdk-pixbuf.dev
-      glib.dev
-      atk.dev
-      gobject-introspection.dev
-      librsvg.dev
-
-      gtk4
-      gtk3
-      glib
-      cairo
-      pango
-      gdk-pixbuf
-      atk
-      gobject-introspection
-      librsvg
-
-      pkg-config
-      cmake
-      ninja
-      meson
-      glade
-      d-spy
-      gtk4.dev
-      gtk3.dev
-      glib.dev
-      cairo.dev
-      pango.dev
-      gdk-pixbuf.dev
-      atk.dev
-      gobject-introspection.dev
-      librsvg.dev
-      openssl
-      libsoup_3.dev
-      webkitgtk_4_1
-      libadwaita
-      libappindicator-gtk3
-      webkitgtk_4_1.dev
-
-
-
-# Development tools
-      alejandra # Nix formatter
-      ansible
-      atac
-      aider-chat
-      bun
-      cmake
-      conda
-      deadnix # Find dead Nix code
-      devbox
-      efibootmgr
-      diff-so-fancy
-      entr
-      gcc
-      ghostty
-      gnumake
-      go
-      home-manager
-      micromamba
-      mysql_jdbc
-      neovim
-      nil # Nix language server
-      nh
-      nixd
-      nodejs_22
-      pipx
-      pnpm
-      postman
-      python3
-      python312Packages.pandas
-      python312Packages.seaborn
-      python312Packages.matplotlib
-      python312Packages.numpy
-      rust-analyzer
-      rustup
-      cargo
-      statix # Lints and suggestions for Nix code
-      sumneko-lua-language-server
-      uv # Python package installer/resolver
-      vscode
-
-##zen
-      zen-browser.packages."${system}".default
-# flutterPackages-source.beta
-
-# Languages and runtimes
-      lua
-      lua5_1
-      luajitPackages.lua-lsp
-      luarocks
-      emmet-language-server
-
-# System tools
-      acpi
-      brightnessctl
-      dig
-      gparted
-      gnome-tweaks
-      kdePackages.partitionmanager
-      pciutils
-      psmisc
-      isoimagewriter
-      usbimager
-
-# Virtualization and containers
-      distrobox
-      docker
-      gnome-boxes
-      podman
-      spice
-      wl-clipboard
-      spice-gtk
-      spice-protocol
-      virt-viewer
-
-# Wayland tools
-      cliphist
-      grimblast
-      grim
-      hyprcursor
-      hyprland-qt-support
-      hyprland-protocols
-# hyprland-qtutils
-      hyprlock
-      hyprls
-      hyprpaper
-      hyprpicker
-      hyprpolkitagent
-      hyprsunset
-      hyprsysteminfo
-      hyprutils
-      hyprwayland-scanner
-      imv
-      nwg-look
-      testdisk-qt
-      testdisk
-      pyprland
-      rofi
-      brave
-
-      freerdp
-
-      slurp
-      sway
-      lazygit
-      yarn
-      swaybg
-      swappy
-      swww
-      waybar
-      wl-clipboard
-      wl-clip-persist
-      wlogout
-      wlprop
-      wlrctl
-      wlsunset
-      wofi
-      wtype
-      wpaperd
-
-# Audio/Video
-      cava
-      ffmpeg_6-full
-      mpv
-      obs-studio
-      pamixer
-      playerctl
-      vlc
-      wf-recorder
-
-# Graphics and design
-      drawing
-      imagemagick
-      krita
-
-# Gaming
-      bottles
-      bubblewrap
-      gamemode
-      heroic
-      lutris
-      protontricks
-
-# Communication
-      anydesk
-      telegram-desktop
-      tunnelto
-      webcord
-      zoom-us
-
-# File management
-      dua
-      tokei
-      sqlitebrowser
-      tesseract
-      xdg-utils
-      xfce.thunar
-      xfce.thunar-volman
-
-# Browsers
-      chromium
-      glib
-      gtk4
-      gobject-introspection
-# Network tools
-      blueman
-      iwgtk
-      motrix
-      qbittorrent
-      wgnord
-
-# Office and productivity
-      libreoffice
-      showtime
-      onlyoffice-desktopeditors
-      mongodb
-
-# Appearance and customization
-      aquamarine
-      ags
-      catppuccin-cursors.macchiatoTeal
-      catppuccin-gtk
-      catppuccin-kvantum
-      comic-mono
-      cool-retro-term
-      dunst
-      eww
-      figlet
-      fuzzel
-      hyprgraphics
-      kitty
-      libsForQt5.qt5ct
-      libsForQt5.qtstyleplugin-kvantum
-      lolcat
-      numix-icon-theme-circle
-      onefetch
-      parabolic
-      qt6.qtwayland
-      tk
-      wallust
-      yad
-
-# NVIDIA and GPU tools
-      cudaPackages.libcublas
-      cudatoolkit
-      lmstudio
-      ollama-cuda
-      onnxruntime
-
-# Specific hardware support
-      lenovo-legion
-
-# markdown
-      glow
-
-      llama-cpp
-
-# Desktop environment components
-      alacritty
-      dbus
-      eog
-      geany
-      gnomeExtensions.appindicator
-      gnomeExtensions.nordvpn-quick-toggle
-      gvfs
-      keypunch
-      libgcc
-      libinput
-      libinput-gestures
-      libnotify
-      lollypop
-      netbeans
-      poweralertd
-      psi-notify
-      sxhkd
-      dmenu
-      wmctrl
-      wine64
-#
-## editor
-      code-cursor
-## java
-      jdk24
-
-## android studio
-      android-studio
-
-      ocs-url
-
-      cheese
-
-      pastel ## color
-      pandoc # convert doc
-
-## language server ###
-      typescript-language-server
-      lua-language-server
-
-# Other tools
-      glib
-      moreutils
-      mycli
-      openssl
-      tree
-      vivid
-      wayland-scanner.dev
-      ];
-
-#############################################################################
-#                         LOCALE AND TIME SETTINGS                          #
-#############################################################################
-# Set timezone and locale
-  time.timeZone = "Asia/Kathmandu";
-  i18n.defaultLocale = "en_US.UTF-8";
-
-#############################################################################
-#                            USER CONFIGURATION                             #
-#############################################################################
-# Default shell for all users
-
-# Main user account configuration
-  users.users = {
-    sanbid = {
-      isNormalUser = true;
-      shell = pkgs.zsh;
-      description = "sanbid";
-      extraGroups = [
-        "networkmanager"
-          "kvm"
-          "vboxusers"
-          "adbusers"
-          "libvirtd"
-          "docker"
-          "wheel" # sudo access
-          "ydotool"
-          "audio"
-      ];
-    };
-
-    sandesh = {
-      isNormalUser = true;
-      shell = pkgs.zsh;
-      description = "real users";
-      extraGroups = [ "wheel" "networkmanager" ];
-    };
-
-  };
-
-# Additional group memberships
-  users.groups.libvirtd.members = [ "sanbid" ];
-
-#############################################################################
-#                           SECURITY SETTINGS                               #
-#############################################################################
-  security = {
-    sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
-    rtkit.enable = true; # For real-time process priorities (audio)
-  };
-
-
-
-# Allow root and sanbid to perform privileged Nix operations
+  # Nix Settings
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   nix.settings.trusted-users = [ "root" "sanbid" ];
+  system.stateVersion = "24.05";
 
-#############################################################################
-#                           SERVICES CONFIGURATION                          #
-#############################################################################
-# Audio services
+
+  #############################################################################
+  #                             NETWORKING & VIRTUALIZATION                   #
+  #############################################################################
+  networking = {
+    hostName = "nixos";
+    networkmanager = {
+      enable = true;
+      wifi.powersave = false;
+      dns = "none";
+    };
+    firewall.allowedTCPPorts = [ 443 ];
+    nameservers = [ "8.8.8.8" "1.1.1.1" ];
+  };
+
+  networking.interfaces.wlan0.mtu = 1400;
+
+  # Virtualization
+  virtualisation = {
+    docker.enable = true;
+    libvirtd.enable = true;
+    virtualbox = {
+      host = {
+        enable = true;
+        enableExtensionPack = true;
+        addNetworkInterface = true;
+        enableKvm = false; # This is key!
+      };
+      guest.enable = true;
+      guest.dragAndDrop = true;
+    };
+  };
+  users.extraGroups.vboxusers.members = [ "sanbid" ];
+
+  # Remote Connectivity
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
+  services.kasmweb.enable = false;
+
+  #############################################################################
+  #                             HARDWARE CONFIGURATION                        #
+  #############################################################################
+  hardware.enableRedistributableFirmware = true;
+  hardware.nvidia-container-toolkit.enable = true; # For NVIDIA in containers
+  services.power-profiles-daemon.enable = true;
+  services.usbmuxd.enable = true; # For Apple device support
+  security.rtkit.enable = true; # For real-time process priorities (audio)
+
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-ocl
+      ];
+    };
+
+    nvidia = {
+      modesetting.enable = true;
+      open = false;
+      powerManagement.enable = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+      prime = {
+        sync.enable = false;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
+      };
+    };
+  };
+
+  #############################################################################
+  #                             AUDIO & DISPLAY SERVICES                      #
+  #############################################################################
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -596,288 +141,463 @@ inputs.kwin-effects-forceblur.packages.${pkgs.system}.default # Wayland
     wireplumber.enable = true;
   };
 
-# Printing
-  services.printing.enable = true;
-
-# Database
-  services.mysql = {
-    enable = true;
-    package = pkgs.mariadb;
-  };
-
-# Display and desktop services
   services.displayManager.sddm.enable = true;
-# services.displayManager.ssdm.enable = true;
-
+  services.desktopManager.plasma6.enable = true; # KDE Plasma 6
   services.xserver = {
     enable = true;
-    videoDrivers = [ "nvidia" ]; # Use NVIDIA drivers
+    videoDrivers = [ "nvidia" ];
 
-# Desktop environments
-      desktopManager = {
-        xfce.enable = true;
+    desktopManager = {
+      xfce.enable = true;
+      cinnamon.enable = true;
+      xterm.enable = true;
+    };
 
-# gnome.enable = true;
-plasma6.enable = true;
-        cinnamon.enable = true;
-        xterm.enable = true;
-      };
-
-# Window managers
     windowManager = {
-    bspwm.enable = true;
-    dwm.enable = true;
-    awesome = {
-      enable = true;
-      luaModules = with pkgs.luaPackages; [
-        luarocks # is the package manager for Lua modules
-          luadbi-mysql # Database abstraction layer
-          awesome-wm-widgets # Community collection of widgets
-      ];
+      bspwm.enable = true;
+      dwm.enable = true;
+      awesome = {
+        enable = true;
+        luaModules = with pkgs.luaPackages; [
+          luarocks
+          luadbi-mysql
+          awesome-wm-widgets
+        ];
+      };
+    };
 
-    };
-    };
-
-# Keyboard layout
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
+    xkb = { layout = "us"; variant = ""; };
   };
 
-# DBUS and related services
   services.dbus = {
     enable = true;
     implementation = "broker";
     packages = with pkgs; [ xfce.xfconf ];
   };
-
-# File system services
   services.gvfs.enable = true;
-
-# System services
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
   services.sysprof.enable = true;
   services.udev.packages = with pkgs; [ gnome-settings-daemon ];
-  services.kasmweb.enable = false; # Remote desktop service
 
-# Idle service for Hyprland
-    services.hypridle.enable = true;
+  # Hyprland specific
+  services.hypridle.enable = true;
 
-# ML model serving
-  services.ollama = {
-    enable = true;
-    acceleration = "cuda"; # Use NVIDIA GPU
+  #############################################################################
+  #                             USER & SHELL CONFIGURATION                    #
+  #############################################################################
+  time.timeZone = "Asia/Kathmandu";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  users.users = {
+    sanbid = {
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      description = "sanbid";
+      extraGroups = [
+        "networkmanager"
+        "kvm"
+        "vboxusers"
+        "adbusers"
+        "libvirtd"
+        "docker"
+        "wheel"
+        "ydotool"
+        "audio"
+      ];
+    };
+    sandesh = {
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      description = "real users";
+      extraGroups = [ "wheel" "networkmanager" ];
+    };
+  };
+  users.groups.libvirtd.members = [ "sanbid" ];
+
+  security.sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
+
+  programs = {
+    zsh.enable = true;
+    fish.enable = true;
+    adb.enable = true;
+    firefox.enable = true;
+    steam.enable = true;
+    appimage.enable = true;
+    dconf.enable = true;
+    ydotool.enable = true;
+
+    java = { enable = true; package = pkgs.jdk; };
+    ssh.askPassword = lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [ stdenv.cc.cc.lib zlib glib gtk3 libusb1 udev ];
+    };
+
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "$HOME/.dotfiles";
+    };
   };
 
-# Systemd configurations
-  systemd.settings.Manager = { DefaultTimeoutStopSec = "6s"; };
-#############################################################################
-#                           PROGRAMS AND FEATURES                           #
-#############################################################################
-# Shell programs
-  programs.zsh = { enable = true; };
-  programs.fish.enable = true;
-
-
-# steam
-  programs.steam.enable = true;
-
-
-# Desktop utilities
-  programs.firefox.enable = true;
-  programs.appimage.enable = true;
-  programs.java = {
+  xdg.portal = {
     enable = true;
-    package = pkgs.jdk24;
-  };
-  programs.ydotool.enable = true;
-  programs.dconf.enable = true;
-# programs.hyprland.withUWSM = true;
-
-# XDG Portal for desktop integration
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-# Compatibility layer for dynamically linked programs
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-# Common libraries that might be needed
-      stdenv.cc.cc.lib
-        zlib
-        glib
-        gtk3
-        libusb1
-        udev
-    ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-# SSH configuration
-  programs.ssh.askPassword =
-    lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+  #############################################################################
+  #                          ENVIRONMENT VARIABLES                            #
+  #############################################################################
+  environment.etc."usr/bin/which".source = "${pkgs.which}/bin/which";
 
-#############################################################################
-#                          HARDWARE CONFIGURATION                           #
-#############################################################################
-# Graphics and GPU settings
-  hardware = {
-opengl = {
-  enable = true;
-  driSupport32Bit = true; # Essential for 32-bit games on Steam
-  extraPackages = with pkgs; [
-    intel-media-driver # For video acceleration on the Intel GPU
-    intel-ocl          # For OpenCL on the Intel GPU
+  environment.sessionVariables = rec {
+    # XDG base directories
+    XDG_CACHE_HOME = "$HOME/.cache";
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+    XDG_BIN_HOME = "$HOME/.local/bin";
+
+    # PATH & RUST
+    PATH = [ "${XDG_BIN_HOME}" "$HOME/.cargo/bin" ];
+    # RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+
+    # GPU/CUDA
+    CUDA_PATH = "${pkgs.cudatoolkit}";
+    EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+    EXTRA_CCFLAGS = "-I/usr/include";
+
+    # GTK/Development
+    GDK_SCALE = "1";
+    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.webkitgtk_4_1.dev}/lib/pkgconfig:${pkgs.libsoup_3.dev}/lib/pkgconfig:${pkgs.gtk4.dev}/lib/pkgconfig:${pkgs.gtk3.dev}/lib/pkgconfig:${pkgs.pango.dev}/lib/pkgconfig:${pkgs.cairo.dev}/lib/pkgconfig:${pkgs.gdk-pixbuf.dev}/lib/pkgconfig:${pkgs.glib.dev}/lib/pkgconfig:${pkgs.atk.dev}/lib/pkgconfig:${pkgs.gobject-introspection.dev}/lib/pkgconfig";
+  };
+
+  #############################################################################
+  #                              SYSTEM PACKAGES                              #
+  #############################################################################
+  environment.systemPackages = with pkgs; [
+    # --- 1. System & Hardware Tools ---
+    acpi
+    brightnessctl
+    dmidecode
+    efibootmgr
+    gnome-tweaks
+    gparted
+    inxi
+    isoimagewriter
+    kdePackages.partitionmanager
+    lenovo-legion
+    lsof
+    pciutils
+    psmisc
+    sbctl
+    testdisk
+    testdisk-qt
+    tree
+    udev
+    usbimager
+    woeusb-ng
+    wirelesstools
+
+    # --- 2. Browsers & Communication ---
+    anydesk
+    brave
+    chromium
+    ferdium
+    motrix
+    qbittorrent
+    telegram-desktop
+    tunnelto
+    webcord
+    wgnord
+    zoom-us
+    zen-browser.packages.${pkgs.system}.default
+
+    # --- 3. Desktop Environments & Window Managers ---
+    ags
+    aquamarine
+    dmenu
+    dunst
+    eww
+    fuzzel
+    ghostty
+    hyprgraphics
+    hyprcursor
+    hyprlock
+    hyprpaper
+    hyprpicker
+    hyprpolkitagent
+    hyprsunset
+    hyprutils
+    hyprwayland-scanner
+    kitty
+    nwg-look
+    picom
+    rofi
+    slurp
+    sway
+    swaybg
+    swww
+    waybar
+    wlogout
+    wofi
+    wmctrl
+
+    # --- 4. Development & Build Tools ---
+    aider-chat
+    alejandra
+    # android-studio
+    ansible
+    atac
+    bun
+    cargo
+    clang
+    cmake
+    conda
+    deadnix
+    devbox
+    diff-so-fancy
+    entr
+    gcc
+    go
+    gradle
+    home-manager
+    jetbrains.idea-community-bin
+    jdk25
+    kotlin
+    lua-language-server
+    luajitPackages.lua-lsp
+    luarocks
+    lua
+    lua5_1
+    meson
+    mysql_jdbc
+    neovim
+    nh
+    nil
+    ninja
+    nixd
+    niv
+    nodejs_22
+    nodemon
+    pipx
+    pnpm
+    postman
+    python3
+    rust-analyzer
+    rustup
+    statix
+    typescript-language-server
+    uv
+    vscode
+
+    # --- 5. Virtualization & Container Tools ---
+    distrobox
+    docker
+    gnome-boxes
+    podman
+    spice
+    spice-gtk
+    spice-protocol
+    virt-viewer
+
+    # --- 6. Graphics & Multimedia ---
+    cava
+    cheese
+    drawing
+    ffmpeg.dev
+    ffmpeg_6-full
+    imv
+    imagemagick
+    krita
+    mpv
+    obs-studio
+    pamixer
+    playerctl
+    swappy
+    vlc
+    wf-recorder
+
+    # --- 7. Gaming & Wine ---
+    bottles
+    bubblewrap
+    gamemode
+    heroic
+    hyprland-qt-support
+    hyprland-protocols
+    lutris
+    protontricks
+    wineWowPackages.waylandFull
+    warehouse
+    wine64
+    inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+
+    # --- 8. Data & Database Tools ---
+    mongodb
+    mongosh
+    mycli
+    pgadmin4
+    pgcli
+    postgresql
+    (rstudioWrapper.override {
+      packages = with pkgs.rPackages; [
+        ggplot2
+        dplyr
+        xts
+        tidyverse
+        randomForest
+        snakecase
+      ];
+    })
+    sqlitebrowser
+
+    # --- 9. Productivity & Office ---
+    code-cursor
+    eog
+    geany
+    glow
+    kdePackages.kbackup
+    kdePackages.kdevelop
+    kdePackages.krdc
+    kdePackages.kruler
+    kdePackages.ktimer
+    kdePackages.krecorder
+    keypunch
+    libqalculate
+    libreoffice
+    lollypop
+    netbeans
+    onlyoffice-desktopeditors
+    pandoc
+    pipeline
+    showtime
+    tesseract
+    xfce.thunar
+    xfce.thunar-volman
+
+    # --- 10. Libraries & Development Headers (GTK/Webkit) ---
+    atk
+    atk.dev
+    cairo
+    cairo.dev
+    glib
+    glib.dev
+    gdk-pixbuf
+    gdk-pixbuf.dev
+    gobject-introspection
+    gobject-introspection.dev
+    gtk3
+    gtk3.dev
+    gtk4
+    gtk4.dev
+    libadwaita
+    libappindicator-gtk3
+    librsvg
+    librsvg.dev
+    libsoup_3.dev
+    openssl
+    pango
+    pango.dev
+    pkg-config
+    qt6.qtwayland
+    webkitgtk_4_1
+    webkitgtk_4_1.dev
+
+    # --- 11. Command Line Utilities ---
+    bat
+    bc
+    eza
+    fd
+    figlet
+    fzf
+    git
+    gzip
+    htop
+    jq
+    wirelesstools
+    lazygit
+    lolcat
+    moreutils
+    pastel
+    progress
+    ripgrep
+    starship
+    stow
+    tmux
+    unzip
+    vivid
+    wget
+    yarn
+    zoxide
+    fastfetch
+    tealdeer
+
+    # --- 12. GPU/ML/AI & System Modules ---
+    cudaPackages.libcublas
+    cudatoolkit
+    llama-cpp
+    onnxruntime
+
+    # --- 13. Mobile & Apple Support ---
+    scrcpy
+    libimobiledevice
+    ifuse
+
+    # --- 14. Gnome Extensions (Keep these together) ---
+    gnomeExtensions.appindicator
+    gnomeExtensions.nordvpn-quick-toggle
+    gvfs
+
+    # --- 15. Miscellaneous ---
+    cool-retro-term
+    kdePackages.kde-gtk-config
+    lact
+    ocs-url
+    poweralertd
+    psi-notify
+    tk
+    wallust
+    yad
+    xdg-utils
+    wl-clipboard
+    wl-clip-persist
+    wlprop
+    wlrctl
+    wlsunset
+    wtype
+    hyprls
   ];
-};
 
-nvidia = {
-  modesetting.enable = true;
-  open = false; # Use the proprietary driver
-  powerManagement.enable = false; # This is fine for stability
-  nvidiaSettings = true;
-  package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-  # PRIME offloading setup
-  prime = {
-    sync.enable = true;
-    # IMPORTANT: Verify these IDs are correct for your machine!
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
-  };
-  };
-
-# NVIDIA specific configuration
-  };
-
-  hardware.nvidia-container-toolkit.enable = true; # For NVIDIA in containers
-
-#############################################################################
-#                           VIRTUALIZATION                                  #
-#############################################################################
-    virtualisation.docker = { enable = true; };
-
-#############################################################################
-#                                FONTS                                      #
-#############################################################################
+  #############################################################################
+  #                                FONTS                                      #
+  #############################################################################
 
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+      liberation_ttf
+      fira-code
+      fira-code-symbols
+      mplus-outline-fonts.githubRelease
+      dina-font
+      proggyfonts
+      comic-mono
+      # Nerd Fonts
       nerd-fonts.jetbrains-mono
-        nerd-fonts.hack
-        nerd-fonts.noto
-        nerd-fonts.monofur
-        nerd-fonts.mononoki
-        nerd-fonts.iosevka
-        nerd-fonts.sauce-code-pro
-        nerd-fonts.victor-mono
-        nerd-fonts.zed-mono
-        nerd-fonts.go-mono
-        nerd-fonts.commit-mono
-# Use the old nerdfonts override syntax for compatibility
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-emoji
-        liberation_ttf
-        fira-code
-        fira-code-symbols
-        mplus-outline-fonts.githubRelease
-        dina-font
-        proggyfonts
-        ];
+      nerd-fonts.hack
+      nerd-fonts.noto
+      nerd-fonts.monofur
+      nerd-fonts.mononoki
+      nerd-fonts.iosevka
+      nerd-fonts.sauce-code-pro
+      nerd-fonts.victor-mono
+      nerd-fonts.zed-mono
+      nerd-fonts.go-mono
+      nerd-fonts.commit-mono
+    ];
   };
-#############################################################################
-#                               Stylix SETTINGS                             #
-#############################################################################
-
-  stylix = {
-    enable = true;
-
-# See https://tinted-theming.github.io/tinted-gallery/ for more schemes
-    base16Scheme = {
-      base00 = "0c0e0f"; # Default Background
-        base01 =
-        "101314"; # Lighter Background (Used for status bars, line number and folding marks)
-        base02 = "313244"; # Selection Background
-        base03 = "45475a"; # Comments, Invisibles, Line Highlighting
-        base04 = "585b70"; # Dark Foreground (Used for status bars)
-        base05 = "cdd6f4"; # Default Foreground, Caret, Delimiters, Operators
-        base06 = "f5e0dc"; # Light Foreground (Not often used)
-        base07 = "b4befe"; # Light Background (Not often used)
-        base08 =
-        "f38ba8"; # Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-        base09 =
-        "fab387"; # Integers, Boolean, Constants, XML Attributes, Markup Link Url
-        base0A = "f9e2af"; # Classes, Markup Bold, Search Text Background
-        base0B = "a6e3a1"; # Strings, Inherited Class, Markup Code, Diff Inserted
-        base0C =
-        "94e2d5"; # Support, Regular Expressions, Escape Characters, Markup Quotes
-        base0D =
-        "89b4fa"; # Functions, Methods, Attribute IDs, Headings, Accent color
-        base0E =
-        "cba6f7"; # Keywords, Storage, Selector, Markup Italic, Diff Changed
-        base0F =
-        "f2cdcd"; # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
-    };
-
-    cursor = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Ice";
-      size = 24;
-    };
-
-    fonts = {
-      monospace = {
-        package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
-      };
-      sansSerif = {
-        package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
-      };
-      serif = {
-        package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrains Mono Nerd Font";
-      };
-      emoji = {
-        package = pkgs.noto-fonts-emoji;
-        name = "Noto Color Emoji";
-      };
-      sizes = {
-        applications = 13;
-        desktop = 13;
-        popups = 13;
-        terminal = 13;
-      };
-    };
-
-    polarity = "dark";
-    image = pkgs.fetchurl {
-      url =
-        "https://github.com/anotherhadi/nixy-wallpapers/blob/main/wallpapers/"
-        + "a-lake-surrounded-by-mountains.png" + "?raw=true";
-      sha256 = "sha256-5VHprxEVOkqyecnsurUx1tmhwE+3v0dhwmhpBPDTOgU=";
-    };
-  };
-
-#############################################################################
-#                               NIX SETTINGS                                #
-#############################################################################
-# Enable flakes and command features
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-# Optimize the Nix store
-  nix.settings.auto-optimise-store = true;
-  nix.optimise.automatic = true;
-
-# Set the Nix path to use the flake inputs
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-
-# Enable CUDA support for applicable packages
-  nixpkgs.config.cudaSupport = true;
-
-# System state version (DO NOT CHANGE after install)
-  system.stateVersion = "24.05";
-                                                 }
+}

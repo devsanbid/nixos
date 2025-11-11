@@ -9,7 +9,7 @@ export PATH="/home/sanbid/.cache/.bun/bin:$PATH"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 plugins=(
-  git 
+  git
   zsh-syntax-highlighting
   fzf
   z
@@ -20,7 +20,7 @@ plugins=(
   ## completion
   ollama
   zsh-completions
-  
+
   ## without this i can't live ##
   tmux
   zsh-vi-mode
@@ -51,10 +51,12 @@ function chpwd() {
 export MANPATH="/usr/local/man:$MANPATH"
 export LANG=en_US.UTF-8
 
+autoload -U compinit
+
 alias ivm="vim"
-alias la="eza -a --color=always --group-directories-first --icons"  
-alias ls="eza --color=always --group-directories-first --icons"  
-alias ll="eza -l --color=always --group-directories-first --icons"  
+alias la="eza -a --color=always --group-directories-first --icons"
+alias ls="eza --color=always --group-directories-first --icons"
+alias ll="eza -l --color=always --group-directories-first --icons"
 alias lt="eza -aT --color=always --group-directories-first --icons"
 alias cargo="cargo -q"
 alias ip="ip -color"
@@ -72,4 +74,3 @@ alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-

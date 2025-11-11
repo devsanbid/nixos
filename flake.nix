@@ -2,6 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
+
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     nixvim = {
@@ -36,6 +37,7 @@
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
+      # The 'pkgs' set defined here is correct, but we stop passing it as specialArgs
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -45,7 +47,9 @@
         nixos = lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit pkgs;
+            # REMOVED: inherit pkgs;
+            # pkgs is now passed as a normal module argument (implicitly) and
+            # then set via nixpkgs.pkgs in configuration.nix
             inherit nixos-unstable-small;
             inherit nix-colors;
             inherit inputs;
@@ -59,6 +63,8 @@
           ];
         };
       };
+      # NOTE: It's good that you keep inherit pkgs; here,
+      # as home-manager configurations often require a host pkgs.
       homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = {
