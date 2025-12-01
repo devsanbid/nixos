@@ -219,7 +219,6 @@
     zsh.enable = true;
     fish.enable = true;
     adb.enable = true;
-    firefox.enable = true;
     steam.enable = true;
     appimage.enable = true;
     dconf.enable = true;
@@ -264,7 +263,7 @@
     # RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
 
     # GPU/CUDA
-    CUDA_PATH = "${pkgs.cudatoolkit}";
+    # CUDA_PATH = "${pkgs.cudatoolkit}";
     EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
     EXTRA_CCFLAGS = "-I/usr/include";
 
@@ -304,14 +303,14 @@
     anydesk
     brave
     chromium
-    ferdium
+    # ferdium
     motrix
     qbittorrent
     telegram-desktop
     tunnelto
     webcord
     wgnord
-    zoom-us
+    # zoom-us
     zen-browser.packages.${pkgs.system}.default
 
     # --- 3. Desktop Environments & Window Managers ---
@@ -345,7 +344,7 @@
     wmctrl
 
     # --- 4. Development & Build Tools ---
-    aider-chat
+    # aider-chat
     alejandra
     # android-studio
     ansible
@@ -385,12 +384,11 @@
     pnpm
     postman
     python3
-    rust-analyzer
-    rustup
+    # rustup
     statix
     typescript-language-server
     uv
-    vscode
+    # vscode
 
     # --- 5. Virtualization & Container Tools ---
     distrobox
@@ -406,13 +404,13 @@
     cava
     cheese
     drawing
-    ffmpeg.dev
-    ffmpeg_6-full
+    # ffmpeg.dev
+    # ffmpeg_6-full
     imv
     imagemagick
-    krita
+    # krita
     mpv
-    obs-studio
+    # obs-studio
     pamixer
     playerctl
     swappy
@@ -434,8 +432,8 @@
     inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
 
     # --- 8. Data & Database Tools ---
-    mongodb
-    mongosh
+    # mongodb
+    # mongosh
     mycli
     pgadmin4
     pgcli
@@ -456,7 +454,7 @@
     code-cursor
     eog
     geany
-    glow
+    # glow
     kdePackages.kbackup
     kdePackages.kdevelop
     kdePackages.krdc
@@ -534,10 +532,9 @@
     tealdeer
 
     # --- 12. GPU/ML/AI & System Modules ---
-    cudaPackages.libcublas
-    cudatoolkit
-    llama-cpp
-    onnxruntime
+    # cudaPackages.libcublas
+    # cudatoolkit
+    # llama-cpp
 
     # --- 13. Mobile & Apple Support ---
     scrcpy
