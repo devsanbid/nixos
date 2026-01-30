@@ -9,6 +9,8 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,9 +20,8 @@
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     stylix.url = "github:danth/stylix";
 
-     lanzaboote = {
+  lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.3";
-      # Optional but recommended to limit the size of your system closure.
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -28,6 +29,8 @@
       url = "github:taj-ny/kwin-effects-forceblur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+
   };
 
   outputs = { self, nixos-hardware, lanzaboote, stylix, nixpkgs, zen-browser
@@ -35,6 +38,7 @@
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
+
       # The 'pkgs' set defined here is correct, but we stop passing it as specialArgs
       pkgs = import nixpkgs {
         inherit system;

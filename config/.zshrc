@@ -17,15 +17,10 @@ plugins=(
   docker-compose
   jsontools
 
-  ## completion
-  ollama
-  zsh-completions
 
   ## without this i can't live ##
   tmux
   zsh-vi-mode
-  nix-zsh-completions
-  nix-shell
 )
 
 ## tmux ##

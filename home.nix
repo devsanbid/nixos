@@ -28,7 +28,7 @@ imports = [
     };
   };
 
-  home.file.".config/hypr".source = ./config/hyprland_2.0;
+  # home.file.".config/hypr".source = ./config/hyprland_2.0;
   home.file.".config/rofi".source = ./config/rofi;
   home.file.".config/ags".source = ./config/ags;
   home.file.".config/btop".source = ./config/btop;
