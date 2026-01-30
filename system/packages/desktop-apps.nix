@@ -56,6 +56,12 @@
     wmctrl
     quickshell
 
+    # Pyprland - Hyprland plugin system
+    pyprland
+
+    # Network/Bluetooth applets
+    networkmanagerapplet  # nm-applet
+
     # Compositors
     picom
     sway

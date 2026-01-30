@@ -30,6 +30,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # DankMaterialShell - Modern desktop shell for Wayland
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # DankSearch - Filesystem search for DMS Spotlight
+    danksearch = {
+      url = "github:AvengeMedia/danksearch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
@@ -77,6 +88,8 @@
           stylix.homeManagerModules.stylix
           ./home.nix
           nixvim.homeManagerModules.nixvim
+          inputs.dms.homeModules.dank-material-shell
+          inputs.danksearch.homeModules.dsearch
         ];
       };
     };

@@ -8,6 +8,42 @@ imports = [
 
   home.sessionPath = ["$HOME/.cargo/bin"];
 
+  # DankMaterialShell - Modern Wayland Desktop Shell
+  programs.dank-material-shell = {
+    enable = true;
+    # Using exec-once in Hyprland instead of systemd service
+    # systemd.enable = true;
+    # Settings managed via DMS GUI (don't use settings = {} to avoid overwriting)
+  };
+
+  # DankSearch - Filesystem search for DMS Spotlight
+  programs.dsearch = {
+    enable = true;
+    config = {
+      # Index common directories
+      index_paths = [
+        {
+          path = "~";
+          max_depth = 5;
+          exclude_hidden = true;
+          exclude_dirs = [ "node_modules" ".git" "target" "venv" ".cache" ".local" ".mozilla" ".config" "snap" "go" ];
+        }
+        {
+          path = "~/.dotfiles";
+          max_depth = 6;
+          exclude_hidden = false;
+          exclude_dirs = [ "result" ".git" ];
+        }
+        {
+          path = "~/.config";
+          max_depth = 4;
+          exclude_hidden = true;
+          exclude_dirs = [ "chromium" "BraveSoftware" "Code" "discord" ];
+        }
+      ];
+    };
+  };
+
   home.packages = with pkgs; [
     discord
     papirus-folders
@@ -29,33 +65,109 @@ imports = [
   };
 
   # home.file.".config/hypr".source = ./config/hyprland_2.0;
-  home.file.".config/rofi".source = ./config/rofi;
-  home.file.".config/ags".source = ./config/ags;
-  home.file.".config/btop".source = ./config/btop;
-  home.file.".config/cava".source = ./config/cava;
-  home.file.".config/fastfetch".source = ./config/fastfetch;
-  home.file.".config/qt5ct".source = ./config/qt5ct;
-  home.file.".config/waybar".source = ./config/waybar;
-  home.file.".config/qt6ct".source = ./config/qt6ct;
-  home.file.".config/swappy".source = ./config/swappy;
-  home.file.".config/swaync".source = ./config/swaync;
-  home.file.".config/wlogout".source = ./config/wlogout;
-  home.file.".config/wallust".source = ./config/wallust;
+  # Use xdg.configFile with recursive to allow DMS to write theme files
+  xdg.configFile."hypr" = {
+    source = ./config/hyprland_2.0;
+    recursive = true;
+  };
+  xdg.configFile."rofi" = {
+    source = ./config/rofi;
+    recursive = true;
+  };
+  xdg.configFile."ags" = {
+    source = ./config/ags;
+    recursive = true;
+  };
+  xdg.configFile."btop" = {
+    source = ./config/btop;
+    recursive = true;
+  };
+  xdg.configFile."cava" = {
+    source = ./config/cava;
+    recursive = true;
+  };
+  xdg.configFile."fastfetch" = {
+    source = ./config/fastfetch;
+    recursive = true;
+  };
+  xdg.configFile."qt5ct" = {
+    source = ./config/qt5ct;
+    recursive = true;
+  };
+  xdg.configFile."waybar" = {
+    source = ./config/waybar;
+    recursive = true;
+  };
+  xdg.configFile."qt6ct" = {
+    source = ./config/qt6ct;
+    recursive = true;
+  };
+  xdg.configFile."swappy" = {
+    source = ./config/swappy;
+    recursive = true;
+  };
+  xdg.configFile."swaync" = {
+    source = ./config/swaync;
+    recursive = true;
+  };
+  xdg.configFile."wlogout" = {
+    source = ./config/wlogout;
+    recursive = true;
+  };
+  xdg.configFile."wallust" = {
+    source = ./config/wallust;
+    recursive = true;
+  };
   home.file."Pictures/wallpapers".source = ./config/wallpapers;
   # home.file.".config/nvim".source = ./config/lazyvim;
-  home.file.".config/alacritty".source = ./config/alacritty;
-  home.file.".config/kitty".source = ./config/kitty;
-  home.file.".config/fish".source = ./config/fish;
+  xdg.configFile."alacritty" = {
+    source = ./config/alacritty;
+    recursive = true;
+  };
+  xdg.configFile."kitty" = {
+    source = ./config/kitty;
+    recursive = true;
+  };
+  xdg.configFile."fish" = {
+    source = ./config/fish;
+    recursive = true;
+  };
   home.file.".config/fish/fish_variables".source = ./config/fish/fish_variables;
-  home.file.".config/dunst".source = ./config/dunst;
-  home.file.".config/tmux".source = ./config/tmux;
-  home.file.".config/vivid".source = ./config/vivid;
+  xdg.configFile."dunst" = {
+    source = ./config/dunst;
+    recursive = true;
+  };
+  xdg.configFile."tmux" = {
+    source = ./config/tmux;
+    recursive = true;
+  };
+  xdg.configFile."vivid" = {
+    source = ./config/vivid;
+    recursive = true;
+  };
   home.file.".zshrc".source = ./config/.zshrc;
   # home.file.".oh-my-zsh".source = ./config/.oh-my-zsh;
-  home.file.".config/pip".source = ./config/pip;
-  home.file.".config/fuzzel".source = ./config/fuzzel;
+  xdg.configFile."pip" = {
+    source = ./config/pip;
+    recursive = true;
+  };
+  xdg.configFile."fuzzel" = {
+    source = ./config/fuzzel;
+    recursive = true;
+  };
 
-  services.gnome-keyring.enable = true;
+  # GNOME Keyring - auto-unlock secrets with login password
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "pkcs11" "secrets" "ssh" ];
+  };
+  
+  # Disable KDE Wallet via config
+  home.file.".config/kwalletrc".text = ''
+    [Wallet]
+    Enabled=false
+    First Use=false
+  '';
 
   programs.git = {
     enable = true;

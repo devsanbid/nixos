@@ -11,5 +11,6 @@
     ./productivity.nix
     ./cli-tools.nix
     ./libraries.nix
+    ./dms.nix
   ];
 }
