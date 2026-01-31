@@ -42,6 +42,7 @@ function chpwd() {
   eza --color=always --group-directories-first --icons
 }
 
+export BROWSER="brave"
 
 export MANPATH="/usr/local/man:$MANPATH"
 export LANG=en_US.UTF-8

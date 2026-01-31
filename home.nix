@@ -151,10 +151,6 @@ imports = [
     source = ./config/pip;
     recursive = true;
   };
-  xdg.configFile."fuzzel" = {
-    source = ./config/fuzzel;
-    recursive = true;
-  };
 
   # GNOME Keyring - auto-unlock secrets with login password
   services.gnome-keyring = {
@@ -168,6 +164,41 @@ imports = [
     Enabled=false
     First Use=false
   '';
+
+  # Fuzzel - fast Wayland launcher (replaces anyrun due to D-Bus issues)
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      main = {
+        font = "Hack Nerd Font:size=14";
+        dpi-aware = "no";
+        width = 35;
+        horizontal-pad = 20;
+        vertical-pad = 12;
+        inner-pad = 8;
+        lines = 10;
+        letter-spacing = 0;
+        layer = "overlay";
+        terminal = "kitty -e";
+        prompt = "❯ ";
+        icons-enabled = "yes";
+        icon-theme = "Papirus-Dark";
+      };
+      colors = {
+        background = "1e1e2efa";
+        text = "cdd6f4ff";
+        match = "89b4faff";
+        selection = "313244ff";
+        selection-text = "cdd6f4ff";
+        selection-match = "89b4faff";
+        border = "89b4fa80";
+      };
+      border = {
+        width = 2;
+        radius = 16;
+      };
+    };
+  };
 
   programs.git = {
     enable = true;
