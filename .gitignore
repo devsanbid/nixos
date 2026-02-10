@@ -1,0 +1,9 @@
+# Large binary files
+*.deb
+*.rpm
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.zip
+*.AppImage
+*.iso

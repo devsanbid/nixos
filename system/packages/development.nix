@@ -9,7 +9,6 @@
     windsurf
     geany
     netbeans
-    jetbrains.idea-community-bin
 
     # Version Control
     git
@@ -34,6 +33,7 @@
     pipx
     uv
     conda
+    gnumake
 
     nodejs_22
     nodemon
@@ -60,8 +60,7 @@
     jdk25
     mysql_jdbc
 
-    flutter
-    android-tools
+    # Flutter moved to flutter.nix for full Android SDK setup
 
     # Build tools
     gcc

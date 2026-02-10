@@ -26,5 +26,8 @@
 
     # Flake path
     FLAKE = "/home/sanbid/.dotfiles";
+
+    # Library path for Python packages with native extensions (uv, pip)
+    LD_LIBRARY_PATH = [ "/run/current-system/sw/share/nix-ld/lib" ];
   };
 }

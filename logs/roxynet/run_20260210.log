@@ -1,0 +1,20 @@
+2026-02-10 16:35:12|INFO|[sysproxy] add sysproxy:http://
+2026-02-10 16:35:12|INFO|[sysproxy]Invalid proxy:http://
+2026-02-10 16:35:12|INFO|[mixed] listen on 0.0.0.0:0: 46787
+2026-02-10 16:35:12|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_proxy_server?port=46787,rsp:{"port":"46787"}
+2026-02-10 16:35:12|ERROR|api server:Listening on 41383 port:[::]:41383
+2026-02-10 16:35:12|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_local_http?port=41383,rsp:{"port":"41383"}
+2026-02-10 16:58:44|INFO|[sysproxy] add sysproxy:http://
+2026-02-10 16:58:44|INFO|[sysproxy]Invalid proxy:http://
+2026-02-10 16:58:44|INFO|[mixed] listen on 0.0.0.0:0: 41063
+2026-02-10 16:58:44|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_proxy_server?port=41063,rsp:{"port":"41063"}
+2026-02-10 16:58:44|ERROR|api server:Listening on 44739 port:[::]:44739
+2026-02-10 16:58:44|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_local_http?port=44739,rsp:{"port":"44739"}
+2026-02-10 11:15:17|INFO|[sysproxy] add sysproxy:http://
+2026-02-10 11:15:17|INFO|[sysproxy]Invalid proxy:http://
+2026-02-10 11:15:17|INFO|[mixed] listen on 0.0.0.0:0: 38349
+2026-02-10 11:15:17|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_proxy_server?port=38349,rsp:{"port":"38349"}
+2026-02-10 11:15:17|ERROR|api server:Listening on 38987 port:[::]:38987
+2026-02-10 11:15:17|ERROR|[http_get_with_retry] req:http://127.0.0.1:45535/tunnel/report_local_http?port=38987,rsp:{"port":"38987"}
+2026-02-10 11:17:22|ERROR|[api] proxy:bb0d43550d46c5a8179a0f463ef6fc22 does not exist
+2026-02-10 11:51:50|ERROR|[api] proxy:f80277fde042a7f85ba1edbf74132fe8 does not exist

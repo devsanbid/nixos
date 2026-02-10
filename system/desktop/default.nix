@@ -27,10 +27,15 @@
   # Hyprland specific
   services.hypridle.enable = true;
 
-  # XDG Portal
+  # XDG Portal - required for screen capture in OBS/Hyprland
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [ 
+      pkgs.xdg-desktop-portal-gtk 
+      pkgs.xdg-desktop-portal-hyprland  # Screen sharing for Hyprland
+    ];
+    # Prefer Hyprland portal for screen capture
+    config.common.default = [ "hyprland" "gtk" ];
   };
 
   # GNOME Keyring for password management (auto-unlock with login)

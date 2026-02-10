@@ -50,6 +50,16 @@ imports = [
     zafiro-icons
     rustc
     wf-recorder
+    
+    # OBS Studio with plugins for Hyprland/Wayland
+    (wrapOBS {
+      plugins = with obs-studio-plugins; [
+        wlrobs                    # Wayland screen capture (wlroots/Hyprland)
+        obs-pipewire-audio-capture  # PipeWire audio capture
+        obs-vkcapture             # Vulkan/OpenGL game capture
+        obs-vaapi                 # Hardware encoding (Intel/AMD)
+      ];
+    })
   ];
 
   home.sessionVariables = {};

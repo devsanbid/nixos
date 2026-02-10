@@ -41,6 +41,7 @@
     pastel
     progress
     tealdeer
+    tree-sitter
 
     # Misc
     yad

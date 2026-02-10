@@ -50,6 +50,7 @@ export LANG=en_US.UTF-8
 autoload -U compinit
 
 alias ivm="vim"
+
 alias la="eza -a --color=always --group-directories-first --icons"
 alias ls="eza --color=always --group-directories-first --icons"
 alias ll="eza -l --color=always --group-directories-first --icons"
@@ -58,7 +59,7 @@ alias cargo="cargo -q"
 alias ip="ip -color"
 alias upd="sudo pacman -Syu --noconfirm"
 alias wget="wget -c "
-alias vim="nvim"
+alias vim="NVIM_APPNAME=demo_nvim nvim"
 alias cls="clear"
 alias cl="clear"
 alias netbeans="netbeans --fontsize 28"

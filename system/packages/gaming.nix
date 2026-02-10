@@ -2,7 +2,7 @@
 { pkgs, ... }: {
 
   environment.systemPackages = with pkgs; [
-    bottles
+    # bottles - Use Flatpak version instead: flatpak install flathub com.usebottles.bottles
     bubblewrap
     gamemode
     heroic
