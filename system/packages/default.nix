@@ -14,6 +14,5 @@
     ./cli-tools.nix
     ./libraries.nix
     ./dms.nix
-    ./roxy-browser  # RoxyBrowser from .deb
   ];
 }
