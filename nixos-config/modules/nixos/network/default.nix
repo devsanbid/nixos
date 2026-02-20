@@ -1,8 +1,8 @@
-# Networking configuration
-{ ... }: {
+# Network — NetworkManager, DNS, WiFi
+{ ... }:
 
+{
   networking = {
-
     networkmanager = {
       enable = true;
       wifi.powersave = false;

@@ -30,6 +30,5 @@
 
     # Legacy modules (review for duplicates)
     ./app            # Docker, Flatpak, Virtualization
-    ./wm             # Hyprland, Wayland, Pipewire
   ];
 }

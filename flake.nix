@@ -1,96 +1,127 @@
 {
-  description = "A very basic flake";
+  description = "Modern NixOS Flake Configuration";
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nixos-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nix-colors.url = "github:misterio77/nix-colors";
+    stylix.url = "github:danth/stylix";
+    
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.3";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-colors.url = "github:misterio77/nix-colors";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    stylix.url = "github:danth/stylix";
-
-  lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.3";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    kwin-effects-forceblur = {
-      url = "github:taj-ny/kwin-effects-forceblur";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # DankMaterialShell - Modern desktop shell for Wayland
     dms = {
       url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # DankSearch - Filesystem search for DMS Spotlight
     danksearch = {
       url = "github:AvengeMedia/danksearch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
-  outputs = { self, nixos-hardware, lanzaboote, stylix, nixpkgs, zen-browser
-    , home-manager, nixos-unstable-small, nix-colors, nixvim, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
-      lib = nixpkgs.lib;
-      system = "x86_64-linux";
-
-      # The 'pkgs' set defined here is correct, but we stop passing it as specialArgs
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      inherit (self) outputs;
+      systems = [ "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
     in {
       nixosConfigurations = {
-        nixos = lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            # REMOVED: inherit pkgs;
-            # pkgs is now passed as a normal module argument (implicitly) and
-            # then set via nixpkgs.pkgs in configuration.nix
-            inherit nixos-unstable-small;
-            inherit nix-colors;
-            inherit inputs;
-            inherit zen-browser;
-          };
-
-          modules = [
-            stylix.nixosModules.stylix
-            ./configuration.nix
-            lanzaboote.nixosModules.lanzaboote
+        work = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; zen-browser = inputs.zen-browser; };
+          modules = [ 
+            inputs.stylix.nixosModules.stylix
+            inputs.lanzaboote.nixosModules.lanzaboote
+            ./hosts/work 
+          ];
+        };
+        development = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; zen-browser = inputs.zen-browser; };
+          modules = [ 
+            inputs.stylix.nixosModules.stylix
+            inputs.lanzaboote.nixosModules.lanzaboote
+            ./hosts/development 
+          ];
+        };
+        testing = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; zen-browser = inputs.zen-browser; };
+          modules = [ 
+            inputs.stylix.nixosModules.stylix
+            inputs.lanzaboote.nixosModules.lanzaboote
+            ./hosts/testing 
+          ];
+        };
+        personal = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; zen-browser = inputs.zen-browser; };
+          modules = [ 
+            inputs.stylix.nixosModules.stylix
+            inputs.lanzaboote.nixosModules.lanzaboote
+            ./hosts/personal 
           ];
         };
       };
-      # NOTE: It's good that you keep inherit pkgs; here,
-      # as home-manager configurations often require a host pkgs.
-      homeConfigurations."sanbid" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = {
-          inherit nix-colors;
-          inherit inputs;
+
+      homeConfigurations = {
+        "sanbid@work" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; nix-colors = inputs.nix-colors; };
+          modules = [ 
+            inputs.stylix.homeManagerModules.stylix
+            inputs.nixvim.homeManagerModules.nixvim
+            inputs.dms.homeModules.dank-material-shell
+            inputs.danksearch.homeModules.dsearch
+            ./hosts/work/home.nix 
+          ];
         };
-        modules = [
-          stylix.homeManagerModules.stylix
-          ./home.nix
-          nixvim.homeManagerModules.nixvim
-          inputs.dms.homeModules.dank-material-shell
-          inputs.danksearch.homeModules.dsearch
-        ];
+        "sanbid@development" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; nix-colors = inputs.nix-colors; };
+          modules = [ 
+            inputs.stylix.homeManagerModules.stylix
+            inputs.nixvim.homeManagerModules.nixvim
+            inputs.dms.homeModules.dank-material-shell
+            inputs.danksearch.homeModules.dsearch
+            ./hosts/development/home.nix 
+          ];
+        };
+        "sanbid@testing" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; nix-colors = inputs.nix-colors; };
+          modules = [ 
+            inputs.stylix.homeManagerModules.stylix
+            inputs.nixvim.homeManagerModules.nixvim
+            inputs.dms.homeModules.dank-material-shell
+            inputs.danksearch.homeModules.dsearch
+            ./hosts/testing/home.nix 
+          ];
+        };
+        "sanbid@personal" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; nix-colors = inputs.nix-colors; };
+          modules = [ 
+            inputs.stylix.homeManagerModules.stylix
+            inputs.nixvim.homeManagerModules.nixvim
+            inputs.dms.homeModules.dank-material-shell
+            inputs.danksearch.homeModules.dsearch
+            ./hosts/personal/home.nix 
+          ];
+        };
       };
     };
 }

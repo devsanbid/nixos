@@ -1,16 +1,15 @@
-# Hardware configuration - Graphics & NVIDIA
-{ config, pkgs, ... }: {
+# Hardware modules — GPU, audio, dbus
+{ config, pkgs, ... }:
 
+{
   imports = [
     ./nvidia.nix
     ./pipewire.nix
     ./dbus.nix
   ];
 
-  # Enable redistributable firmware
   hardware.enableRedistributableFirmware = true;
 
-  # Graphics
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -20,9 +19,6 @@
     ];
   };
 
-  # Power management
   services.power-profiles-daemon.enable = true;
-
-  # Apple device support
   services.usbmuxd.enable = true;
 }
