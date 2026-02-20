@@ -7,9 +7,9 @@
     gamemode
     heroic
     lutris
-    protontricks
-    wineWowPackages.waylandFull
+    # protontricks
+    # wineWowPackages.waylandFull
     warehouse
-    wine64
+    # wine64
   ];
 }

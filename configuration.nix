@@ -7,6 +7,11 @@
     ./system
   ];
 
+  # XanMod Stable — LTS-based kernel with performance optimizations:
+  # BBR3 (faster WiFi/network), BORE scheduler, NVIDIA compatible.
+  # Fallback: pkgs.linuxPackages_6_12 (vanilla LTS)
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_stable;
+
   # Note: All configuration has been modularized into ./system/
   # Structure:
   #   system/

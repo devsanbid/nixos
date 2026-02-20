@@ -64,7 +64,7 @@ in
     ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
     ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
     JAVA_HOME = "${pkgs.jdk17}";
-    CHROME_EXECUTABLE = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    # CHROME_EXECUTABLE = "${pkgs.google-chrome}/bin/google-chrome-stable";
   };
 
   # Add user to required groups for Android development

@@ -2,6 +2,7 @@
 { pkgs, ... }: {
 
   environment.systemPackages = with pkgs; [
+    pwvucontrol
     acpi
     brightnessctl
     dmidecode

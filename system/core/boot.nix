@@ -16,8 +16,8 @@
 
   # Kernel configuration
   boot.kernelModules = [ "acpi_ec" "wmi" "ec_sys" "thinkpad_acpi" ];
-  boot.extraModulePackages = with pkgs; [
-    linuxKernel.packages.linux_6_12.lenovo-legion-module
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    lenovo-legion-module
   ];
 
   # Kernel parameters for NVIDIA

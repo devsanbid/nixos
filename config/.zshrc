@@ -68,6 +68,5 @@ alias wf-recorder="wf-recorder --audio=alsa_input.pci-0000_00_1f.3.analog-stereo
 alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
 
 
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

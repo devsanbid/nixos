@@ -3,35 +3,35 @@
 
 let
   # Python environment with Jupyter and common data science packages
-  pythonWithJupyter = pkgs.python3.withPackages (ps: with ps; [
-    # Jupyter core
-    jupyter
-    jupyterlab
-    notebook
-    ipykernel
-    ipywidgets
-    
-    # Vim motions for Jupyter
-    jupyterlab-vim
-    
-    # Common data science packages
-    numpy
-    pandas
-    matplotlib
-    seaborn
-    scipy
-    scikit-learn
-    
-    # Additional useful packages
-    plotly
-    nbformat
-    nbconvert
-  ]);
+  # pythonWithJupyter = pkgs.python3.withPackages (ps: with ps; [
+  #   # Jupyter core
+  #   jupyter
+  #   jupyterlab
+  #   notebook
+  #   ipykernel
+  #   ipywidgets
+  #
+  #   # Vim motions for Jupyter
+  #   jupyterlab-vim
+  #
+  #   # Common data science packages
+  #   numpy
+  #   pandas
+  #   matplotlib
+  #   seaborn
+  #   scipy
+  #   scikit-learn
+  #
+  #   # Additional useful packages
+  #   plotly
+  #   nbformat
+  #   nbconvert
+  # ]);
 in
 {
   environment.systemPackages = with pkgs; [
     # Python with Jupyter and packages
-    pythonWithJupyter
+    # pythonWithJupyter
     
     # JupyterLab desktop app (optional)
     # jupyterlab-desktop

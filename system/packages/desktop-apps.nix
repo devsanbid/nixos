@@ -66,7 +66,5 @@
     picom
     sway
 
-    # KDE integration
-    inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
   ];
 }
