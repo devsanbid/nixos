@@ -68,11 +68,5 @@ in
         };
       };
     };
-
-    # Also source original dunst config for any extra overrides
-    xdg.configFile."dunst" = {
-      source = ../../../config/dunst;
-      recursive = true;
-    };
   };
 }

@@ -1,5 +1,5 @@
 # Qt theming — qt5ct, qt6ct, pip, vivid, shortcuts
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.theming.qt;

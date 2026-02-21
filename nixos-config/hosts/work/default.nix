@@ -3,14 +3,12 @@
 # ║  Desktop: Hyprland (primary) + KDE + Niri                   ║
 # ║  Features: DMS shell, full dev tools, waybar                ║
 # ╚══════════════════════════════════════════════════════════════╝
-{ config, lib, pkgs, inputs, ... }:
+{ ... }:
 
 {
   imports = [
     ../common
   ];
-
-  networking.hostName = "work";
 
   # ── Desktop Environments ──────────────────────────────────
   modules.desktop = {
@@ -20,9 +18,5 @@
   };
 
   # ── Work-specific system packages ─────────────────────────
-  environment.systemPackages = with pkgs; [
-    # Extra work tools
-    postman
-    gitkraken
-  ];
+  # postman and gitkraken are in modules/nixos/packages/development.nix
 }

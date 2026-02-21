@@ -1,5 +1,5 @@
 # User scripts — symlinked to ~/.local/bin
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.dev.scripts;
@@ -14,6 +14,7 @@ in
       source = ../../../script;
       recursive = true;
       executable = true;
+      force = true;
     };
   };
 }

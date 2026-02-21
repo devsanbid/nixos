@@ -1,5 +1,5 @@
 # Cava — audio visualizer
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.apps.cava;

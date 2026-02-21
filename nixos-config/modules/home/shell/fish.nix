@@ -90,7 +90,7 @@ in
             owner = "jorgebucaran";
             repo = "fisher";
             rev = "4.4.5";
-            sha256 = "sha256-waAinH4d6xtVCcBuzj9PI5zp2QfBo/mhPhCF42d5iLc=";
+            sha256 = "sha256-VC8LMjwIvF6oG8ZVtFQvo2mGdyAzQyluAGBoK8N2/QM=";
           };
         }
       ];

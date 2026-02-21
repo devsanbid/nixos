@@ -1,10 +1,9 @@
-# Security — SSH, firewall, automount
+# Security — SSH, automount
 { ... }:
 
 {
   imports = [
     ./sshd.nix
-    ./firewall.nix
     ./automount.nix
   ];
 }

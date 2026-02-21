@@ -11,14 +11,12 @@
     ripgrep       # grep → rg
     zoxide        # cd → z
     vivid         # LS_COLORS generator
-    starship      # prompt
 
     # ── Essentials ──────────────────────────────────────────
     tree
     unzip
     gzip
     htop
-    fastfetch
     inxi
     jq
     bc
@@ -26,7 +24,6 @@
 
     # ── Terminal tools ──────────────────────────────────────
     stow
-    tmux
     wget
     dig
 

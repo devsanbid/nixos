@@ -16,7 +16,7 @@ in
       settings = {
         # ── Shell ───────────────────────────────────────────
         terminal.shell = {
-          program = "/run/current-system/sw/bin/fish";
+          program = "${lib.getExe pkgs.fish}";
           args = [ "--login" ];
         };
 

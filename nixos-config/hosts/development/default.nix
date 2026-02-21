@@ -3,14 +3,12 @@
 # ║  Desktop: Hyprland + KDE (primary for dev) + Niri           ║
 # ║  Features: No DMS, KDE panel instead of waybar              ║
 # ╚══════════════════════════════════════════════════════════════╝
-{ config, lib, pkgs, inputs, ... }:
+{ ... }:
 
 {
   imports = [
     ../common
   ];
-
-  networking.hostName = "development";
 
   # ── Desktop Environments ──────────────────────────────────
   modules.desktop = {
@@ -20,9 +18,5 @@
   };
 
   # ── Dev-specific system packages ──────────────────────────
-  environment.systemPackages = with pkgs; [
-    # Extra dev tools
-    android-tools
-    scrcpy
-  ];
+  # android-tools and scrcpy are in modules/nixos/packages/flutter.nix
 }

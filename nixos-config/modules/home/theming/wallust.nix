@@ -1,5 +1,5 @@
 # Wallust — color scheme generation from wallpapers
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.theming.wallust;

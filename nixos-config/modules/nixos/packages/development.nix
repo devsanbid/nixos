@@ -4,7 +4,6 @@
 {
   environment.systemPackages = with pkgs; [
     # ── Editors ─────────────────────────────────────────────
-    neovim
     helix
     vscode
     windsurf
@@ -47,7 +46,6 @@
     # ── Systems languages ───────────────────────────────────
     go
     rustup
-    cargo
 
     # ── Lua ─────────────────────────────────────────────────
     lua
@@ -64,7 +62,6 @@
     kotlin
     gradle
     jdk25
-    mysql_jdbc
 
     # ── C/C++ / Build ───────────────────────────────────────
     gcc
@@ -76,8 +73,6 @@
     # ── DevOps ──────────────────────────────────────────────
     ansible
     devbox
-    docker
-    podman
     distrobox
 
     # ── API tools ───────────────────────────────────────────

@@ -1,6 +1,6 @@
 # Hyprland Rice — JaKooLit config with DMS integration
 # Sources the full hyprland_2.0 directory
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.theming.hyprland-rice;

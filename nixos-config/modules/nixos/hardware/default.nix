@@ -1,11 +1,10 @@
-# Hardware modules — GPU, audio, dbus
+# Hardware modules — GPU, audio
 { config, pkgs, ... }:
 
 {
   imports = [
     ./nvidia.nix
     ./pipewire.nix
-    ./dbus.nix
   ];
 
   hardware.enableRedistributableFirmware = true;

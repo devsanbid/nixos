@@ -1,12 +1,12 @@
-# Users — sanbid (primary), sandesh
-{ pkgs, ... }:
+# Users — primary user + sandesh
+{ pkgs, username, ... }:
 
 {
   users.users = {
-    sanbid = {
+    ${username} = {
       isNormalUser = true;
       shell = pkgs.zsh;
-      description = "sanbid";
+      description = username;
       extraGroups = [
         "networkmanager"
         "kvm"
@@ -14,6 +14,7 @@
         "adbusers"
         "libvirtd"
         "docker"
+        "podman"
         "wheel"
         "ydotool"
         "audio"
@@ -28,9 +29,8 @@
     };
   };
 
-  users.groups.libvirtd.members = [ "sanbid" ];
-  users.extraGroups.vboxusers.members = [ "sanbid" ];
+  users.groups.libvirtd.members = [ username ];
+  users.extraGroups.vboxusers.members = [ username ];
 
-  security.sudo.extraConfig = "sanbid ALL=(ALL:ALL) SETENV: ALL";
-  security.rtkit.enable = true;
+  security.sudo.extraConfig = "${username} ALL=(ALL:ALL) SETENV: ALL";
 }

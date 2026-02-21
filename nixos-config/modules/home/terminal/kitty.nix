@@ -46,7 +46,7 @@ in
         detect_urls = true;
 
         # ── Shell ───────────────────────────────────────────
-        shell = "/run/current-system/sw/bin/fish";
+        shell = "${lib.getExe pkgs.fish}";
       };
 
       keybindings = {

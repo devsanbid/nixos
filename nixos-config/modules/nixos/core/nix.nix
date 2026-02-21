@@ -1,5 +1,5 @@
 # Nix settings — flakes, unfree, CUDA, store optimization
-{ inputs, ... }:
+{ inputs, username, ... }:
 
 {
   nixpkgs.config = {
@@ -15,7 +15,7 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
-      trusted-users = [ "root" "sanbid" ];
+      trusted-users = [ "root" username ];
     };
     optimise.automatic = true;
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];

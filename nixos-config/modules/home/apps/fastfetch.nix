@@ -1,5 +1,5 @@
 # Fastfetch — system info display
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.apps.fastfetch;

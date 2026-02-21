@@ -9,7 +9,6 @@
     dmidecode
     gnome-tweaks
     gparted
-    inxi
     kdePackages.isoimagewriter
     kdePackages.partitionmanager
     lenovo-legion
@@ -18,7 +17,6 @@
     psmisc
     testdisk
     testdisk-qt
-    tree
     udev
     usbimager
     woeusb-ng

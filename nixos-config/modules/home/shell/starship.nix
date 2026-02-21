@@ -73,8 +73,5 @@ in
         package.disabled = true;
       };
     };
-
-    # Also source original starship.toml for any custom overrides
-    xdg.configFile."starship.toml".source = lib.mkDefault ../../../config/starship.toml;
   };
 }

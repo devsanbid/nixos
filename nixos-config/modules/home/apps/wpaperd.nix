@@ -1,5 +1,5 @@
 # Wpaperd — wallpaper daemon
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.apps.wpaperd;

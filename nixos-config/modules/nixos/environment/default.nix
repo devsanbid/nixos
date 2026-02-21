@@ -33,7 +33,7 @@
       "${pkgs.gobject-introspection.dev}/lib/pkgconfig"
     ];
 
-    FLAKE = "/home/sanbid/.dotfiles/nixos-config";
+    FLAKE = "$HOME/.dotfiles/nixos-config";
 
     LD_LIBRARY_PATH = [ "/run/current-system/sw/share/nix-ld/lib" ];
   };

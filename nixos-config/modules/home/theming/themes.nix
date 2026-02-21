@@ -1,5 +1,5 @@
 # Themes — base16 color schemes
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.theming.themes;

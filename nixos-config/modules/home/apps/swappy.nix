@@ -1,5 +1,5 @@
 # Swappy — screenshot annotation
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.apps.swappy;

@@ -12,45 +12,38 @@ in
   config = lib.mkIf cfg.enable {
     programs.git = {
       enable = true;
-      userName = "devsanbid";
-      userEmail = "devsanbid@gmail.com";
-
-      delta = {
-        enable = true;
-        options = {
-          navigate = true;
-          side-by-side = true;
-          line-numbers = true;
-          syntax-theme = "Catppuccin Mocha";
+      settings = {
+        user = {
+          name = "devsanbid";
+          email = "devsanbid@gmail.com";
         };
-      };
-
-      extraConfig = {
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         pull.rebase = true;
         merge.conflictstyle = "diff3";
         diff.colorMoved = "default";
-        core = {
-          editor = "nvim";
-          pager = "delta";
-        };
-        url = {
-          "ssh://git@github.com/" = {
-            insteadOf = "https://github.com/";
-          };
+        core.editor = "nvim";
+        url."ssh://git@github.com/".insteadOf = "https://github.com/";
+        alias = {
+          co = "checkout";
+          br = "branch";
+          ci = "commit";
+          st = "status";
+          unstage = "reset HEAD --";
+          last = "log -1 HEAD";
+          lg = "log --oneline --graph --decorate --all";
+          wip = "!git add -A && git commit -m 'wip'";
         };
       };
+    };
 
-      aliases = {
-        co = "checkout";
-        br = "branch";
-        ci = "commit";
-        st = "status";
-        unstage = "reset HEAD --";
-        last = "log -1 HEAD";
-        lg = "log --oneline --graph --decorate --all";
-        wip = "!git add -A && git commit -m 'wip'";
+    programs.delta = {
+      enable = true;
+      options = {
+        navigate = true;
+        side-by-side = true;
+        line-numbers = true;
+        syntax-theme = "Catppuccin Mocha";
       };
     };
 

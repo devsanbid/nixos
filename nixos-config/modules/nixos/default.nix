@@ -1,5 +1,5 @@
 # NixOS System Modules — imports all system-level configuration
-{ config, lib, pkgs, inputs, zen-browser, ... }:
+{ ... }:
 
 {
   imports = [

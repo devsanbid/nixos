@@ -9,11 +9,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    distrobox
-    podman
     podman-compose
-    xorg.xhost
+    xhost
   ];
-
-  users.users."sanbid".extraGroups = [ "podman" ];
 }

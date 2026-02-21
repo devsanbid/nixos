@@ -5,8 +5,10 @@
   services.dbus = {
     enable = true;
     implementation = "broker";
-    packages = with pkgs; [ xfce.xfconf ];
+    packages = with pkgs; [ dconf xfconf ];
   };
+
+  programs.dconf.enable = true;
 
   services.gvfs.enable = true;
   services.sysprof.enable = true;

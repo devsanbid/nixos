@@ -1,4 +1,4 @@
-# Apps — Docker, Flatpak, Podman/Distrobox, Virtualization
+# Apps — Docker, Flatpak, Podman/Distrobox
 { ... }:
 
 {
@@ -6,6 +6,5 @@
     ./docker.nix
     ./distrobox.nix
     ./flatpak.nix
-    ./virtualization.nix
   ];
 }

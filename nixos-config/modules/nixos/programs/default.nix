@@ -7,7 +7,6 @@
     fish.enable = true;
     steam.enable = true;
     appimage.enable = true;
-    dconf.enable = true;
     ydotool.enable = true;
 
     java = {
@@ -57,18 +56,18 @@
         dbus
         gdk-pixbuf
 
-        xorg.libX11
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-        xorg.libxcb
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
-        xorg.libXScrnSaver
+        libX11
+        libXcomposite
+        libXdamage
+        libXext
+        libXfixes
+        libXrandr
+        libxcb
+        libXcursor
+        libXi
+        libXrender
+        libXtst
+        libXScrnSaver
 
         wayland
 
@@ -76,8 +75,6 @@
         freetype
         libpulseaudio
         systemd
-
-        mesa.drivers
       ];
     };
 

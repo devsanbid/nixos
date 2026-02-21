@@ -8,8 +8,8 @@
     onlyoffice-desktopeditors
 
     # ── File managers ───────────────────────────────────────
-    xfce.thunar
-    xfce.thunar-volman
+    thunar
+    thunar-volman
     dua
 
     # ── Documents ───────────────────────────────────────────

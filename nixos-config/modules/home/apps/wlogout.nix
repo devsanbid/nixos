@@ -1,5 +1,5 @@
 # Wlogout — logout/power menu
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.apps.wlogout;

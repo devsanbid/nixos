@@ -3,12 +3,9 @@
 
 {
   environment.systemPackages = with pkgs; [
-    quickshell
     matugen
     lm_sensors
-    wl-clipboard
     cliphist
-    cava
     khal
     vdirsyncer
     ddcutil
@@ -18,15 +15,11 @@
     adw-gtk3
     accountsservice
     power-profiles-daemon
-    networkmanager
     bluez
     blueman
-    playerctl
     wttrbar
-    fd
     mlocate
     plocate
-    libappindicator-gtk3
     polkit_gnome
   ];
 

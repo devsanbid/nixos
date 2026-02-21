@@ -1,5 +1,5 @@
 # Neovim — symlink multiple config directories
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.dev.neovim;
@@ -15,22 +15,27 @@ in
       "nvim" = {
         source = ../../../config/nvim;
         recursive = true;
+        force = true;
       };
       "lazyvim" = {
         source = ../../../config/lazyvim;
         recursive = true;
+        force = true;
       };
       "nixvim" = {
         source = ../../../config/nixvim;
         recursive = true;
+        force = true;
       };
       "astro" = {
         source = ../../../config/astro;
         recursive = true;
+        force = true;
       };
       "renew_nvim" = {
         source = ../../../config/renew_nvim;
         recursive = true;
+        force = true;
       };
     };
   };

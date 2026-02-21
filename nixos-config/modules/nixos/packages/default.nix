@@ -1,5 +1,5 @@
 # System packages — organized by category
-{ pkgs, inputs, zen-browser, ... }:
+{ ... }:
 
 {
   imports = [

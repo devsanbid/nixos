@@ -3,14 +3,12 @@
 # ║  Desktop: Hyprland (primary) + KDE + Niri                   ║
 # ║  Features: DMS, waybar, gaming, multimedia                  ║
 # ╚══════════════════════════════════════════════════════════════╝
-{ config, lib, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ../common
   ];
-
-  networking.hostName = "personal";
 
   # ── Desktop Environments ──────────────────────────────────
   modules.desktop = {

@@ -37,5 +37,5 @@ in
     JAVA_HOME = "${pkgs.jdk17}";
   };
 
-  users.users.sanbid.extraGroups = [ "kvm" ];
+  # kvm group assignment consolidated in users/default.nix
 }

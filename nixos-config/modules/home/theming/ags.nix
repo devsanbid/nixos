@@ -1,5 +1,5 @@
 # AGS — Widget system
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.modules.home.theming.ags;

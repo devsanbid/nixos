@@ -49,12 +49,13 @@
       inherit (self) outputs;
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      username = "sanbid";
 
       # ── Helper: create a NixOS system for a given host ──────
       mkHost = hostname: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
-          inherit inputs outputs;
+          inherit inputs outputs username;
           zen-browser = inputs.zen-browser;
           hostname = hostname;
         };
@@ -62,6 +63,7 @@
           # Flake modules
           inputs.stylix.nixosModules.stylix
           inputs.lanzaboote.nixosModules.lanzaboote
+          inputs.niri.nixosModules.niri
 
           # Home-Manager as NixOS module (integrated)
           home-manager.nixosModules.home-manager
@@ -70,11 +72,16 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = {
-                inherit inputs outputs;
+                inherit inputs outputs username;
                 nix-colors = inputs.nix-colors;
                 hostname = hostname;
               };
-              users.sanbid = import ./hosts/${hostname}/home.nix;
+              sharedModules = [
+                inputs.nixvim.homeModules.nixvim
+                inputs.dms.homeModules.dank-material-shell
+                inputs.danksearch.homeModules.dsearch
+              ];
+              users.${username} = import ./hosts/${hostname}/home.nix;
             };
           }
 

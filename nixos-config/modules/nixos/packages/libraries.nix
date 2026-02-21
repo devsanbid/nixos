@@ -33,7 +33,6 @@
     upscayl
 
     # ── Mobile ──────────────────────────────────────────────
-    scrcpy
     libimobiledevice
     ifuse
 
