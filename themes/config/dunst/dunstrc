@@ -1,0 +1,19 @@
+[global]
+    monitor = 0
+    follow = none
+    height = (100, 100)  # Fixed 300px height
+    weight = (100, 100)  # Fixed 300px height
+    origin = bottom-center 
+    offset = (20, 20)
+    indicate_hidden = yes
+    transparency = 100
+    frame_color = "#FFFFFF"
+    background = "#FFFFFF"
+    foreground = "#D3D3D3"
+
+[experimental]
+    per_monitor_dpi = false
+
+[urgency_normal]
+    background = "#FFFFFF"
+    foreground = "#D3D3D3"

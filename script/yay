@@ -1,0 +1,527 @@
+#!/usr/bin/env python3
+"""
+yay — NixOS package search & install helper
+Like yay for Arch Linux, but for NixOS flakes.
+
+Usage:
+  yay <package>       Search & install a package
+  yay -Ss <package>   Search only (no install)
+  yay -R <package>    Remove a package from config & rebuild
+  yay -h              Show help
+"""
+
+import subprocess
+import json
+import sys
+import os
+import re
+import signal
+
+# ── Handle Ctrl+C gracefully ─────────────────────────────────
+signal.signal(signal.SIGINT, lambda *_: (print(f"\n{RED} Aborted.{RST}"), sys.exit(130)))
+
+# ── ANSI Colors ──────────────────────────────────────────────
+RST = "\033[0m"
+B   = "\033[1m"
+D   = "\033[2m"
+RED = "\033[31m"
+GRN = "\033[32m"
+YEL = "\033[33m"
+BLU = "\033[34m"
+MAG = "\033[35m"
+CYN = "\033[36m"
+WHT = "\033[97m"
+
+# ── Configuration ────────────────────────────────────────────
+FLAKE_DIR    = os.path.expanduser("~/.dotfiles/nixos-config")
+PACKAGES_DIR = os.path.join(FLAKE_DIR, "modules/nixos/packages")
+HOSTNAME     = os.uname().nodename
+SEARCH_URL   = "https://search.nixos.org/packages?channel=unstable&query="
+
+# ── Category keyword mapping ────────────────────────────────
+# keywords → .nix filename
+CATEGORIES = {
+    "browsers.nix": [
+        "browser", "chromium", "firefox", "vivaldi", "brave", "chrome",
+        "tor-browser", "web browser", "surf", "qutebrowser", "nyxt",
+        "anydesk", "qbittorrent", "torrent", "download",
+        "telegram", "signal", "discord", "slack", "element", "chat",
+        "email client", "thunderbird", "mailspring",
+    ],
+    "cli-tools.nix": [
+        "command-line", "command line", "terminal utility", "shell tool",
+        "text processing", "unix", "coreutils", "file utility",
+        "archive", "compression", "json tool", "yaml", "csv",
+        "fuzzy finder", "search tool",
+    ],
+    "desktop-apps.nix": [
+        "wayland", "hyprland", "compositor", "launcher", "notification",
+        "wallpaper", "screenshot", "clipboard", "status bar", "dock",
+        "lock screen", "logout", "session", "display manager",
+        "file manager", "thunar", "nautilus", "dolphin", "nemo",
+    ],
+    "development.nix": [
+        "editor", "ide", "compiler", "debugger", "programming",
+        "language server", "lsp", "sdk", "devops", "container",
+        "build tool", "version control", "code editor", "development",
+        "database", "sql", "api", "formatter", "linter",
+    ],
+    "multimedia.nix": [
+        "audio", "video", "media player", "music", "sound",
+        "image viewer", "photo", "recorder", "visualizer",
+        "streaming", "codec", "encoder", "decoder",
+        "camera", "screen capture", "obs", "mpv", "vlc",
+    ],
+    "productivity.nix": [
+        "office", "document", "pdf", "note", "calendar",
+        "email", "task manager", "spreadsheet", "presentation",
+        "writing", "markdown", "latex", "typst",
+    ],
+    "system-tools.nix": [
+        "system monitor", "hardware", "partition", "disk",
+        "brightness", "power management", "usb", "network tool",
+        "benchmark", "diagnostic", "firmware", "backup",
+    ],
+    "libraries.nix": [
+        "library", "development library", "binding",
+        "runtime", "framework",
+    ],
+}
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Helpers
+# ═══════════════════════════════════════════════════════════════
+
+def info(msg):
+    print(f"{CYN}{B}:: {WHT}{msg}{RST}")
+
+def warn(msg):
+    print(f"{YEL}{B}:: {WHT}{msg}{RST}")
+
+def err(msg):
+    print(f"{RED}{B}:: {WHT}{msg}{RST}")
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Search
+# ═══════════════════════════════════════════════════════════════
+
+def search_packages(query):
+    """Search nixpkgs for packages matching query."""
+    info(f"Searching nixpkgs for {CYN}{B}{query}{RST}{WHT}...")
+
+    try:
+        result = subprocess.run(
+            ["nix", "search", "nixpkgs", query, "--json"],
+            capture_output=True, text=True, timeout=120,
+        )
+    except subprocess.TimeoutExpired:
+        err("Search timed out. Try again.")
+        return {}
+
+    if result.returncode != 0 or not result.stdout.strip():
+        return {}
+
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+
+
+def extract_attr(key):
+    """Extract attr name from nix search key.
+    legacyPackages.x86_64-linux.firefox → firefox
+    """
+    parts = key.split(".", 2)
+    return parts[2] if len(parts) > 2 else key
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Display & Select
+# ═══════════════════════════════════════════════════════════════
+
+def display_search_results(packages, query):
+    """Display results (search-only mode, no install prompt)."""
+    items = []
+    for key, pkg in packages.items():
+        attr  = extract_attr(key)
+        pname = pkg.get("pname", attr)
+        ver   = pkg.get("version", "")
+        desc  = pkg.get("description", "") or ""
+        items.append((attr, pname, ver, desc))
+
+    items = items[:10]
+    print()
+    for i in range(len(items) - 1, -1, -1):
+        attr, pname, ver, desc = items[i]
+        num = i + 1
+        print(f" {MAG}{B}{num:>2}{RST}  {WHT}{B}nixos-unstable/{CYN}{pname} {GRN}{ver}{RST}")
+        if desc:
+            print(f"      {D}{desc}{RST}")
+        print(f"      {D}{SEARCH_URL}{pname}{RST}")
+
+
+def display_and_select(packages, query):
+    """
+    Show results numbered bottom→top (like yay).
+    Returns (attr_name, pname, description) or (None, None, None).
+    """
+    items = []
+    exact = None
+
+    for key, pkg in packages.items():
+        attr  = extract_attr(key)
+        pname = pkg.get("pname", attr)
+        ver   = pkg.get("version", "")
+        desc  = pkg.get("description", "") or ""
+        items.append((attr, pname, ver, desc))
+        if pname == query or attr == query:
+            exact = (attr, pname, desc)
+
+    # ── Exact match → fast path ────────────────────────────
+    if exact:
+        attr, pname, desc = exact
+        print(f"\n  {GRN}{B}✓ {WHT}Exact match: {CYN}{B}{pname}{RST}")
+        print(f"    {D}{desc}{RST}")
+        print(f"    {D}{SEARCH_URL}{pname}{RST}")
+        ans = input(f"\n{GRN}{B}:: {WHT}Install {CYN}{B}{pname}{WHT}? [Y/n] {RST}").strip().lower()
+        if ans in ("", "y", "yes"):
+            return attr, pname, desc
+        if ans == "n":
+            pass  # show full list instead
+        else:
+            return None, None, None
+
+    # ── Top 10, numbered bottom→top ────────────────────────
+    items = items[:10]
+    if not items:
+        err(f"No packages found for '{query}'")
+        return None, None, None
+
+    print()
+    for i in range(len(items) - 1, -1, -1):
+        attr, pname, ver, desc = items[i]
+        num = i + 1
+        print(f" {MAG}{B}{num:>2}{RST}  {WHT}{B}nixos-unstable/{CYN}{pname} {GRN}{ver}{RST}")
+        if desc:
+            print(f"      {D}{desc}{RST}")
+        print(f"      {D}{SEARCH_URL}{pname}{RST}")
+
+    print(f"\n{GRN}{B}:: {WHT}Enter number to install (q to quit):{RST}")
+    try:
+        choice = input(f"{GRN}{B}==> {RST}").strip()
+    except EOFError:
+        return None, None, None
+
+    if choice.lower() in ("q", "quit", ""):
+        return None, None, None
+
+    try:
+        idx = int(choice) - 1
+        if 0 <= idx < len(items):
+            attr, pname, _, desc = items[idx]
+            return attr, pname, desc
+    except ValueError:
+        pass
+
+    err("Invalid selection.")
+    return None, None, None
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Categorize
+# ═══════════════════════════════════════════════════════════════
+
+def existing_categories():
+    """Return sorted list of .nix category files (excluding default.nix)."""
+    return sorted(
+        f for f in os.listdir(PACKAGES_DIR)
+        if f.endswith(".nix") and f != "default.nix"
+    )
+
+
+def find_package_in_files(attr_name):
+    """Check if package already exists in any .nix file. Returns filename or None."""
+    for fname in existing_categories():
+        path = os.path.join(PACKAGES_DIR, fname)
+        with open(path) as f:
+            content = f.read()
+        if re.search(rf'^\s+{re.escape(attr_name)}\s*$', content, re.MULTILINE):
+            return fname
+    return None
+
+
+def categorize(attr_name, description):
+    """Auto-detect which .nix file a package belongs to."""
+    text = f"{attr_name} {description}".lower()
+    scores = {}
+    for fname, kws in CATEGORIES.items():
+        score = sum(1 for kw in kws if kw in text)
+        if score > 0:
+            scores[fname] = score
+    return max(scores, key=scores.get) if scores else None
+
+
+def prompt_category(attr_name):
+    """Let user choose or create a category."""
+    cats = existing_categories()
+    warn(f"Couldn't auto-detect category for {CYN}{attr_name}{RST}")
+    print(f"\n  {WHT}Select a category:{RST}\n")
+
+    for i, f in enumerate(cats, 1):
+        label = f.removesuffix(".nix").replace("-", " ").title()
+        print(f"  {MAG}{B}{i:>2}{RST}  {WHT}{label}{RST}  {D}({f}){RST}")
+    print(f"  {GRN}{B}  n{RST}  {WHT}Create new category{RST}")
+
+    try:
+        choice = input(f"\n{GRN}{B}==> {RST}").strip()
+    except EOFError:
+        return None
+
+    if choice.lower() == "n":
+        name = input(f"{GRN}{B}:: {WHT}Category name (e.g. gaming): {RST}").strip().lower()
+        if not name:
+            return None
+        fname = f"{name.replace(' ', '-')}.nix"
+        create_category(fname, name)
+        return fname
+
+    try:
+        idx = int(choice) - 1
+        if 0 <= idx < len(cats):
+            return cats[idx]
+    except ValueError:
+        pass
+
+    return None
+
+
+def create_category(filename, label):
+    """Create a new package .nix file and register its import in default.nix."""
+    path = os.path.join(PACKAGES_DIR, filename)
+    title = label.replace("-", " ").title()
+
+    with open(path, "w") as f:
+        f.write(
+            f"# {title} packages\n"
+            f"{{ pkgs, ... }}:\n\n"
+            f"{{\n"
+            f"  environment.systemPackages = with pkgs; [\n"
+            f"  ];\n"
+            f"}}\n"
+        )
+
+    # Register in default.nix imports
+    default = os.path.join(PACKAGES_DIR, "default.nix")
+    with open(default) as f:
+        text = f.read()
+    imp = f"    ./{filename}"
+    if imp not in text:
+        text = text.replace("  ];", f"{imp}\n  ];")
+        with open(default, "w") as f:
+            f.write(text)
+
+    print(f"  {GRN}✓{RST} Created {D}{path}{RST}")
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Add / Remove Package
+# ═══════════════════════════════════════════════════════════════
+
+def add_to_file(attr_name, nix_file):
+    """Insert package into the systemPackages list."""
+    path = os.path.join(PACKAGES_DIR, nix_file)
+
+    with open(path) as f:
+        content = f.read()
+
+    # Already present?
+    if re.search(rf'^\s+{re.escape(attr_name)}\s*$', content, re.MULTILINE):
+        warn(f"{attr_name} already in {nix_file}")
+        return True
+
+    # Find the systemPackages block's closing ];
+    m = re.search(
+        r'(environment\.systemPackages\s*=\s*with\s+pkgs\s*;\s*\[)'
+        r'(.*?)'
+        r'(\s*\];)',
+        content,
+        re.DOTALL,
+    )
+    if not m:
+        err(f"Could not find systemPackages in {nix_file}")
+        return False
+
+    # Detect indentation from existing entries
+    body = m.group(2)
+    indents = re.findall(r'^(\s+)\S', body, re.MULTILINE)
+    indent = indents[-1] if indents else "    "
+
+    # Insert just before ];
+    insertion_point = m.end(2)
+    new = content[:insertion_point] + f"\n{indent}{attr_name}" + content[insertion_point:]
+
+    with open(path, "w") as f:
+        f.write(new)
+
+    print(f"  {GRN}✓{RST} Added {CYN}{B}{attr_name}{RST} → {D}{nix_file}{RST}")
+    return True
+
+
+def remove_from_file(attr_name):
+    """Remove a package from whichever .nix file contains it."""
+    fname = find_package_in_files(attr_name)
+    if not fname:
+        err(f"{attr_name} not found in any package file.")
+        return False
+
+    path = os.path.join(PACKAGES_DIR, fname)
+    with open(path) as f:
+        lines = f.readlines()
+
+    new_lines = []
+    removed = False
+    for line in lines:
+        if re.match(rf'^\s+{re.escape(attr_name)}\s*$', line):
+            removed = True
+            continue
+        new_lines.append(line)
+
+    if not removed:
+        err(f"Could not remove {attr_name} from {fname}")
+        return False
+
+    with open(path, "w") as f:
+        f.writelines(new_lines)
+
+    print(f"  {GRN}✓{RST} Removed {CYN}{B}{attr_name}{RST} from {D}{fname}{RST}")
+    return True
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Rebuild
+# ═══════════════════════════════════════════════════════════════
+
+def rebuild():
+    """git-add then nixos-rebuild switch."""
+    info(f"Rebuilding NixOS ({CYN}{B}{HOSTNAME}{RST}{WHT})...\n")
+
+    # Flakes need tracked files
+    subprocess.run(
+        ["git", "add", "-A"],
+        cwd=os.path.expanduser("~/.dotfiles"),
+        capture_output=True,
+    )
+
+    rc = subprocess.call(
+        ["sudo", "nixos-rebuild", "switch", "--flake", f"{FLAKE_DIR}#{HOSTNAME}"],
+        cwd=FLAKE_DIR,
+    )
+
+    if rc == 0:
+        print(f"\n{GRN}{B}✓ {WHT}Done! Package installed successfully.{RST}")
+    else:
+        err("Build failed — reverting changes.")
+        subprocess.run(
+            ["git", "checkout", "--", "."],
+            cwd=os.path.expanduser("~/.dotfiles"),
+            capture_output=True,
+        )
+    return rc == 0
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Main
+# ═══════════════════════════════════════════════════════════════
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
+        print(
+            f"\n  {CYN}{B}yay{RST} — NixOS package search & install\n\n"
+            f"  {WHT}Usage:{RST}\n"
+            f"    yay <package>       Search & install\n"
+            f"    yay -Ss <package>   Search only\n"
+            f"    yay -R <package>    Remove & rebuild\n"
+            f"    yay -h              Help\n"
+        )
+        sys.exit(0)
+
+    args = sys.argv[1:]
+    search_only = False
+    remove_mode = False
+
+    if args[0] == "-Ss":
+        search_only = True
+        args = args[1:]
+    elif args[0] == "-S":
+        args = args[1:]
+    elif args[0] == "-R":
+        remove_mode = True
+        args = args[1:]
+
+    if not args:
+        err("No package name given.")
+        sys.exit(1)
+
+    query = args[0]
+
+    # ── Remove mode ────────────────────────────────────────
+    if remove_mode:
+        if remove_from_file(query):
+            rebuild()
+        sys.exit(0)
+
+    # ── Search ─────────────────────────────────────────────
+    pkgs = search_packages(query)
+    if not pkgs:
+        err(f"No packages found for '{query}'")
+        print(f"  {D}Try: {SEARCH_URL}{query}{RST}")
+        sys.exit(1)
+
+    # ── Search-only mode: just display, no install ─────────
+    if search_only:
+        display_search_results(pkgs, query)
+        sys.exit(0)
+
+    # ── Display & select ───────────────────────────────────
+    attr_name, pname, desc = display_and_select(pkgs, query)
+    if not attr_name:
+        sys.exit(0)
+
+    # ── Check if already installed ─────────────────────────
+    existing = find_package_in_files(attr_name)
+    if existing:
+        warn(f"{CYN}{attr_name}{RST}{WHT} is already in {D}{existing}{RST}")
+        sys.exit(0)
+
+    # ── Categorize ─────────────────────────────────────────
+    nix_file = categorize(attr_name, desc or "")
+
+    if nix_file:
+        label = nix_file.removesuffix(".nix").replace("-", " ").title()
+        info(f"Category: {GRN}{B}{label}{RST}{WHT} ({D}{nix_file}{RST}{WHT})")
+        try:
+            ans = input(f"  {WHT}Correct? [Y/n/c(change)] {RST}").strip().lower()
+        except EOFError:
+            sys.exit(0)
+        if ans == "n":
+            sys.exit(0)
+        if ans == "c":
+            nix_file = prompt_category(attr_name)
+    else:
+        nix_file = prompt_category(attr_name)
+
+    if not nix_file:
+        err("No category selected.")
+        sys.exit(1)
+
+    # ── Add to file & rebuild ──────────────────────────────
+    if not add_to_file(attr_name, nix_file):
+        sys.exit(1)
+
+    rebuild()
+
+
+if __name__ == "__main__":
+    main()

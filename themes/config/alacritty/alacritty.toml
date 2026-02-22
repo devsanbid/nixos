@@ -1,0 +1,37 @@
+[terminal.shell]
+args = ["--login"]
+program = "/run/current-system/sw/bin/zsh"
+
+[general]
+live_config_reload = true
+
+[window]
+padding = { x = 10, y = 10 }
+decorations = "None"
+dynamic_padding = true
+opacity = 0.59
+blur = true
+
+
+[colors.primary]
+background = '#000000'
+
+
+[font]
+offset = { x = 0, y = 3 }
+size = 16
+
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+vi_mode_style = { shape = "Block", blinking = "Off" }
+thickness = 0.13
+
+[mouse]
+hide_when_typing = false
+
+[keyboard]
+bindings = [
+  { key = "h", mods = "Control|Shift", action = "ReceiveChar" },
+  { key = "l", mods = "Control|Shift", action = "ReceiveChar" },
+]

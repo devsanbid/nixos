@@ -1,0 +1,28 @@
+#!/run/current-system/sw/bin/bash
+
+
+get_ai_response() {
+    clipboard_content=$(wl-paste)
+    notify-send -h string:bgcolor:#FFFFFF  -h string:fgcolor:#ADACAD "." "'starting..'" -t 1500
+    temp_response=$(mktemp)
+    clipboard_content+="\ngive the answer for 5 marks ( no need to format into markdown way just simple text)"
+    echo "$clipboard_content" | ollama run llama3.1:8b-instruct-q8_0  2> /dev/null > "$temp_response"
+
+    if [ -s "$temp_response" ]; then  
+        ai_response=$(cat "$temp_response")
+        cat "$temp_response" | wl-copy
+        notify-send -h string:bgcolor:#FFFFFF  -h string:fgcolor:#ADACAD "." "'done'" -t 1500
+    else
+        echo "No response received from the AI." >&2
+    fi
+    rm "$temp_response"
+}
+
+trap 'echo "Exiting..." >&2; exit 1' INT
+
+
+
+get_ai_response &  
+
+
+
