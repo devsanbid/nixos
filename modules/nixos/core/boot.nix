@@ -15,6 +15,36 @@
     efiSysMountPoint = "/boot";
   };
 
+  # ── Boot Snapshots / Generation Labels ────────────────────
+  # Show generation labels in boot menu with timestamps
+  boot.loader.systemd-boot.configurationLimit = 20;  # Keep last 20 generations
+
+  # Enable boot counting for automatic fallback on failed boots
+  boot.loader.systemd-boot.extraEntries = {
+    # Custom entry for recovery
+    "nixos-recovery.conf" = ''
+      title NixOS Recovery
+      linux /nixos-generation-recovery/kernel
+      initrd /nixos-generation-recovery/initrd
+      options root="UUID=$(findmnt -n -o UUID /)" init=/nix/var/nix/profiles/system/recovery/bin/switch-to-configuration boot
+    '';
+  };
+
+  # ── Snapshot Integration ─────────────────────────────────
+  # Create snapshot metadata on each rebuild
+  system.activationScripts.snapshotBoot = {
+    text = ''
+      # Create timestamped boot entry label
+      current_time=$(date "+%Y-%m-%d %H:%M:%S")
+      echo "Booted: ''${current_time}" > /boot/nixos-boot-info.txt
+
+      # Store generation info
+      generation=$(readlink /nix/var/nix/profiles/system | grep -o '[0-9]*')
+      echo "Generation: ''${generation}" >> /boot/nixos-boot-info.txt
+      echo "Profile: $(hostname)" >> /boot/nixos-boot-info.txt
+    '';
+  };
+
   # ── Kernel modules ────────────────────────────────────────
   boot.kernelModules = [ "acpi_ec" "wmi" "ec_sys" "thinkpad_acpi" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [

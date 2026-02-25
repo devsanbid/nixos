@@ -49,6 +49,7 @@ in
         shell = "${lib.getExe pkgs.zsh}";
 
         clear_all_shortcuts = true;
+        clipboard_control = "write-primary write-clipboard no-append";
 
         # ── Shell integration ──────────────────────────────
         shell_integration = "no-rc";
@@ -60,6 +61,8 @@ in
         "ctrl+shift+equal" = "change_font_size all +1.0";
         "ctrl+shift+minus" = "change_font_size all -1.0";
         "ctrl+shift+0" = "change_font_size all 0";
+         "ctrl+shift+c" =  "copy_to_clipboard";
+         "ctrl+shift+v" ="paste_from_clipboard";
       };
 
       # ── Theme ─────────────────────────────────────────────

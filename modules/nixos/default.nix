@@ -16,5 +16,6 @@
     ./fonts
     ./apps
     ./gaming.nix
+    ./home-manager-auto.nix  # Auto-activate home-manager + snapshots
   ];
 }

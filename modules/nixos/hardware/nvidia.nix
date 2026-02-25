@@ -1,15 +1,14 @@
-# NVIDIA — Intel+NVIDIA PRIME offload (Lenovo Legion)
+# NVIDIA — Intel+NVIDIA PRIME offload with finegrained power management (Lenovo Legion)
 { config, pkgs, ... }:
-
 {
   hardware.nvidia-container-toolkit.enable = true;
-
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
-    powerManagement.enable = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.production;
+
+    powerManagement.enable = true;        # changed from false
 
     prime = {
       sync.enable = false;
@@ -21,6 +20,5 @@
       };
     };
   };
-
   services.xserver.videoDrivers = [ "nvidia" ];
 }

@@ -21,5 +21,6 @@
     usbimager
     woeusb-ng
     wirelesstools
+    upower
   ];
 }

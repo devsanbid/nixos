@@ -33,7 +33,7 @@ CYN = "\033[36m"
 WHT = "\033[97m"
 
 # ── Configuration ────────────────────────────────────────────
-FLAKE_DIR    = os.path.expanduser("~/.dotfiles/nixos-config")
+FLAKE_DIR    = os.path.expanduser("~/.dotfiles")
 PACKAGES_DIR = os.path.join(FLAKE_DIR, "modules/nixos/packages")
 HOSTNAME     = os.uname().nodename
 SEARCH_URL   = "https://search.nixos.org/packages?channel=unstable&query="

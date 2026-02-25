@@ -35,6 +35,10 @@
 
     FLAKE = "$HOME/.dotfiles/nixos-config";
 
-    LD_LIBRARY_PATH = [ "/run/current-system/sw/share/nix-ld/lib" ];
-  };
+    LD_LIBRARY_PATH = [ 
+      "/run/current-system/sw/share/nix-ld/lib"
+      "/run/opengl-driver/lib"
+      "/run/opengl-driver-32/lib"
+    ];
+};
 }

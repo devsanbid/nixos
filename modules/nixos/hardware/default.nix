@@ -5,6 +5,7 @@
   imports = [
     ./nvidia.nix
     ./pipewire.nix
+    ./tlp.nix
   ];
 
   hardware.enableRedistributableFirmware = true;
@@ -18,6 +19,6 @@
     ];
   };
 
-  services.power-profiles-daemon.enable = true;
+  services.power-profiles-daemon.enable = false;
   services.usbmuxd.enable = true;
 }

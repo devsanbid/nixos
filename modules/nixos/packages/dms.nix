@@ -14,7 +14,6 @@
     fprintd
     adw-gtk3
     accountsservice
-    power-profiles-daemon
     bluez
     blueman
     wttrbar
