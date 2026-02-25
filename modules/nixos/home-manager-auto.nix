@@ -42,14 +42,8 @@
 
   # ── System-Wide Home-Manager Settings ────────────────────
   home-manager = {
-    # These are already set in flake.nix, but we ensure backup file extension
-    backupFileExtension = "backup-$(date +%Y%m%d-%H%M%S)";
-
-    # Show news after activation
-    news.display = "show";
-
-    # Extra output on activation
-    verbose = true;
+    # Ensure backup file extension for existing files
+    backupFileExtension = "backup";
   };
 
   # ── Packages for Home-Manager ────────────────────────────

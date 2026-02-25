@@ -17,7 +17,7 @@
 
   # ── Boot Snapshots / Generation Labels ────────────────────
   # Show generation labels in boot menu with timestamps
-  boot.loader.systemd-boot.configurationLimit = 20;  # Keep last 20 generations
+  boot.loader.systemd-boot.configurationLimit = 5;  # Keep last 20 generations
 
   # Enable boot counting for automatic fallback on failed boots
   boot.loader.systemd-boot.extraEntries = {
