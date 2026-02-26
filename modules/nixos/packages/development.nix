@@ -85,5 +85,8 @@
     entr
     lon
     copilot-cli
+
+    # android studio
+    android-studio
   ];
 }

@@ -20,12 +20,12 @@
 
   # ── Personal Packages ─────────────────────────────────────
   home.packages = with pkgs; [
-    wf-recorder
-    (wrapOBS {
-      plugins = with obs-studio-plugins; [
-        wlrobs obs-pipewire-audio-capture obs-vkcapture obs-vaapi
-      ];
-    })
+    # wf-recorder
+    # (wrapOBS {
+    #   plugins = with obs-studio-plugins; [
+    #     wlrobs obs-pipewire-audio-capture obs-vkcapture obs-vaapi
+    #   ];
+    # })
   ];
 
   # ── Personal Extras ───────────────────────────────────────

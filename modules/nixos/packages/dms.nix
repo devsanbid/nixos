@@ -6,7 +6,6 @@
     matugen
     lm_sensors
     cliphist
-    khal
     vdirsyncer
     ddcutil
     i2c-tools

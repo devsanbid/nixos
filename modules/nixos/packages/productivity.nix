@@ -43,7 +43,6 @@
     })
 
     # ── Database tools ──────────────────────────────────────
-    mycli
     pgadmin4
     pgcli
     postgresql
