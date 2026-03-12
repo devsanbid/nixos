@@ -1,14 +1,14 @@
 # TLP power management — Lenovo Legion 5 i9-14900HX + RTX 4070
 { config, pkgs, lib, ... }:
 {
-  services.power-profiles-daemon.enable = false;
-  powerManagement.enable = false;
+  services.power-profiles-daemon.enable = true;
+  powerManagement.enable = true;
   services.upower = lib.mkForce {
-    enable = true;
+    enable = false;
     noPollBatteries = false;
   };
   services.tlp = {
-    enable = true;
+    enable = false;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC  = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";

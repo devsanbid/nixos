@@ -19,6 +19,5 @@
     ];
   };
 
-  services.power-profiles-daemon.enable = false;
   services.usbmuxd.enable = true;
 }

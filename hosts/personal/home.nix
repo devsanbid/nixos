@@ -6,6 +6,7 @@
 
   # ── DankMaterialShell ─────────────────────────────────────
   programs.dank-material-shell.enable = true;
+  programs.dank-material-shell.enableCalendarEvents = false;
   programs.dsearch = {
     enable = true;
     config.index_paths = [
@@ -20,12 +21,13 @@
 
   # ── Personal Packages ─────────────────────────────────────
   home.packages = with pkgs; [
-    # wf-recorder
-    # (wrapOBS {
-    #   plugins = with obs-studio-plugins; [
-    #     wlrobs obs-pipewire-audio-capture obs-vkcapture obs-vaapi
-    #   ];
-    # })
+    wf-recorder
+    (wrapOBS {
+      plugins = with obs-studio-plugins; [
+        wlrobs obs-pipewire-audio-capture obs-vkcapture obs-vaapi
+      ];
+    })
+    (callPackage ../../modules/nixos/packages/qoder.nix { })
   ];
 
   # ── Personal Extras ───────────────────────────────────────

@@ -88,5 +88,6 @@
 
     # android studio
     android-studio
+    antigravity-fhs
   ];
 }
