@@ -27,7 +27,7 @@
         wlrobs obs-pipewire-audio-capture obs-vkcapture obs-vaapi
       ];
     })
-    (callPackage ../../modules/nixos/packages/qoder.nix { })
+    # (callPackage ../../modules/nixos/packages/qoder.nix { })
   ];
 
   # ── Personal Extras ───────────────────────────────────────

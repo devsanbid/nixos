@@ -5,10 +5,11 @@
   imports = [
     ./nvidia.nix
     ./pipewire.nix
-    ./tlp.nix
+    # ./tlp.nix
   ];
 
   hardware.enableRedistributableFirmware = true;
+  services.power-profiles-daemon.enable = true;
 
   hardware.graphics = {
     enable = true;

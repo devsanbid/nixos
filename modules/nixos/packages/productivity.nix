@@ -4,7 +4,7 @@
 {
   environment.systemPackages = with pkgs; [
     # ── Office ──────────────────────────────────────────────
-    libreoffice
+    # libreoffice
     onlyoffice-desktopeditors
 
     # ── File managers ───────────────────────────────────────

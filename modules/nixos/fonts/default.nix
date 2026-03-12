@@ -5,9 +5,9 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-color-emoji
+      # noto-fonts
+      # noto-fonts-cjk-sans
+      # noto-fonts-color-emoji
       liberation_ttf
       fira-code
       fira-code-symbols
@@ -19,7 +19,7 @@
       # ── Nerd Fonts ────────────────────────────────────────
       nerd-fonts.jetbrains-mono
       nerd-fonts.hack
-      nerd-fonts.noto
+      # nerd-fonts.noto
       nerd-fonts.monofur
       nerd-fonts.mononoki
       nerd-fonts.iosevka

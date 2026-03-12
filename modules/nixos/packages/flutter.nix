@@ -15,6 +15,15 @@ let
     ndkVersions = [ "26.1.10909125" ];
     includeSources = false;
     includeExtras = [ "extras;google;gcm" ];
+    extraLicenses = [
+      "android-googletv-license"
+      "android-googlexr-license"
+      "android-sdk-arm-dbt-license"
+      "android-sdk-preview-license"
+      "google-gdk-license"
+      "intel-android-extra-license"
+      "mips-android-sysimage-license"
+    ];
   };
   androidSdk = androidComposition.androidsdk;
 in
@@ -28,7 +37,7 @@ in
     jdk17
     google-chrome
     scrcpy
-    mesa
+    mesa-demos
   ];
 
   environment.sessionVariables = {

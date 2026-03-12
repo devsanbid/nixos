@@ -104,7 +104,8 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   unpackPhase = ''
-    dpkg-deb -x $src .
+    ar x $src
+    tar xf data.tar.xz --no-same-permissions --no-same-owner
   '';
 
   installPhase = ''

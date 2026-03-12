@@ -11,7 +11,7 @@
     ./productivity.nix
     ./system-tools.nix
     ./libraries.nix
-    # ./flutter.nix
+    ./flutter.nix
     ./dms.nix
   ];
 }

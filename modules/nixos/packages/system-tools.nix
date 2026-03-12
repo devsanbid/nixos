@@ -22,5 +22,6 @@
     woeusb-ng
     wirelesstools
     upower
+    squashfs-tools-ng  # unsquashfs — needed by AppManager to extract AppImages
   ];
 }

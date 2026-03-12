@@ -8,6 +8,7 @@
     steam.enable = true;
     appimage.enable = true;
     ydotool.enable = true;
+    fuse.enable = true;
 
     java = {
       enable = true;
@@ -25,6 +26,10 @@
         glib
         gtk3
         gtk4
+        libgee
+        libadwaita
+        json-glib
+        libsoup_3
         libusb1
         udev
 
