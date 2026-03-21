@@ -18,7 +18,8 @@
   };
 
   # ── Personal extras ───────────────────────────────────────
-  modules.gaming.enable = true;  # Gaming packages for personal
+  modules.gaming.enable = true;   # Gaming packages for personal
+  modules.waydroid.enable = true;  # Android container with Play Store
 
   environment.systemPackages = with pkgs; [
     # Personal media/social

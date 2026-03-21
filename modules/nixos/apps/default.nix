@@ -1,4 +1,4 @@
-# Apps — Docker, Flatpak, Podman/Distrobox
+# Apps — Docker, Flatpak, Podman/Distrobox, Waydroid
 { ... }:
 
 {
@@ -6,5 +6,6 @@
     ./docker.nix
     ./distrobox.nix
     ./flatpak.nix
+    ./waydroid.nix
   ];
 }

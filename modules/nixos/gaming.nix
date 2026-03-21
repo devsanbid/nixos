@@ -13,7 +13,7 @@ in
     environment.systemPackages = with pkgs; [
       bubblewrap
       gamemode
-      heroic
+      # heroic
       lutris
       warehouse
     ];

@@ -89,5 +89,8 @@
     # android studio
     android-studio
     antigravity-fhs
+
+    #claude code
+    claude-code
   ];
 }
