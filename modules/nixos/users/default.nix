@@ -18,6 +18,7 @@
         "wheel"
         "ydotool"
         "audio"
+        "video"
       ];
     };
 

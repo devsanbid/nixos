@@ -31,17 +31,17 @@
     kdePackages.krecorder
 
     # ── R / Data Science ────────────────────────────────────
-    (rstudioWrapper.override {
-      packages = with pkgs.rPackages; [
-        ggplot2
-        dplyr
-        xts
-        tidyverse
-        randomForest
-        snakecase
-      ];
-    })
-
+    # (rstudioWrapper.override {
+    #   packages = with pkgs.rPackages; [
+    #     ggplot2
+    #     dplyr
+    #     xts
+    #     tidyverse
+    #     randomForest
+    #     snakecase
+    #   ];
+    # })
+    #
     # ── Database tools ──────────────────────────────────────
     pgadmin4
     pgcli

@@ -20,6 +20,6 @@
     autoEnable = false;     # We manage themes ourselves — disable auto-theming
     polarity = "dark";
     image = ../../config/wallpapers/1.png;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
   };
 }

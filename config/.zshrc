@@ -70,3 +70,9 @@ alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Temporary fix for nh zsh completions (nh-4.3.0 is missing native zsh completions)
+autoload -U +X bashcompinit && bashcompinit
+if [ -f /run/current-system/sw/share/bash-completion/completions/nh.bash ]; then
+    source /run/current-system/sw/share/bash-completion/completions/nh.bash
+fi

@@ -8,6 +8,7 @@
     cudaSupport = true;
     permittedInsecurePackages = [
       "electron-36.9.5"
+      "electron-38.8.4"
     ];
   };
 

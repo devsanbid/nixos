@@ -33,13 +33,12 @@ pkgs.mkShell {
     wafw00f
 
     # Password & Authentication
-    thc-hydra  # 'hydra' in Nix refers to the CI tool, thc-hydra is the password cracker
+    thc-hydra
     john
     hashcat
     medusa
     evil-winrm
     hash-identifier
-    # ophcrack # Currently broken in nixpkgs missing libexpat during build
 
     # Binary Analysis & Reverse Engineering
     gdb
@@ -47,24 +46,50 @@ pkgs.mkShell {
     binwalk
     ghidra
     checksec
-    binutils   # Provides strings and objdump
+    binutils
     volatility3
     foremost
     steghide
     exiftool
+
+    # Python runtime for pip-installed tools
+    python3
+    python3Packages.pip
   ];
 
   shellHook = ''
     echo "========================================================"
-    echo " Kali Linux Tools Environment Activated "
+    echo " Kali Linux Tools Environment Activated"
     echo "========================================================"
-    echo " Note: The following packages were not found in standard"
-    echo " nixpkgs and have been omitted:"
-    echo " - autorecon"
-    echo " - dirsearch"
-    echo " - paramspider"
-    echo " - patator"
-    echo " - crackmapexec (superseded by netexec)"
+
+    # Isolated pip install directory inside the project
+    export PIP_PREFIX="$PWD/.pip-packages"
+    PY_VER=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+    export PYTHONPATH="$PIP_PREFIX/lib/python$PY_VER/site-packages:$PYTHONPATH"
+    export PATH="$PIP_PREFIX/bin:$PATH"
+    mkdir -p "$PIP_PREFIX"
+
+    echo " Installing missing tools via pip..."
+    pip install --quiet --prefix="$PIP_PREFIX" \
+      autorecon \
+      dirsearch \
+      patator \
+      paramspider
+
+    echo ""
+    echo " Nixpkgs tools    : nmap, masscan, rustscan, amass, subfinder,"
+    echo "                    nuclei, fierce, dnsenum, theharvester, responder,"
+    echo "                    netexec, enum4linux-ng, gobuster, feroxbuster,"
+    echo "                    ffuf, dirb, httpx, katana, nikto, sqlmap, wpscan,"
+    echo "                    arjun, dalfox, wafw00f, hydra, john, hashcat,"
+    echo "                    medusa, evil-winrm, hash-identifier, gdb, radare2,"
+    echo "                    binwalk, ghidra, checksec, strings, objdump,"
+    echo "                    volatility3, foremost, steghide, exiftool"
+    echo ""
+    echo " Pip tools        : autorecon, dirsearch, patator, paramspider"
+    echo " Pip prefix       : $PIP_PREFIX"
+    echo ""
+    echo " Omitted          : ophcrack (broken build), crackmapexec (-> netexec)"
     echo "========================================================"
   '';
 }

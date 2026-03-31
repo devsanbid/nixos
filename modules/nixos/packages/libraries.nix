@@ -54,4 +54,8 @@
     psi-notify
     tk
   ];
+
+  programs.virt-manager.enable = true;
+    virtualisation.spiceUSBRedirection.enable = true;
+
 }

@@ -37,5 +37,10 @@
 
     yad
     xdg-utils
+
+    hyperfine
+    pv
+    navi
+    loganalyzer
   ];
 }

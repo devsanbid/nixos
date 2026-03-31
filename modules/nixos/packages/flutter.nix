@@ -12,7 +12,7 @@ let
     systemImageTypes = [ "google_apis_playstore" ];
     abiVersions = [ "x86_64" ];
     includeNDK = true;
-    ndkVersions = [ "26.1.10909125" ];
+    ndkVersions = [ "28.2.13676358" ];
     includeCmake = true;
     cmakeVersions = [ "3.22.1" ];
     includeSources = false;

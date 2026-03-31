@@ -19,6 +19,13 @@
   # Show generation labels in boot menu with timestamps
   boot.loader.systemd-boot.configurationLimit = 5;  # Keep last 20 generations
 
+    virtualisation.libvirtd.enable = true;
+
+  boot.extraModprobeConfig = ''
+    options kvm_intel nested=1
+    options kvm_intel emulate_invalid_guest_state=0
+    options kvm ignore_msrs=1
+  '';
   # Enable boot counting for automatic fallback on failed boots
   boot.loader.systemd-boot.extraEntries = {
     # Custom entry for recovery
