@@ -14,12 +14,9 @@
   # ── Hostname (set per-host, but needed here for networking) ─
   networking.hostName = lib.mkDefault hostname;
 
-  # ── Stylix (global theming) ───────────────────────────────
-  stylix = {
-    enable = true;
-    autoEnable = false;     # We manage themes ourselves — disable auto-theming
-    polarity = "dark";
-    image = ../../config/wallpapers/1.png;
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-  };
+
+  nix.settings = {
+  extra-substituters = [ "https://noctalia.cachix.org" ];
+  extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+};
 }

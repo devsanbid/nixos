@@ -1,7 +1,7 @@
 # NVIDIA — Intel+NVIDIA PRIME offload with finegrained power management (Lenovo Legion)
 { config, pkgs, ... }:
 {
-  hardware.nvidia-container-toolkit.enable = true;
+  # hardware.nvidia-container-toolkit.enable = true;
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;

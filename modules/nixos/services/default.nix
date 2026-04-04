@@ -10,6 +10,8 @@
 
   programs.dconf.enable = true;
 
+  environment.systemPackages = with pkgs; [ inetutils ];
+
   services.gvfs.enable = true;
   services.sysprof.enable = true;
   services.udev.packages = with pkgs; [ gnome-settings-daemon ];

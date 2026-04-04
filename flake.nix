@@ -13,7 +13,6 @@
 
     # ── Theming ───────────────────────────────────────────────
     nix-colors.url = "github:misterio77/nix-colors";
-    stylix.url = "github:danth/stylix";
 
     # ── Security ──────────────────────────────────────────────
     lanzaboote = {
@@ -33,15 +32,12 @@
     };
 
     # ── Shell Extensions ──────────────────────────────────────
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell";
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    danksearch = {
-      url = "github:AvengeMedia/danksearch";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -61,9 +57,9 @@
         };
         modules = [
           # Flake modules
-          inputs.stylix.nixosModules.stylix
           inputs.lanzaboote.nixosModules.lanzaboote
           inputs.niri.nixosModules.niri
+          ./noctalia.nix
 
           # Home-Manager as NixOS module (integrated)
           home-manager.nixosModules.home-manager
@@ -78,8 +74,6 @@
               };
               sharedModules = [
                 inputs.nixvim.homeModules.nixvim
-                inputs.dms.homeModules.dank-material-shell
-                inputs.danksearch.homeModules.dsearch
               ];
               users.${username} = import ./hosts/${hostname}/home.nix;
             };

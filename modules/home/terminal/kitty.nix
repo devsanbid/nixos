@@ -66,7 +66,9 @@ in
       };
 
       # ── Theme ─────────────────────────────────────────────
-      themeFile = "tokyo_night_night";
+      extraConfig = ''
+        include ~/.config/kitty/themes/noctalia.conf
+    '';
     };
   };
 }

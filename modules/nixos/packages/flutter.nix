@@ -4,7 +4,7 @@
 let
   androidComposition = pkgs.androidenv.composeAndroidPackages {
     cmdLineToolsVersion = "11.0";
-    buildToolsVersions = [ "36.0.0" "35.0.0" "34.0.0" "33.0.1" "28.0.3" ];
+    buildToolsVersions = [ "36.1.0" "36.0.0" "35.0.0" "34.0.0" "33.0.1" "28.0.3" ];
     platformVersions = [ "36" "35" "34" "33" ];
     includeEmulator = true;
     emulatorVersion = "35.1.4";
@@ -12,7 +12,7 @@ let
     systemImageTypes = [ "google_apis_playstore" ];
     abiVersions = [ "x86_64" ];
     includeNDK = true;
-    ndkVersions = [ "28.2.13676358" ];
+    ndkVersions = [ "28.2.13676358" "29.0.14206865" ];
     includeCmake = true;
     cmakeVersions = [ "3.22.1" ];
     includeSources = false;

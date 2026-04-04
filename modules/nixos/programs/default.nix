@@ -2,6 +2,7 @@
 { lib, pkgs, ... }:
 
 {
+# services.mongodb.enable = true;
   programs = {
     zsh.enable = true;
     fish.enable = true;
@@ -9,6 +10,7 @@
     appimage.enable = true;
     ydotool.enable = true;
     fuse.enable = true;
+
 
     java = {
       enable = true;

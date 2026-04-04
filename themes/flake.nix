@@ -33,15 +33,6 @@
     };
 
     # ── Shell Extensions ──────────────────────────────────────
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    danksearch = {
-      url = "github:AvengeMedia/danksearch";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -78,8 +69,6 @@
               };
               sharedModules = [
                 inputs.nixvim.homeModules.nixvim
-                inputs.dms.homeModules.dank-material-shell
-                inputs.danksearch.homeModules.dsearch
               ];
               users.${username} = import ./hosts/${hostname}/home.nix;
             };

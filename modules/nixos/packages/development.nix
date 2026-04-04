@@ -5,8 +5,8 @@
   environment.systemPackages = with pkgs; [
     # ── Editors ─────────────────────────────────────────────
     helix
-    vscode
-    windsurf
+    # vscode
+    # windsurf
     geany
     netbeans
 
@@ -34,6 +34,7 @@
     uv
     conda
     gnumake
+    pywalfox-native
 
     # ── JavaScript/TypeScript ───────────────────────────────
     nodejs_22
@@ -91,6 +92,6 @@
     antigravity-fhs
 
     #claude code
-    claude-code
+    # claude-code
   ];
 }

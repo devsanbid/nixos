@@ -48,7 +48,7 @@
       # Store generation info
       generation=$(readlink /nix/var/nix/profiles/system | grep -o '[0-9]*')
       echo "Generation: ''${generation}" >> /boot/nixos-boot-info.txt
-      echo "Profile: $(hostname)" >> /boot/nixos-boot-info.txt
+      echo "Profile: ${config.networking.hostName}" >> /boot/nixos-boot-info.txt
     '';
   };
 

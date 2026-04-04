@@ -24,6 +24,8 @@
     dmenu
     wofi
 
+    yazi
+
     # ── Terminals (not managed by HM) ───────────────────────
     ghostty
     cool-retro-term
@@ -37,6 +39,7 @@
     slurp
     wl-clipboard
     wl-clip-persist
+    wl-mirror
 
     # ── Wayland utilities ───────────────────────────────────
     wlprop

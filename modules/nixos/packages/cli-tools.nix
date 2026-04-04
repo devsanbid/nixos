@@ -37,6 +37,8 @@
 
     yad
     xdg-utils
+    gpu-screen-recorder
+    gpu-screen-recorder-gtk
 
     hyperfine
     pv
