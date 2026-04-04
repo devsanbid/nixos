@@ -26,19 +26,19 @@
 
   modules.home.terminal = {
     kitty.enable = lib.mkDefault true;
-    alacritty.enable = lib.mkDefault true;
+    # alacritty.enable = lib.mkDefault true;
   };
 
   # ── Desktop Apps ──────────────────────────────────────────
   modules.home.apps = {
     waybar.enable = lib.mkDefault true;
     rofi.enable = lib.mkDefault true;
-    fuzzel.enable = lib.mkDefault true;
+    # fuzzel.enable = lib.mkDefault true;
     dunst.enable = lib.mkDefault true;
     swaync.enable = lib.mkDefault true;
     wlogout.enable = lib.mkDefault true;
-    btop.enable = lib.mkDefault true;
-    cava.enable = lib.mkDefault true;
+    # btop.enable = lib.mkDefault true;
+    # cava.enable = lib.mkDefault true;
     fastfetch.enable = lib.mkDefault true;
     swappy.enable = lib.mkDefault true;
     wpaperd.enable = lib.mkDefault true;

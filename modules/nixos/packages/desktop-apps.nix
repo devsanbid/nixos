@@ -55,5 +55,10 @@
     # ── Tray / network ──────────────────────────────────────
     networkmanagerapplet
     anyrun
+
+    alacritty
+    btop
+    fuzzel
+    cava
   ];
 }
