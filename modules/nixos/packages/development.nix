@@ -86,6 +86,7 @@
     entr
     lon
     copilot-cli
+    opencode
 
     # android studio
     android-studio

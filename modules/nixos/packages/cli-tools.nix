@@ -44,5 +44,8 @@
     pv
     navi
     loganalyzer
+    yt-dlp
+    mpc
+    ashuffle
   ];
 }
