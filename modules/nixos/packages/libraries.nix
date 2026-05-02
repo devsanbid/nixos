@@ -28,8 +28,8 @@
     pkg-config
 
     # ── CUDA ────────────────────────────────────────────────
-    cudaPackages.libcublas
-    cudatoolkit
+    # cudaPackages.libcublas
+    # cudatoolkit
     upscayl
 
     # ── Mobile ──────────────────────────────────────────────

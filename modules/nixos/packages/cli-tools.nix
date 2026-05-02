@@ -44,10 +44,11 @@
     pv
     navi
     loganalyzer
-    yt-dlp
+    # yt-dlp
     mpc
     ashuffle
 
     wlr-randr
+    nix-tree
   ];
 }

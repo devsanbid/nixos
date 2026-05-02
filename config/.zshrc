@@ -66,6 +66,7 @@ alias netbeans="netbeans --fontsize 28"
 alias CLASSPATH="/nix/store/b3kcs51w5fcp0maj62aln2h854zb64xv-mysql-connector-java-9.1.0/share/java/mysql-connector-j.jar:$CLASSPATH"
 alias wf-recorder="wf-recorder --audio=alsa_input.pci-0000_00_1f.3.analog-stereo"
 alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
+alias flutter-emulator="QT_QPA_PLATFORM=xcb __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia flutter emulators --launch"
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -73,6 +74,28 @@ alias pgcli="pgcli -h localhost -p 5432 -U postgres -d postgres"
 
 # Temporary fix for nh zsh completions (nh-4.3.0 is missing native zsh completions)
 autoload -U +X bashcompinit && bashcompinit
-if [ -f /run/current-system/sw/share/bash-completion/completions/nh.bash ]; then
-    source /run/current-system/sw/share/bash-completion/completions/nh.bash
-fi
+
+# Auto-fix Flutter gradle wrapper on NixOS
+~/.config/update_flutter_wrapper.sh
+function flutter() {
+  export FLUTTER_ROOT="$HOME/.cache/flutter-sdk-wrapper"
+  if [[ "$1" == "create" ]]; then
+    command flutter "$@"
+    local project_dir=""
+    for arg in "$@"; do
+      if [[ "$arg" != -* && "$arg" != "create" ]]; then
+        project_dir="$arg"
+      fi
+    done
+    if [[ -n "$project_dir" && -d "$project_dir/android/gradle/wrapper" ]]; then
+      local wrapper_file="$project_dir/android/gradle/wrapper/gradle-wrapper.properties"
+      if [[ -f "$wrapper_file" ]]; then
+        echo "🤖 Automatically fixing gradle-wrapper.properties for NixOS compatibility..."
+        sed -i 's/gradle-2.14.1-all.zip/gradle-8.13-all.zip/g' "$wrapper_file"
+        echo "✅ Gradle wrapper updated to 8.13!"
+      fi
+    fi
+  else
+    command flutter "$@"
+  fi
+}

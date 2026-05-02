@@ -19,7 +19,7 @@
     # ── Utilities ───────────────────────────────────────────
     libqalculate
     keypunch
-    pipeline
+    # pipeline
     showtime
 
     # ── KDE apps ────────────────────────────────────────────
@@ -44,7 +44,7 @@
     #
     # ── Database tools ──────────────────────────────────────
     pgadmin4
-    pgcli
+    # pgcli # temporarily disabled due to python3.13-cli-helpers test failures
     postgresql
     sqlitebrowser
 

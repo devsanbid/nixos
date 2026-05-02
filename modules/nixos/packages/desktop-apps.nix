@@ -19,12 +19,16 @@
     hyprland-qt-support
     hyprland-protocols
 
+
+    jetbrains.idea
     # ── Status bars / Launchers (not managed by HM) ─────────
     eww
     dmenu
     wofi
 
     yazi
+
+    windsurf
 
     # ── Terminals (not managed by HM) ───────────────────────
     ghostty
@@ -62,5 +66,21 @@
     cava
 
     lmstudio
+    nix-search-cli
+
+  # viber
+  (viber.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      rm -f $out/opt/viber/lib/libxml2.so.2
+      ln -s "${pkgs.lib.getLib pkgs.libxml2}/lib/libxml2.so" "$out/opt/viber/lib/libxml2.so.2"
+      
+      # Fix Qt plugin collision with Hyprland and system Qt
+      wrapProgram $out/bin/viber \
+        --unset QT_QUICK_CONTROLS_STYLE \
+        --unset QT_QPA_PLATFORMTHEME \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_WAYLAND_DISABLE_WINDOWDECORATION
+    '';
+  }))
   ];
 }

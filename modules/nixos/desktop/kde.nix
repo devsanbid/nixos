@@ -3,9 +3,12 @@
 
 let
   cfg = config.modules.desktop.kde;
-    sddm-themes = pkgs.stdenvNoCC.mkDerivation {
+  sddm-themes = pkgs.stdenvNoCC.mkDerivation {
     name = "sddm-themes";
-    src = /home/sanbid/.dotfiles/sddm_theme;
+    src = builtins.path {
+      path = ../../../sddm_theme;
+      name = "sddm-themes";
+    };
     installPhase = ''
       mkdir -p $out/share/sddm/themes
       cp -r . $out/share/sddm/themes/
@@ -17,7 +20,6 @@ in
     enable = lib.mkEnableOption "KDE Plasma 6 desktop environment";
   };
 
-    environment.systemPackages = [ sddm-themes ];
 
   config = lib.mkIf cfg.enable {
     # ── Display Manager ─────────────────────────────────────
@@ -37,6 +39,8 @@ in
       kwallet-pam
       kwalletmanager
     ];
+
+    environment.systemPackages = [ sddm-themes ];
 
     # ── X11 fallback (SDDM needs it) ───────────────────────
     services.xserver = {

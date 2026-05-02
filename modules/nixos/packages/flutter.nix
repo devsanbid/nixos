@@ -5,9 +5,9 @@ let
   androidComposition = pkgs.androidenv.composeAndroidPackages {
     cmdLineToolsVersion = "11.0";
     buildToolsVersions = [ "36.1.0" "36.0.0" "35.0.0" "34.0.0" "33.0.1" "28.0.3" ];
-    platformVersions = [ "36" "35" "34" "33" ];
+    platformVersions = [ "37" "36" "35" "34" "33" ];
     includeEmulator = true;
-    emulatorVersion = "35.1.4";
+    emulatorVersion = "35.1.19";
     includeSystemImages = true;
     systemImageTypes = [ "google_apis_playstore" ];
     abiVersions = [ "x86_64" ];
@@ -46,6 +46,8 @@ in
     ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
     ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
     JAVA_HOME = "${pkgs.jdk17}";
+    # Fix for flutter doctor network resources crash on NixOS
+    NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   # kvm group assignment consolidated in users/default.nix

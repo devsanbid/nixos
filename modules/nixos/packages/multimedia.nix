@@ -6,7 +6,7 @@
     cava
     pamixer
     playerctl
-    mpv
+    # mpv
     vlc
     wf-recorder
     imv
@@ -14,6 +14,6 @@
     eog
     drawing
     cheese
-    lollypop
+    # lollypop
   ];
 }

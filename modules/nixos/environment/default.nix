@@ -14,7 +14,7 @@
     PATH = [ "${XDG_BIN_HOME}" "$HOME/.cargo/bin" ];
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
 
-    CUDA_PATH = "${pkgs.cudatoolkit}";
+    # CUDA_PATH = "${pkgs.cudatoolkit}";
     EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
     EXTRA_CCFLAGS = "-I/usr/include";
 
@@ -35,10 +35,14 @@
 
     FLAKE = "$HOME/.dotfiles/nixos-config";
 
-    LD_LIBRARY_PATH = [ 
-      "/run/current-system/sw/share/nix-ld/lib"
-      "/run/opengl-driver/lib"
-      "/run/opengl-driver-32/lib"
-    ];
+    # WARNING: Do NOT set LD_LIBRARY_PATH globally. 
+    # It poisons the environment for system utilities (like mount, sudo) 
+    # and causes version mismatches during system upgrades.
+    # # nix-ld handles dynamic linking automatically without this.
+    # LD_LIBRARY_PATH = [ 
+    #   "/run/current-system/sw/share/nix-ld/lib"
+    #   "/run/opengl-driver/lib"
+    #   "/run/opengl-driver-32/lib"
+    # ];
 };
 }

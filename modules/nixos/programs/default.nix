@@ -75,6 +75,7 @@
         libXrender
         libXtst
         libXScrnSaver
+        vulkan-loader
 
         wayland
 

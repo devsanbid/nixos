@@ -14,7 +14,7 @@ in
       bubblewrap
       gamemode
       # heroic
-      lutris
+      # lutris
       warehouse
     ];
   };
