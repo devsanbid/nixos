@@ -3,17 +3,28 @@
 
 let
   cfg = config.modules.desktop.kde;
+    sddm-themes = pkgs.stdenvNoCC.mkDerivation {
+    name = "sddm-themes";
+    src = /home/sanbid/.dotfiles/sddm_theme;
+    installPhase = ''
+      mkdir -p $out/share/sddm/themes
+      cp -r . $out/share/sddm/themes/
+    '';
+  };
 in
 {
   options.modules.desktop.kde = {
     enable = lib.mkEnableOption "KDE Plasma 6 desktop environment";
   };
 
+    environment.systemPackages = [ sddm-themes ];
+
   config = lib.mkIf cfg.enable {
     # ── Display Manager ─────────────────────────────────────
     services.displayManager.sddm = {
       enable = true;
       wayland.enable = true;
+      theme = "minecraft";
     };
 
     # ── Plasma 6 ────────────────────────────────────────────

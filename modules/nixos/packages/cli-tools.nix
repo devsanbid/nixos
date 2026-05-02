@@ -47,5 +47,7 @@
     yt-dlp
     mpc
     ashuffle
+
+    wlr-randr
   ];
 }

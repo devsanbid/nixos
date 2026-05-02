@@ -60,5 +60,7 @@
     btop
     fuzzel
     cava
+
+    lmstudio
   ];
 }
