@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+EMULATORS=$(flutter emulators | grep "•" | grep -v "INFO" | awk -F'•' '{print $1}' | tr -d ' ' | grep -v "^Id$")
+
+if [ -z "$EMULATORS" ]; then
+    echo "No emulators found."
+    exit 1
+fi
+
+SELECTED=$(echo "$EMULATORS" | fzf --prompt="Select an Android Emulator: " --height=40% --layout=reverse --border=rounded)
+
+if [ -n "$SELECTED" ]; then
+    echo "🚀 Launching $SELECTED with Max Performance on RTX 4070..."
+    
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export VK_ICD_FILENAMES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json
+    export QT_QPA_PLATFORM=xcb # Use X11 backend for Qt to avoid Wayland stutter
+    export vblank_mode=0 # Disable vsync throttling for the emulator host window
+    
+    # Run the emulator directly to pass extra performance flags
+    steam-run /nix/store/pwyqwc030ydb9nlm75wwgza88lld8v3v-androidsdk/libexec/android-sdk/emulator/emulator -avd "$SELECTED" -gpu host -no-boot-anim -no-snapshot-save -qemu -smp 6 &
+else
+    echo "❌ Launch cancelled."
+fi
