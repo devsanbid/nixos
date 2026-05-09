@@ -10,7 +10,7 @@
 
   programs.dconf.enable = true;
 
-  environment.systemPackages = with pkgs; [ inetutils ];
+  environment.systemPackages = with pkgs; [ inetutils mongosh ];
 
   services.gvfs.enable = true;
   services.sysprof.enable = true;
@@ -41,7 +41,7 @@
 
   ## kasm web and support of nvidia gpu and change password to "33533" and username as "sanbid"
   services.kasmweb = {
-    enable = true;
+    enable = false;
     defaultUserPassword = "33533";
     defaultAdminPassword = "33533";
     networkSubnet = "172.25.0.0/16"; # Prevent conflict with existing docker networks
@@ -49,4 +49,8 @@
 
   # The initialization script for Kasm requires `hostname` which is missing by default
   systemd.services.init-kasmweb.path = [ pkgs.inetutils ];
+
+  # ── MongoDB ───────────────────────────────────────────────
+  services.mongodb.enable = true;
+  services.mongodb.package = pkgs.mongodb-ce;
 }

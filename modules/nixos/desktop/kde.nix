@@ -26,7 +26,7 @@ in
     services.displayManager.sddm = {
       enable = true;
       wayland.enable = true;
-      theme = "windows_7";
+      # theme = "dog-samurai";
     };
 
     # ── Plasma 6 ────────────────────────────────────────────

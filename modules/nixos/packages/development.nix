@@ -5,6 +5,7 @@
   environment.systemPackages = with pkgs; [
     # ── Editors ─────────────────────────────────────────────
     helix
+    (pkgs.callPackage ./trae.nix {})
     # vscode
     # windsurf
     geany

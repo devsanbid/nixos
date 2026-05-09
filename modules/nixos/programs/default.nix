@@ -2,7 +2,6 @@
 { lib, pkgs, ... }:
 
 {
-# services.mongodb.enable = true;
   programs = {
     zsh.enable = true;
     fish.enable = true;

@@ -50,7 +50,7 @@ echo ""
 export NIXOS_LABEL="$BUILD_LABEL"
 
 # Perform rebuild
-(cd ~/.dotfiles && sudo nixos-rebuild $MODE --flake .#$HOST)
+(cd ~/.dotfiles && sudo nixos-rebuild $MODE --flake .#$HOST "''${@:3}")
 
 REBUILD_STATUS=$?
 END_TIME=$(date +%s)
