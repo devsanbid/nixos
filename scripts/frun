@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EMULATORS=$(flutter emulators | grep "•" | grep -v "INFO" | awk -F'•' '{print $1}' | tr -d ' ' | grep -v "^Id$")
+EMULATORS=$(emulator -list-avds | grep -v '^INFO')
 
 if [ -z "$EMULATORS" ]; then
     echo "No emulators found."
@@ -19,7 +19,8 @@ if [ -n "$SELECTED" ]; then
     export vblank_mode=0 # Disable vsync throttling for the emulator host window
     
     # Run the emulator directly to pass extra performance flags
-    steam-run /nix/store/pwyqwc030ydb9nlm75wwgza88lld8v3v-androidsdk/libexec/android-sdk/emulator/emulator -avd "$SELECTED" -gpu host -no-boot-anim -no-snapshot-save -qemu -smp 6 &
+    steam-run "$ANDROID_HOME/emulator/emulator" -avd Pixel_7_API_36 -gpu host -no-boot-anim -no-snapshot-save -qemu -smp 6 &
+
 else
     echo "❌ Launch cancelled."
 fi

@@ -2,6 +2,17 @@
 { lib, pkgs, ... }:
 
 {
+
+  services.printing = {
+    enable = true;
+    drivers = [pkgs.brlaser];
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
   programs = {
     zsh.enable = true;
     fish.enable = true;
@@ -9,7 +20,6 @@
     appimage.enable = true;
     ydotool.enable = true;
     fuse.enable = true;
-
 
     java = {
       enable = true;
@@ -93,4 +103,7 @@
       flake = "$HOME/.dotfiles";
     };
   };
+
+  environment.shells = [ pkgs.xonsh ];
+  environment.systemPackages = [ pkgs.xonsh ];
 }

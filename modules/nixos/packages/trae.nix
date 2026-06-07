@@ -2,17 +2,18 @@
 
 pkgs.stdenv.mkDerivation rec {
   pname = "trae";
-  version = "2.3.21083";
+  version = "2.3.24300";
 
   src = pkgs.fetchurl {
     url = "https://lf-cdn.trae.ai/obj/trae-ai-us/pkg/app/releases/stable/${version}/linux/Trae-linux-x64.deb";
-    sha256 = "9ffde5baabfbd61b017bdfcb015a016dc7677670a7e51062c5e314180f85634b";
+    hash = "sha256-DtJt44xthtO6TGkEwhJi28PJJPWdAbMud/Dpje7zLcY=";
   };
 
   nativeBuildInputs = with pkgs; [
     autoPatchelfHook
     dpkg
     makeWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs = with pkgs; [
@@ -46,7 +47,8 @@ pkgs.stdenv.mkDerivation rec {
     webkitgtk_4_1
     libsoup_3
     libsecret
-    xorg.libxkbfile
+    libxkbfile
+    gsettings-desktop-schemas
   ];
 
   runtimeDependencies = with pkgs; [
@@ -59,6 +61,8 @@ pkgs.stdenv.mkDerivation rec {
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"
   ];
+
+  dontWrapGApps = true;
 
   unpackPhase = ''
     dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions
@@ -83,6 +87,8 @@ pkgs.stdenv.mkDerivation rec {
       fi
     fi
     
-    ln -s $out/share/trae/trae $out/bin/trae
+    makeWrapper $out/share/trae/trae $out/bin/trae \
+      --prefix XDG_DATA_DIRS : "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS" \
+      --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [ pkgs.libdbusmenu-gtk3 ]}"
   '';
 }

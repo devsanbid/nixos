@@ -31,9 +31,11 @@
     # ── Python ──────────────────────────────────────────────
     python3
     python313Packages.pip
-    pipx
+    # pipx
     uv
     conda
+    rustpython
+    pypy3
     gnumake
     pywalfox-native
 
@@ -86,7 +88,6 @@
     diff-so-fancy
     entr
     lon
-    copilot-cli
     opencode
 
     # android studio

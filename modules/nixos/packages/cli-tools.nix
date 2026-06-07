@@ -31,6 +31,8 @@ in
     vivid         # LS_COLORS generator
     nvd
 
+    ntfs3g
+
     # ── Essentials ──────────────────────────────────────────
     tree
     unzip
